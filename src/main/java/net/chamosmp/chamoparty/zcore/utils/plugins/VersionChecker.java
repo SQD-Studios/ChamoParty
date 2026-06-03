@@ -134,6 +134,8 @@ public class VersionChecker implements Listener {
 		} else {
 			Logger.info("No update available.");
 		}
+		} else  {
+			Logger.info("Failed to check for updates.");
 		}
 	}
 	public String remoteVer() throws IOException, InterruptedException {
