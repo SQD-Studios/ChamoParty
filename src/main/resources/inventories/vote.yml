@@ -33,7 +33,7 @@ items:
       player-head: "%player%"
       name: '<green>%player%'
       lore:
-        - '<white><b>| <gray>You have <white>%zvoteparty_player_votes%<gray> votes'
+        - '<white><b>| <gray>You have <white>%chamoparty_player_votes%<gray> votes'
         - ''
-        - '<white><b>| <light_purple>VoteParty <dark_gray>- <aqua>%zvoteparty_votes_recorded% <dark_gray>/ <green>%zvoteparty_votes_required_total%'
-        - '<white><b>| %zvoteparty_votes_progressbar%'
+        - '<white><b>| <light_purple>VoteParty <dark_gray>- <aqua>%chamoparty_votes_recorded% <dark_gray>/ <green>%chamoparty_votes_required_total%'
+        - '<white><b>| %chamoparty_votes_progressbar%'

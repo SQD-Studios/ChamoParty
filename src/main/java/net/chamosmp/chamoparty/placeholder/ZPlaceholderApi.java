@@ -16,7 +16,7 @@ import net.chamosmp.chamoparty.zcore.utils.ZUtils;
 public class ZPlaceholderApi extends ZUtils {
 
 	private ZVotePartyPlugin plugin;
-	private final String prefix = "zvoteparty";
+	private final String prefix = "chamoparty";
 	private final Pattern pattern = Pattern.compile("[%]([^%]+)[%]");
 
 	/**

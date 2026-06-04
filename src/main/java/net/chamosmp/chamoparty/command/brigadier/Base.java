@@ -8,6 +8,7 @@ import net.chamosmp.chamoparty.zcore.utils.commands.CommandType;
 import net.strokkur.commands.Aliases;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
+import net.strokkur.commands.paper.Executor;
 import net.strokkur.commands.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -66,7 +67,7 @@ public class Base extends VCommand {
 
     @Permission("chamoparty.config")
     @Executes("config")
-    void onExecuteConfig(Player sender) {
+    void onExecuteConfig(@Executor Player sender) {
         this.createInventory(plugin, sender, EnumInventory.INVENTORY_CONFIG);
     }
 
