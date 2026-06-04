@@ -1,6 +1,7 @@
 package net.chamosmp.chamoparty.zcore.logger;
 
 
+import net.chamosmp.chamoparty.zcore.utils.ColorUtils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 
@@ -49,12 +50,12 @@ public class Logger{
 
 	public void log(String message, LogType type){
 		MiniMessage mm = MiniMessage.miniMessage();
-		Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "| " + type.getColor() + message));
+		Bukkit.getConsoleSender().sendMessage(mm.deserialize(ColorUtils.legacyToMiniMessage(prefix + "| " + type.getColor() + message)));
 	}
 
 	public void log(String message){
 		MiniMessage mm = MiniMessage.miniMessage();
-		Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "| " + message));
+		Bukkit.getConsoleSender().sendMessage(mm.deserialize(ColorUtils.legacyToMiniMessage(prefix + "| " + message)));
 
 		//Bukkit.getConsoleSender().sendMessage("§8[§e"+prefix+"§8] §e" + getColoredMessage(message));
 	}
@@ -77,21 +78,12 @@ public class Logger{
 	 *
 	 * @param message The message to initialize and convert to legacy
 	 * @return The legacy compatible message
-	 * @deprecated Please use {@link Logger#legacyToMiniMessage(String)}. To support MiniMessage we had to give up on legacy soo
+	 * @deprecated Please use {@link ColorUtils#legacyToMiniMessage(String)}. To support MiniMessage we had to give up on legacy soo
 	 */
 	@Deprecated(since = "0.0.1", forRemoval = true)
 	public String getColoredMessage(String message){
 		return message.replace("<&>", "§");
 	}
 
-	/**
-	 * What are these weird things I do for YOU
-	 * @apiNote It's not finished yet so write it in MiniMessage to begin with
-	 * @param message The message to make the Legacy to minimessage
-	 * @return The minimessage from legacy String
-	 */
-	public String legacyToMiniMessage(String message) {
-		String mmMessage = message.replace("&0", "<black>") + message.replace("&1", "<dark_blue>") + message.replace("&2", "<dark_green>") + message.replace("&3", "<dark_aqua>") + message.replace("&4", "<dark_red>");
-		return mmMessage;
-	}
+
 }

@@ -24,15 +24,15 @@ public abstract class MessageUtils extends LocationUtils {
 	 */
 	protected void messageWO(CommandSender player, Message message, Object... args) {
 
-		player.sendRichMessage(getMessage(message, args));
+		player.sendRichMessage(ColorUtils.legacyToMiniMessage(getMessage(message, args)));
 	}
 
 	protected void messageWO(CommandSender player, String message, Object... args) {
-		player.sendRichMessage(getMessage(message, args));
+		player.sendRichMessage(ColorUtils.legacyToMiniMessage(getMessage(message, args)));
 	}
 
 	protected void message(CommandSender sender, String message, Object... args) {
-		sender.sendRichMessage(Message.PREFIX.msg() + getMessage(message, args));
+		sender.sendRichMessage(ColorUtils.legacyToMiniMessage(Message.PREFIX.msg() + getMessage(message, args)));
 	}
 
 	/**
@@ -44,12 +44,12 @@ public abstract class MessageUtils extends LocationUtils {
 	protected void message(CommandSender sender, Message message, Object... args) {
 
 		if (sender instanceof ConsoleCommandSender) {
-			if (message.getMessages().size() > 0) {
+			if (!message.getMessages().isEmpty()) {
 				message.getMessages().forEach(msg -> {				
-					sender.sendRichMessage(Message.PREFIX.msg() + this.papi(getMessage(msg, args), null));
+					sender.sendRichMessage(ColorUtils.legacyToMiniMessage(Message.PREFIX.msg() + this.papi(getMessage(msg, args), null)));
 				});
 			} else {			
-				sender.sendRichMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), null));
+				sender.sendRichMessage(ColorUtils.legacyToMiniMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), null)));
 			}
 		} else {
 
@@ -61,18 +61,18 @@ public abstract class MessageUtils extends LocationUtils {
 			case TCHAT:
 				if (message.getMessages().size() > 0) {
 					message.getMessages().forEach(msg -> {
-						sender.sendRichMessage(Message.PREFIX.msg() + this.papi(getMessage(msg, args), player));
+						sender.sendRichMessage(ColorUtils.legacyToMiniMessage(Message.PREFIX.msg() + this.papi(getMessage(msg, args), player)));
 					});
 				} else
-					sender.sendRichMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), player));
+					sender.sendRichMessage(ColorUtils.legacyToMiniMessage(Message.PREFIX.msg() + this.papi(getMessage(message, args), player)));
 				break;
 			case CENTER:
 				if (message.getMessages().size() > 0) {
 					message.getMessages().forEach(msg -> {
-						sender.sendRichMessage(this.papi(this.getCenteredMessage(getMessage(msg, args)), player));
+						sender.sendRichMessage(ColorUtils.legacyToMiniMessage(this.papi(this.getCenteredMessage(getMessage(msg, args)), player)));
 					});
 				} else
-					sender.sendRichMessage(this.papi(this.getCenteredMessage(getMessage(message, args)), player));
+					sender.sendRichMessage(ColorUtils.legacyToMiniMessage(this.papi(this.getCenteredMessage(getMessage(message, args)), player)));
 				break;
 			case TITLE:
 				// gestion du title message
@@ -102,7 +102,7 @@ public abstract class MessageUtils extends LocationUtils {
 	protected void broadcast(Message message, Object... args) {
 		for (Player player : Bukkit.getOnlinePlayers())
 			message(player, message, args);
-		message(Bukkit.getConsoleSender(), message, args);
+		message(Bukkit.getConsoleSender(), ColorUtils.legacyToMiniMessage(String.valueOf(message)), args);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public abstract class MessageUtils extends LocationUtils {
 	 * @param args
 	 */
 	protected void actionMessage(Player player, Message message, Object... args) {
-		ActionBar.sendActionBar(player, this.papi(getMessage(message, args), player));
+		ActionBar.sendActionBar(player, ColorUtils.legacyToMiniMessage(this.papi(getMessage(message, args), player)));
 	}
 
 	protected String getMessage(Message message, Object... args) {
