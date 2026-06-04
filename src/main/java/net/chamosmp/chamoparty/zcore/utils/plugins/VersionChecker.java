@@ -157,7 +157,6 @@ public class VersionChecker implements Listener {
 		Matcher matcher = pattern.matcher(responseBody);
 
 		if (!matcher.find()) {
-			Logger.info("Cannot look for updates: ");
 			return "failed";
 		}
 
