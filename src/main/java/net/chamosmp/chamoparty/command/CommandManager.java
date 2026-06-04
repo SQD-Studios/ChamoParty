@@ -261,7 +261,7 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 	 * @param aliases
 	 */
 	public void registerCommand(String string, VCommand vCommand, String... aliases) {
-		try {
+		/*try {
 			Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			bukkitCommandMap.setAccessible(true);
 
@@ -287,6 +287,8 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		 */
 	}
 
 }

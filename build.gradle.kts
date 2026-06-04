@@ -48,25 +48,12 @@ repositories {
         name = "chamosmpRepoReleases"
         url = uri("https://maven.chamosmp.net/releases")
     }
-
      */
+    maven {
+        name = "eldonexus"
+        url = uri("https://eldonexus.de/repository/maven-public/")
+    }
 }
-
-/*dependencies {
-    api("redis.clients:jedis::7.2.0")
-    //api("com.github.technicallycoded:folialib")
-    implementation("com.tcoded:FoliaLib:0.5.1")
-    compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
-    //compileOnly("com.github.nuvotifier:nuvotifier:nuvotifier.api")
-    //compileOnly("com.github.nuvotifier.nuvotifier.nuvotifier.bukkit")
-    compileOnly("com.vexsoftware:nuvotifier-universal:version")
-    compileOnly("com.mojang.authlib")
-    compileOnly("fr.maxlego08.menu.zmenu.api")
-    compileOnly("me.clip.placeholde
-    compileOnly("commons.lang.commons.lang")
-}
-
- */
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
     compileOnly("redis.clients:jedis:5.1.3")
@@ -79,12 +66,16 @@ dependencies {
     //compileOnly("com.github.technicallycoded:FoliaLib:0.4.3")
     implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("org.bstats:bstats-bukkit:3.2.1")
+    compileOnly("net.strokkur.commands:annotations-paper:2.1.1")
+    annotationProcessor("net.strokkur.commands:processor-paper:2.1.1")
+
 }
 
 tasks.shadowJar {
     configurations = project.configurations.runtimeClasspath.map { setOf(it) }
 
     dependencies {
+
     }
     relocate("com.tcoded.folialib", "net.chamosmp.zvoteparty.libs.folialib")
     relocate("org.bstats", project.group.toString())

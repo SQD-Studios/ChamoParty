@@ -27,10 +27,10 @@ public interface VotePartyManager extends Saveable {
 
 	/**
 	 * Allows you to open the voting inventory
-	 * 
+	 *
 	 * @param player
 	 */
-	void openVote(Player player);
+    void openVote(Player player);
 
 	/**
 	 * Allows you to perform the voting action on a user

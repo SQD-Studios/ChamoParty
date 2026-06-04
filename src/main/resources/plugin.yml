@@ -6,4 +6,3 @@ version: '${version}'
 website: https://github.com/SQD-Studios/ChamoParty
 api-version: 1.20
 folia-supported: true
-#commands:

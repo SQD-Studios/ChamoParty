@@ -37,7 +37,7 @@ public abstract class MessageUtils extends LocationUtils {
 
 	/**
 	 * 
-	 * @param player The player to send the message to
+	 * @param sender The player to send the message to
 	 * @param message The message to send
 	 * @param args The arguments?
 	 */
