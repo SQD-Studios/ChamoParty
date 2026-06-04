@@ -22,10 +22,6 @@ repositories {
     }
 
     maven {
-        url = uri("https://libraries.minecraft.net/")
-    }
-
-    maven {
         url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 
@@ -44,11 +40,8 @@ repositories {
         name = "papermc"
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
-    /*maven {
-        name = "chamosmpRepoReleases"
-        url = uri("https://maven.chamosmp.net/releases")
-    }
-     */
+
+    // Strokk Commands
     maven {
         name = "eldonexus"
         url = uri("https://eldonexus.de/repository/maven-public/")
@@ -59,11 +52,8 @@ dependencies {
     compileOnly("redis.clients:jedis:5.1.3")
     compileOnly("com.github.NuVotifier.NuVotifier:nuvotifier-api:2.7.2")
     compileOnly("com.github.NuVotifier.NuVotifier:nuvotifier-bukkit:2.7.2")
-    implementation("com.mojang:authlib:4.0.43")
     compileOnly("fr.maxlego08.menu:zmenu-api:1.1.1.4")
     compileOnly("me.clip:placeholderapi:2.11.6")
-    implementation("commons-lang:commons-lang:2.6")
-    //compileOnly("com.github.technicallycoded:FoliaLib:0.4.3")
     implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("org.bstats:bstats-bukkit:3.2.1")
     compileOnly("net.strokkur.commands:annotations-paper:2.1.1")

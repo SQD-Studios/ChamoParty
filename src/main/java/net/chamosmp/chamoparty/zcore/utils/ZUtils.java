@@ -1,8 +1,6 @@
 package net.chamosmp.chamoparty.zcore.utils;
 
 import com.google.common.base.Strings;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import net.chamosmp.chamoparty.ZVotePartyPlugin;
 import net.chamosmp.chamoparty.api.enums.Permission;
 import net.chamosmp.chamoparty.zcore.enums.EnumInventory;
@@ -16,10 +14,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
@@ -35,8 +30,12 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -812,28 +811,25 @@ public abstract class ZUtils extends MessageUtils {
         return TimerBuilder.getStringTime(second);
     }
 
-    /**
-     * @param url
-     * @return
-     */
-    protected ItemStack createSkull(String url) {
 
+    protected ItemStack createSkull(String url) {
         ItemStack head = playerHead();
         if (url.isEmpty()) return head;
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 
-        profile.getProperties().put("textures", new Property("textures", url));
+        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID(), null);
+        PlayerTextures textures = profile.getTextures();
 
         try {
-            Field profileField = headMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(headMeta, profile);
-
-        } catch (IllegalArgumentException | NoSuchFieldException | SecurityException | IllegalAccessException error) {
-            error.printStackTrace();
+            textures.setSkin(new URL(url));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return head;
         }
+
+        profile.setTextures(textures);
+        headMeta.setOwnerProfile(profile);
         head.setItemMeta(headMeta);
         return head;
     }

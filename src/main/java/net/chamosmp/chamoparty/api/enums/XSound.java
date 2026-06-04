@@ -25,9 +25,6 @@ import com.google.common.base.Enums;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -1239,12 +1236,12 @@ public enum XSound {
         if (Strings.isNullOrEmpty(sound) || sound.equalsIgnoreCase("none")) return null;
 
         return CompletableFuture.supplyAsync(() -> {
-            String[] split = StringUtils.split(StringUtils.deleteWhitespace(sound), ',');
-            if (split.length == 0) split = StringUtils.split(sound, ' ');
+            String[] split = sound.replaceAll("\\s+", "").split(",");
+            if (split.length == 0) split = sound.split(" ");
 
             String name = split[0];
             boolean playAtLocation = player == null;
-            if (!playAtLocation && StringUtils.startsWithIgnoreCase(name, "loc:")) {
+            if (!playAtLocation && name.toLowerCase(Locale.ENGLISH).startsWith("loc:")) {
                 name = name.substring(4);
                 playAtLocation = true;
             }
@@ -1325,7 +1322,16 @@ public enum XSound {
      */
     @Override
     public String toString() {
-        return WordUtils.capitalize(this.name().replace('_', ' ').toLowerCase(Locale.ENGLISH));
+        String[] words = this.name().replace('_', ' ').toLowerCase(Locale.ENGLISH).split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                sb.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(' ');
+            }
+        }
+        return sb.toString().trim();
     }
 
     /**
@@ -1400,8 +1406,17 @@ public enum XSound {
         Objects.requireNonNull(plugin, "Cannot play repeating sound from null plugin");
         Objects.requireNonNull(entity, "Cannot play repeating sound at null location");
 
-        Validate.isTrue(repeat > 0, "Cannot repeat playing sound " + repeat + " times");
-        Validate.isTrue(delay > 0, "Delay ticks must be at least 1");
+        if (repeat <= 0) {
+            throw new IllegalArgumentException(
+                    "Cannot repeat playing sound " + repeat + " times"
+            );
+        }
+
+        if (delay <= 0) {
+            throw new IllegalArgumentException(
+                    "Delay ticks must be at least 1"
+            );
+        }
 
         return new BukkitRunnable() {
             int repeating = repeat;
@@ -1431,9 +1446,23 @@ public enum XSound {
         Objects.requireNonNull(player, "Cannot play note from null player");
         Objects.requireNonNull(playTo, "Cannot play note to null entity");
 
-        Validate.isTrue(ascendLevel > 0, "Note ascend level cannot be lower than 1");
-        Validate.isTrue(ascendLevel <= 7, "Note ascend level cannot be greater than 7");
-        Validate.isTrue(delay > 0, "Delay ticks must be at least 1");
+        if (ascendLevel <= 0) {
+            throw new IllegalArgumentException(
+                    "Note ascend level cannot be lower than 1"
+            );
+        }
+
+        if (ascendLevel > 7) {
+            throw new IllegalArgumentException(
+                    "Note ascend level cannot be greater than 7"
+            );
+        }
+
+        if (delay <= 0) {
+            throw new IllegalArgumentException(
+                    "Delay ticks must be at least 1"
+            );
+        }
 
         return new BukkitRunnable() {
             int repeating = ascendLevel;
