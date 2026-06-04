@@ -6,6 +6,11 @@ import java.util.function.Consumer;
 
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.folialib.impl.PlatformScheduler;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.chamosmp.chamoparty.command.brigadier.Base;
+import net.chamosmp.chamoparty.command.brigadier.BaseBrigadier;
+import net.chamosmp.chamoparty.command.brigadier.Vote;
+import net.chamosmp.chamoparty.command.brigadier.VoteBrigadier;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -47,6 +52,8 @@ public class ZVotePartyPlugin extends ZPlugin {
 	public void onEnable() {
 
 
+
+
 		ZPlaceholderApi.getInstance().setPlugin(this);
 
 		scheduler = new FoliaLib(this).getScheduler();
@@ -69,7 +76,13 @@ public class ZVotePartyPlugin extends ZPlugin {
 
 		/* Commands */
 
-		this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vp");
+		//this.registerCommand("zvoteparty", new CommandIndex(this), "voteparty", "vp");
+
+		this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
+			// Register the command with the description and aliases declared as annotations:
+			BaseBrigadier.register(event.registrar(), this);
+			VoteBrigadier.register(event.registrar(), this);
+		}));
 
 		/* Inventories */
 
