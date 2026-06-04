@@ -10,21 +10,21 @@
 #    \____/_| |_|\__,_|_| |_| |_|\___/\_|  \__,_|_|   \__|\__, |
 #                                                          __/ |
 #   Commands and permissions:
-#   - /vote » Open vote inventory - zvoteparty.vote
-#   - /zvoteparty » Show needed votes for vote party (aliases: /vp, /voteparty) - zvoteparty.use
-#   - /zvoteparty reload » Reload configuration - zvoteparty.reload
-#   - /zvoteparty config » Open ingame configuration - zvoteparty.config
-#   - /zvoteparty version » Show plugin version
-#   - /zvoteparty help » Send commands description and syntax - zvoteparty.help
-#   - /zvoteparty add » Add vote to player - zvoteparty.add
-#   - /zvoteparty startparty » Force launch a Vote Party - zvoteparty.startparty
+#   - /vote » Open vote inventory - chamoparty.vote
+#   - /chamoparty » Show needed votes for vote party (aliases: /vp, /voteparty) - chamoparty.use
+#   - /chamoparty reload » Reload configuration - chamoparty.reload
+#   - /chamoparty config » Open ingame configuration - chamoparty.config
+#   - /chamoparty version » Show plugin version
+#   - /chamoparty help » Send commands description and syntax - chamoparty.help
+#   - /chamoparty add » Add vote to player - chamoparty.add
+#   - /chamoparty startparty » Force launch a Vote Party - chamoparty.startparty
 #   
 #   Placeholders:
-#   - %zvoteparty_votes_recorded% » Returns the current amount of votes in the Vote Party.   
-#   - %zvoteparty_votes_required_party% » Returns the amount of votes left that are needed for a Vote Party to happen.
-#   - %zvoteparty_votes_required_total% » Returns the total amount of votes needed for a Vote Party to happen.
-#   - %zvoteparty_player_votes% » Returns the total amount of votes a player has.
-#   - %zvoteparty_votes_progressbar% » Return a progress bar for the vote party
+#   - %chamoparty_votes_recorded% » Returns the current amount of votes in the Vote Party.   
+#   - %chamoparty_votes_required_party% » Returns the amount of votes left that are needed for a Vote Party to happen.
+#   - %chamoparty_votes_required_total% » Returns the total amount of votes needed for a Vote Party to happen.
+#   - %chamoparty_player_votes% » Returns the total amount of votes a player has.
+#   - %chamoparty_votes_progressbar% » Return a progress bar for the vote party
 #   
 #   
 #########################################################################################################################################
@@ -93,4 +93,4 @@ sql:
   password: "secret"
   port: 3306
   host: "192.168.10.10"
-  database: "zvoteparty"
+  database: "chamoparty"

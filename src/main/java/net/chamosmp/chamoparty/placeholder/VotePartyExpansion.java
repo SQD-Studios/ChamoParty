@@ -24,7 +24,7 @@ public class VotePartyExpansion extends PlaceholderExpansion {
 
 	@Override
 	public String getIdentifier() {
-		return "zvoteparty";
+		return "chamoparty";
 	}
 
 	@Override
