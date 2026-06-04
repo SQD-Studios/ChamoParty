@@ -25,6 +25,8 @@ import org.bukkit.plugin.Plugin;
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.zcore.logger.Logger;
 
+import static net.chamosmp.chamoparty.zcore.logger.Logger.LogType.WARNING;
+
 /**
  * 
  * @author Maxlego08
@@ -85,9 +87,9 @@ public class VersionChecker implements Listener {
 		if (isNewerVersion(plugin.getPluginMeta().getVersion(), remoteVer()) && event.getPlayer().hasPermission("zplugin.notifs")) {
 			ZVotePartyPlugin.getScheduler().runAtEntityLater(player, () -> {
 				String prefix = Message.PREFIX.getMessage();
-				player.sendMessage(prefix
-						+ "§cYou do not use the latest version of the plugin! Thank you for taking the latest version to avoid any risk of problem!");
-				player.sendMessage(prefix + "§fDownload plugin here: §a" + String.format(URL_RESOURCE, pluginID));
+				player.sendRichMessage(prefix
+						+ "<red>You do not use the latest version of the plugin! Update to eliminate the risk of problems!");
+				player.sendRichMessage(prefix + "<white>Download plugin here: <green>" + String.format(URL_RESOURCE, pluginID));
 
 			}, 20 * 2);
 		}
@@ -135,7 +137,7 @@ public class VersionChecker implements Listener {
 			Logger.info("No update available.");
 		}
 		} else  {
-			Logger.info("Failed to check for updates.");
+			Logger.info("Failed to check for updates.", WARNING);
 		}
 	}
 	public String remoteVer() throws IOException, InterruptedException {
