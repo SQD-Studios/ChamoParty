@@ -32,8 +32,8 @@ public class ColorUtils {
         String material_quartz = minecoin_gold.replace("&h", "<#E3D4D1>");
         String material_iron = material_quartz.replace("&i", "<#CECACA>");
         String material_netherite = material_iron.replace("&j", "<#443A3B>");
-        String material_redstone = material_netherite.replace("&m", "<#971607>");
-        String material_copper = material_redstone.replace("&n", "<#B4684D>");
+        //String material_redstone = material_netherite.replace("&m", "<#971607>");
+        //String material_copper = material_redstone.replace("&n", "<#B4684D>");
         String material_gold = material_copper.replace("&p", "<#DEB12D>");
         String material_emerald = material_gold.replace("&q", "<#119F36>");
         String material_diamond = material_emerald.replace("&s", "<#2CBAA8>");
