@@ -1,9 +1,6 @@
 # ChamoParty
 **A fork of zVoteParty to modernize the VoteParty plugins** <br>
 
-> [!CAUTION]
-> Keep in mind that this is still in progress and IS NOT PRODUCTION READY <br>
-
 Here is the checklist:
 - [x] Hook into NuVotifier (Idk how we ended up like this)
 - [x] Hook into zMenu
