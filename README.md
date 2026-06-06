@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/Wiki%20License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Maven](https://img.shields.io/badge/Maven-maven.chamosmp.net-orange)](https://maven.chamosmp.net/releases)
 
-ChamoParty is a modernized fork of the zVoteParty plugin, rewritten with cleaner internals, modern Minecraft version support, and a proper API for developers.
+ChamoParty is a modernized fork of the zVoteParty plugin, rewritten with source, modern Minecraft version support, and a proper API
 
 ---
 
