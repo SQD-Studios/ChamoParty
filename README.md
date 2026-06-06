@@ -49,6 +49,7 @@ Maven (pom.xml)
   <version>version</version>
 </dependency>
 ```
+
 ## FAQ
 ### **Add-Ons**<br>
 Keep in mind that this plugin will not work with "addons" that worked with zVoteParty as it changed its classes to net.chamosmp.chamoparty and its plugin name to ChamoParty but that api has still remained the same
