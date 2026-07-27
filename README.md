@@ -59,3 +59,6 @@ This isn't a drop in replacement as it changed its structure to ChamoParty and i
 | ---------- | ------- |
 | [MIT License](https://github.com/SQD-Studios/ChamoParty/blob/master/LICENSE.WIKI) | [Wiki](https://github.com/SQD-Studios/ChamoParty/wiki) |
 | [GPL v3](https://github.com/SQD-Studios/ChamoParty/blob/master/LICENSE.CODE) | [Code](https://github.com/SQD-Studios/ChamoParty) |
+
+## Want to get the original?
+The original project on which this was based can be found and built here: https://github.com/Maxlego08/zVoteParty
