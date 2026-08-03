@@ -69,5 +69,4 @@ publishing {
 dependencies {
     compileOnly(project(":core"))
     implementation(project(":paper"))
-    compileOnly(project(":api"))
 }

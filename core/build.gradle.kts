@@ -6,34 +6,16 @@ plugins {
 
 java.sourceCompatibility = JavaVersion.VERSION_25
 
-
 dependencies {
-    compileOnly("redis.clients:jedis:5.1.3")
-    compileOnly("com.github.NuVotifier.NuVotifier:nuvotifier-api:2.7.2")
-    implementation("com.zaxxer:HikariCP:4.0.3")
-
     compileOnly("net.kyori:adventure-text-minimessage:5.2.0")
     compileOnly("net.kyori:adventure-api:5.2.0")
-
-    implementation(project(":api"))
 }
 
 tasks {
-    processResources {
-        val props = mapOf("version" to project.version)
-        inputs.properties(props)
-        filteringCharset = "UTF-8"
-
-        filesMatching("plugin.yml") {
-            expand(props)
-        }
-    }
-
     withType<Javadoc> {
         options.encoding = "UTF-8"
     }
 }
-
 
 publishing {
     publications {
