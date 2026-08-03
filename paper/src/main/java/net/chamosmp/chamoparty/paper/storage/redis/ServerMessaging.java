@@ -84,8 +84,6 @@ public class ServerMessaging extends JedisPubSub {
                         this.plugin.getManager().secretStart();
                         break;
                     case ADD_VOTE:
-                        String username = values[2];
-                        String serviceName = values[3];
                         this.handleVoteResponse(uuid, true, null);
                         break;
                     case VOTE_RESPONSE:

@@ -1,22 +1,19 @@
 package net.chamosmp.chamoparty.paper.storage.utils;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Consumer;
-
+import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.api.storage.Storage;
-import net.chamosmp.chamoparty.paper.storage.requets.InsertRunnable;
-import net.chamosmp.chamoparty.paper.storage.requets.SelectVoteCountRunnable;
-import net.chamosmp.chamoparty.paper.storage.requets.SelectVotesRunnable;
-import net.chamosmp.chamoparty.paper.storage.requets.UpdateCountRunnable;
-import net.chamosmp.chamoparty.paper.storage.requets.UpdatePlayerRunnable;
+import net.chamosmp.chamoparty.paper.core.logger.Logger;
+import net.chamosmp.chamoparty.paper.storage.requets.*;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Connection implements IConnection {
 
@@ -97,7 +94,7 @@ public class Connection implements IConnection {
                             connect();
                             runnable.run();
                         } catch (SQLException e) {
-                            // e.printStackTrace();
+                            Logger.log(e.getMessage(), Logger.LogType.ERROR);
                         }
                     }
                 };
@@ -106,7 +103,7 @@ public class Connection implements IConnection {
                 runnable.run();
             }
         } catch (SQLException e) {
-            // e.printStackTrace();
+            Logger.log(e.getMessage(), Logger.LogType.ERROR);
         }
     }
 

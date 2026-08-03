@@ -27,10 +27,6 @@ public final class SchedulerUtil {
         }
     }
 
-    public static Executor getVirtualThreadExecutor() {
-        return VIRTUAL_THREAD_EXECUTOR;
-    }
-
     public static void runAsync(@NotNull Plugin plugin, @NotNull Runnable task) {
         if (isFolia()) {
             Bukkit.getAsyncScheduler().runNow(plugin, _ -> task.run());

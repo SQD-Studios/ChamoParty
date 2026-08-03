@@ -3,7 +3,6 @@ package net.chamosmp.chamoparty.paper.core.utils.storage;
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.core.utils.storage.DiscUtils;
 import net.chamosmp.chamoparty.paper.core.Plugin;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.save.Config;
@@ -55,12 +54,12 @@ public class Persist extends Utils {
 
     // NICE WRAPPERS
 
-    public <T> T loadOrSaveDefault(T def, Class<T> clazz) {
-        return loadOrSaveDefault(def, clazz, getFile(clazz));
+    public <T> void loadOrSaveDefault(T def, Class<T> clazz) {
+        loadOrSaveDefault(def, clazz, getFile(clazz));
     }
 
-    public <T> T loadOrSaveDefault(T def, Class<T> clazz, String name) {
-        return loadOrSaveDefault(def, clazz, getFile(name));
+    public <T> void loadOrSaveDefault(T def, Class<T> clazz, String name) {
+        loadOrSaveDefault(def, clazz, getFile(name));
     }
 
     public <T> T loadOrSaveDefault(T def, Class<T> clazz, Folder folder, String name) {
@@ -169,7 +168,6 @@ public class Persist extends Utils {
         return load(typeOfT, getFile(name));
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T load(Type typeOfT, File file) {
         String content = DiscUtils.readCatch(file);
         if (content == null) {
@@ -177,7 +175,7 @@ public class Persist extends Utils {
         }
 
         try {
-            return (T) p.getGson().fromJson(content, typeOfT);
+            return p.getGson().fromJson(content, typeOfT);
         } catch (Exception ex) { // output the error message rather than full
             // stack trace; error parsing the file, most
             // likely

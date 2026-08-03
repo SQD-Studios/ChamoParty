@@ -14,7 +14,7 @@ public class PlaceholderAPI extends Utils {
 
     private ChamoPartyPlugin plugin;
     private final String prefix = "chamoparty";
-    private final Pattern pattern = Pattern.compile("[%]([^%]+)[%]");
+    private final Pattern pattern = Pattern.compile("%([^%]+)%");
 
     /**
      * Set plugin instance

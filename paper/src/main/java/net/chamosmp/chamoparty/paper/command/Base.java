@@ -45,9 +45,12 @@ public class Base extends ChamoPartyManager {
     @Permission("chamoparty.version")
     @Executes("version")
     void onExecuteVersion(CommandSender sender) {
-        message(sender, "<green>Version<gray>: <dark_green>" + plugin.getPluginMeta().getVersion());
-        message(sender, "<green>Organization<gray>: <dark_green>SQD Studios");
-        message(sender, "<green>Download<gray>: <dark_green>https://modrinth.com/project/chamoparty");
+        message(sender, String.format("""
+                <green>Version<gray>: <dark_green>" %s
+                <green>Organization<gray>: <dark_green>SQD Studios
+                <green>Download<gray>: <dark_green>https://modrinth.com/project/chamoparty"
+                """, plugin.getPluginMeta().getVersion()
+        ));
     }
 
     // StartParty Sub
@@ -65,7 +68,11 @@ public class Base extends ChamoPartyManager {
     @Permission("chamoparty.config")
     @Executes("config")
     void onExecuteConfig(@Executor Player sender) {
-        this.createInventory(plugin, sender, EnumInventory.INVENTORY_CONFIG);
+        try {
+            this.createInventory(plugin, sender, EnumInventory.INVENTORY_CONFIG);
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Permission("chamoparty.add")

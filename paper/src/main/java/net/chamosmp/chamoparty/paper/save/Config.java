@@ -14,11 +14,11 @@ public class Config implements Saveable {
 
     public static boolean enableDebug = false;
     public static boolean enableDebugTime = false;
-    public static boolean enableAutoUpdate = true;
     public static boolean enableLogMessage = false;
 
     public static boolean enableVoteInventory = true;
     public static boolean enableVoteMessage = true;
+
     // New flag to restrict rewards only to voters
     public static boolean only_voters_rewards = true;
 

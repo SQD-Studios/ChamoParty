@@ -39,7 +39,7 @@ public class VersionChecker implements Listener {
     @EventHandler
     public void onConnect(PlayerJoinEvent event) throws IOException, InterruptedException {
         final Player player = event.getPlayer();
-        if (isNewerVersion(plugin.getPluginMeta().getVersion(), remoteVer()) && event.getPlayer().hasPermission("zplugin.notifs")) {
+        if (isNewerVersion(plugin.getPluginMeta().getVersion(), remoteVer()) && event.getPlayer().hasPermission("chamoparty.update")) {
             SchedulerUtil.runAtEntityLater(plugin, player, () -> {
                 Component prefix = Message.PREFIX.getMessage();
                 player.sendRichMessage(prefix +

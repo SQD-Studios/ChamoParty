@@ -35,7 +35,6 @@ import java.util.List;
 
 public abstract class Plugin extends JavaPlugin {
 
-    private final Logger log = new Logger();
     private final List<Saveable> savers = new ArrayList<>();
     private final List<ListenerAdapter> listenerAdapters = new ArrayList<>();
     private final List<String> files = new ArrayList<>();
@@ -48,8 +47,8 @@ public abstract class Plugin extends JavaPlugin {
 
         this.enableTime = System.currentTimeMillis();
 
-        this.log.log("Enabling");
-        this.log.log("Plugin Version v" + this.getPluginMeta().getVersion(), LogType.INFO);
+        Logger.log("Enabling");
+        Logger.log("Plugin Version v" + this.getPluginMeta().getVersion(), LogType.INFO);
 
         this.getDataFolder().mkdirs();
 
@@ -78,17 +77,17 @@ public abstract class Plugin extends JavaPlugin {
 
         if (this.inventoryManager != null) this.inventoryManager.sendLog();
 
-        this.log.log("Done enabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
+        Logger.log("Done enabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
 
     }
 
     protected void preDisable() {
         this.enableTime = System.currentTimeMillis();
-        this.log.log("Starting disabling");
+        Logger.log("Starting disabling");
     }
 
     protected void postDisable() {
-        this.log.log("Done disabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
+        Logger.log("Done disabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
 
     }
 
@@ -132,15 +131,6 @@ public abstract class Plugin extends JavaPlugin {
     }
 
     /**
-     * Get logger
-     *
-     * @return loggers
-     */
-    public Logger getLog() {
-        return this.log;
-    }
-
-    /**
      * Get gson
      *
      * @return {@link Gson}
@@ -169,10 +159,10 @@ public abstract class Plugin extends JavaPlugin {
     public <T> T getProvider(Class<T> classz) {
         RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(classz);
         if (provider == null) {
-            log.log("Unable to retrieve the provider " + classz, LogType.WARNING);
+            Logger.log("Unable to retrieve the provider " + classz, LogType.WARNING);
             return null;
         }
-        return provider.getProvider() != null ? provider.getProvider() : null;
+        return provider.getProvider();
     }
 
     /**

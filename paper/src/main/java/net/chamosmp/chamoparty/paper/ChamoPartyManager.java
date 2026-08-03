@@ -88,6 +88,9 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         if (configuration.isConfigurationSection("party.rewards.")) {
             try {
                 configurationSection = configuration.getConfigurationSection("party.rewards.");
+                if (configurationSection == null) {
+                    return;
+                }
                 for (String key : configurationSection.getKeys(false)) {
                     String path = "party.rewards." + key + ".";
                     Reward reward = loader.load(configuration, path);
@@ -115,12 +118,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
         this.handleVoteParty();
 
-        if (offlinePlayer != null) {
-            this.vote(offlinePlayer, serviceName);
-        } else {
-            IStorage iStorage = this.plugin.getIStorage();
-            iStorage.performCustomVoteAction(username, serviceName, null);
-        }
+        this.vote(offlinePlayer, serviceName);
     }
 
     @Override
@@ -132,7 +130,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void vote(CommandSender sender, String username, boolean updateVoteParty) {
-        this.vote(username, "Serveur Minecraft Vote", updateVoteParty);
+        this.vote(username, "ChamoParty", updateVoteParty);
         message(sender, Message.VOTE_SEND, "%player%", username);
     }
 
@@ -153,25 +151,6 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
             iStorage.insertVote(playerVote, vote, reward);
         }, false);
     }
-
-/*    @Override
-    public boolean secretVote(String username, String serviceName) {
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
-        if (offlinePlayer == null || !offlinePlayer.isOnline()) return false;
-
-        Reward reward = getRandomReward(RewardType.VOTE);
-        if (reward != null && reward.needToBeOnline()) {
-            this.plugin.get(offlinePlayer, playerVote -> {
-                IStorage iStorage = this.plugin.getIStorage();
-                Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
-                iStorage.insertVote(playerVote, vote, reward);
-            }, false);
-            return true;
-        }
-    }
-
- */
-
 
     @Override
     public void secretStart() {
@@ -256,7 +235,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         this.plugin.get(player, playerVote -> {
             List<Vote> votes = playerVote.getNeedRewardVotes();
             if (!votes.isEmpty()) {
-                schedule(Integer.valueOf((int) Config.joinGiveVoteMilliSecond), () -> {
+                schedule((int) Config.joinGiveVoteMilliSecond, () -> {
                     message(player, Message.VOTE_LATER, "%amount%", votes.size());
                     votes.forEach(e -> e.giveReward(this.plugin, player));
                 });

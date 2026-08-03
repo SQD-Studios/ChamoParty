@@ -40,7 +40,7 @@ public abstract class PaginateInventory<T> extends Inventory {
 
         if (defaultSlot > inventorySize || nextSlot > inventorySize || previousSlot > inventorySize
                 || paginationSize > inventorySize)
-            throw new InventoryOpenException("Une erreur est survenue avec la gestion des slots !");
+            throw new InventoryOpenException("An error occurred with slot management!");
 
         collections = preOpenInventory();
 
@@ -62,11 +62,23 @@ public abstract class PaginateInventory<T> extends Inventory {
         });
 
         if (getPage() != 1)
-            addItem(previousSlot, Material.ARROW, "§f§ §7Page pr§c§dente")
-                    .setClick(event -> createInventory(this.plugin, player, getId(), getPage() - 1, args));
+            addItem(previousSlot, Material.ARROW, "§f§ §7Previous page")
+                    .setClick(event -> {
+                        try {
+                            createInventory(this.plugin, player, getId(), getPage() - 1, args);
+                        } catch (CloneNotSupportedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
         if (getPage() != getMaxPage(collections))
-            addItem(nextSlot, Material.ARROW, "§f§ §7Page suivante")
-                    .setClick(event -> createInventory(this.plugin, player, getId(), getPage() + 1, args));
+            addItem(nextSlot, Material.ARROW, "§f§ §7Next Page")
+                    .setClick(event -> {
+                        try {
+                            createInventory(this.plugin, player, getId(), getPage() + 1, args);
+                        } catch (CloneNotSupportedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
 
         postOpenInventory();
 

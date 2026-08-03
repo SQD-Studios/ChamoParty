@@ -61,7 +61,9 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
             try {
                 if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
-                    message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
+                    if (player != null) {
+                        message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
+                    }
                 }
 
                 if (Config.enableActionBarVoteAnnonce)
@@ -101,6 +103,6 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
 
     @Override
     public void removeVote() {
-        if (!votes.isEmpty()) votes.remove(0);
+        if (!votes.isEmpty()) votes.removeFirst();
     }
 }

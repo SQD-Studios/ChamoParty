@@ -34,7 +34,7 @@ public class InventoryManager extends ListenerAdapter {
     }
 
     public void sendLog() {
-        plugin.getLog().log("Loading " + inventories.size() + " inventories", LogType.SUCCESS);
+        Logger.log("Loading " + inventories.size() + " inventories", LogType.SUCCESS);
     }
 
     /**
@@ -57,7 +57,7 @@ public class InventoryManager extends ListenerAdapter {
      * @param page
      * @param objects
      */
-    public void createInventory(EnumInventory inv, Player player, int page, Object... objects) {
+    public void createInventory(EnumInventory inv, Player player, int page, Object... objects) throws CloneNotSupportedException {
         this.createInventory(inv.getId(), player, page, objects);
     }
 
@@ -68,7 +68,7 @@ public class InventoryManager extends ListenerAdapter {
      * @param page
      * @param objects
      */
-    public void createInventory(int id, Player player, int page, Object... objects) {
+    public void createInventory(int id, Player player, int page, Object... objects) throws CloneNotSupportedException {
         Inventory inventory = getInventory(id);
         if (inventory == null) {
             message(player, Message.INVENTORY_CLONE_NULL, "%id%", id);

@@ -4,56 +4,42 @@ import net.chamosmp.chamoparty.paper.save.Config;
 
 public class ElapsedTime extends Utils {
 
-	private long start;
-	private long end;
+    private long start;
+    private long end;
 
-	private final String name;
+    private final String name;
 
-	/**
-	 * @param name
-	 */
-	public ElapsedTime(String name) {
-		super();
-		this.name = name;
-	}
+    /**
+     * @param name
+     */
+    public ElapsedTime(String name) {
+        super();
+        this.name = name;
+    }
 
-	/**
-	 * Start
-	 */
-	public void start() {
-		this.start = System.nanoTime();
-	}
+    /**
+     * Start
+     */
+    public void start() {
+        this.start = System.nanoTime();
+    }
 
-	/**
-	 * Stop
-	 */
-	public void end() {
-		this.end = System.nanoTime();
-	}
+    /**
+     * Stop
+     */
+    public void end() {
+        this.end = System.nanoTime();
+    }
 
-	/**
-	 * @return the start
-	 */
-	public long getStart() {
-		return start;
-	}
+    public long getElapsedTime() {
+        return this.end - this.start;
+    }
 
-	/**
-	 * @return the end
-	 */
-	public long getEnd() {
-		return end;
-	}
-
-	public long getElapsedTime() {
-		return this.end - this.start;
-	}
-
-	public void endDisplay() {
-		this.end();
-		if (Config.enableDebugTime) {
-			System.out.println("[ElapsedTime] " + name + " -> " + super.format(this.getElapsedTime(), ' '));
-		}
-	}
+    public void endDisplay() {
+        this.end();
+        if (Config.enableDebugTime) {
+            System.out.println("[ElapsedTime] " + name + " -> " + super.format(this.getElapsedTime(), ' '));
+        }
+    }
 
 }

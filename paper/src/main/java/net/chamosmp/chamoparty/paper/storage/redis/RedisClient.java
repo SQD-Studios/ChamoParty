@@ -8,38 +8,38 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 public class RedisClient {
-	
-	private final JedisPool jedis;
 
-	public RedisClient() {
-		RedisConfiguration config = Config.redis;
+    private final JedisPool jedis;
 
-		this.jedis = config.getPassword() != null
-				? new JedisPool(buildPoolConfig(config), config.getHost(), config.getPort(), Protocol.DEFAULT_TIMEOUT,
-						config.getPassword())
-				: new JedisPool(buildPoolConfig(config), config.getHost(), config.getPort());
+    public RedisClient() {
+        RedisConfiguration config = Config.redis;
 
-	}
+        this.jedis = config.getPassword() != null
+                ? new JedisPool(buildPoolConfig(config), config.getHost(), config.getPort(), Protocol.DEFAULT_TIMEOUT,
+                config.getPassword())
+                : new JedisPool(buildPoolConfig(config), config.getHost(), config.getPort());
 
-	public Jedis getPool() {
-		Jedis jedis = this.jedis.getResource();
+    }
 
-		RedisConfiguration config = Config.redis;
-		if (config.getDatabaseIndex() != 0) {
-			jedis.select(config.getDatabaseIndex());
-		}
+    public Jedis getPool() {
+        Jedis jedis = this.jedis.getResource();
 
-		return jedis;
-	}
+        RedisConfiguration config = Config.redis;
+        if (config.getDatabaseIndex() != 0) {
+            jedis.select(config.getDatabaseIndex());
+        }
 
-	private JedisPoolConfig buildPoolConfig(RedisConfiguration config) {
-		RedisConfiguration.RedisPoolConfiguration poolConfig = config.getPoolConfig();
-		JedisPoolConfig poolConfigBuilder = new JedisPoolConfig();
+        return jedis;
+    }
 
-		poolConfigBuilder.setMaxTotal(poolConfig.maxTotal());
-		poolConfigBuilder.setMaxIdle(poolConfig.maxIdle());
-		poolConfigBuilder.setMinIdle(poolConfig.minIdle());
+    private JedisPoolConfig buildPoolConfig(RedisConfiguration config) {
+        RedisConfiguration.RedisPoolConfiguration poolConfig = config.getPoolConfig();
+        JedisPoolConfig poolConfigBuilder = new JedisPoolConfig();
 
-		return poolConfigBuilder;
-	}
+        poolConfigBuilder.setMaxTotal(poolConfig.maxTotal());
+        poolConfigBuilder.setMaxIdle(poolConfig.maxIdle());
+        poolConfigBuilder.setMinIdle(poolConfig.minIdle());
+
+        return poolConfigBuilder;
+    }
 }

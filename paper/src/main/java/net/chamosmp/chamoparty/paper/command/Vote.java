@@ -24,5 +24,3 @@ public class Vote extends ChamoPartyManager {
         openVote(sender);
     }
 }
-
-

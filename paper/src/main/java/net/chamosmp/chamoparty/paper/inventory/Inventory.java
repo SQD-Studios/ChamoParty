@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -130,13 +129,6 @@ public abstract class Inventory extends Utils implements Cloneable {
     }
 
     /**
-     * @return the args
-     */
-    public Object[] getObjets() {
-        return args;
-    }
-
-    /**
      * @return the inventory
      */
     public org.bukkit.inventory.Inventory getInventory() {
@@ -183,7 +175,8 @@ public abstract class Inventory extends Utils implements Cloneable {
     protected Inventory clone() {
         try {
             return getClass().getDeclaredConstructor().newInstance();
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

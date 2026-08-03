@@ -1,6 +1,5 @@
 package net.chamosmp.chamoparty.paper.core.utils;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.core.enums.DefaultFontInfo;
 import net.chamosmp.chamoparty.core.utils.ColorUtils;

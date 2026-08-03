@@ -17,10 +17,8 @@ import java.util.Map;
 
 public class ItemBuilder extends Utils implements Cloneable {
 
-    private ItemStack item;
     private final Material material;
     private ItemMeta meta;
-    private final int data;
     private final int amount;
     private String name;
     private List<Component> lore;
@@ -30,18 +28,16 @@ public class ItemBuilder extends Utils implements Cloneable {
     /**
      *
      * @param material
-     * @param data
      * @param amount
      * @param name
      * @param lore
      * @param flags
      * @param enchantments
      */
-    public ItemBuilder(Material material, int data, int amount, String name, List<String> lore, List<ItemFlag> flags,
+    public ItemBuilder(Material material, int amount, String name, List<String> lore, List<ItemFlag> flags,
                        Map<Enchantment, Integer> enchantments) {
         super();
         this.material = material;
-        this.data = data;
         this.amount = amount;
         this.name = name;
         this.lore = ColorUtils.parse(lore);
@@ -55,7 +51,7 @@ public class ItemBuilder extends Utils implements Cloneable {
      * @param name
      */
     public ItemBuilder(Material material, String name) {
-        this(material, 0, 1, name, null, null, null);
+        this(material, 1, name, null, null, null);
     }
 
 
@@ -64,38 +60,32 @@ public class ItemBuilder extends Utils implements Cloneable {
      *
      * @param enchantment
      * @param value
-     * @return
      */
-    public ItemBuilder addEnchant(Enchantment enchantment, int value) {
+    public void addEnchant(Enchantment enchantment, int value) {
         if (enchantments == null)
             enchantments = new HashMap<>();
         enchantments.put(enchantment, value);
-        return this;
     }
 
     /**
      *
      * @param flag
-     * @return
      */
-    public ItemBuilder setFlag(ItemFlag flag) {
+    public void setFlag(ItemFlag flag) {
         if (flags == null)
             flags = new ArrayList<>();
         this.flags.add(flag);
-        return this;
     }
 
     /**
      *
      * @param format
      * @param args
-     * @return
      */
-    public ItemBuilder addLine(String format) {
+    public void addLine(String format) {
         if (lore == null)
             lore = new ArrayList<>();
         lore.add(ColorUtils.parse(format));
-        return this;
     }
 
     /**
@@ -110,16 +100,14 @@ public class ItemBuilder extends Utils implements Cloneable {
 
     /**
      *
-     * @return
      */
-    public ItemBuilder glow() {
+    public void glow() {
         addEnchant(material != Material.BOW ? Enchantment.INFINITY : Enchantment.LUCK_OF_THE_SEA, 10);
         setFlag(ItemFlag.HIDE_ENCHANTS);
-        return this;
     }
 
     public ItemStack build() {
-        item = new ItemStack(material, amount);
+        ItemStack item = new ItemStack(material, amount);
 
         if (meta == null)
             meta = item.getItemMeta();
@@ -153,13 +141,6 @@ public class ItemBuilder extends Utils implements Cloneable {
             e.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * @return the amount
-     */
-    public int getAmount() {
-        return amount;
     }
 
     /**

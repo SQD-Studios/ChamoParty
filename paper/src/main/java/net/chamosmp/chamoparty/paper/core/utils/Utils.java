@@ -10,7 +10,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 import java.text.DecimalFormat;
@@ -30,38 +29,6 @@ public abstract class Utils extends MessageUtils {
 
     public String getProgressBar(long l, long m, ProgressBar progressBar) {
         return this.getProgressBar(l, m, progressBar.getLength(), progressBar.getSymbol(), progressBar.getCompletedColor(), progressBar.getNotCompletedColor());
-    }
-
-    /**
-     * @param player
-     * @return true if the player's inventory is full
-     */
-    protected boolean hasInventoryFull(Player player) {
-        int slot = 0;
-        PlayerInventory inventory = player.getInventory();
-        for (int a = 0; a != 36; a++) {
-            ItemStack itemStack = inventory.getContents()[a];
-            if (itemStack == null) slot++;
-        }
-        return slot == 0;
-    }
-
-    protected boolean give(ItemStack item, Player player) {
-        if (hasInventoryFull(player)) return false;
-        player.getInventory().addItem(item);
-        return true;
-    }
-
-    /**
-     * Gives an item to the player, if the player's inventory is full then the
-     * item will drop to the ground
-     *
-     * @param player
-     * @param item
-     */
-    protected void give(Player player, ItemStack item) {
-        if (hasInventoryFull(player)) player.getWorld().dropItem(player.getLocation(), item);
-        else player.getInventory().addItem(item);
     }
 
 
@@ -139,7 +106,7 @@ public abstract class Utils extends MessageUtils {
      * @param player
      * @param inventoryId
      */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory) {
+    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory) throws CloneNotSupportedException {
         createInventory(plugin, player, inventory, 1);
     }
 
@@ -148,7 +115,7 @@ public abstract class Utils extends MessageUtils {
      * @param inventoryId
      * @param page
      */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page) {
+    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page) throws CloneNotSupportedException {
         createInventory(plugin, player, inventory, page, new Object() {
         });
     }
@@ -159,7 +126,7 @@ public abstract class Utils extends MessageUtils {
      * @param page
      * @param objects
      */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page, Object... objects) {
+    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page, Object... objects) throws CloneNotSupportedException {
         plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
     }
 
@@ -169,7 +136,7 @@ public abstract class Utils extends MessageUtils {
      * @param page
      * @param objects
      */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, int inventory, int page, Object... objects) {
+    protected void createInventory(ChamoPartyPlugin plugin, Player player, int inventory, int page, Object... objects) throws CloneNotSupportedException {
         plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
     }
 
@@ -206,14 +173,6 @@ public abstract class Utils extends MessageUtils {
         return messages.stream().map(this::color).collect(Collectors.toList());
     }
 
-    /**
-     * @param messages
-     * @return
-     */
-    protected List<String> colorReverse(List<String> messages) {
-        return messages.stream().map(message -> colorReverse(message)).collect(Collectors.toList());
-    }
-
 
     /**
      * @param l
@@ -240,7 +199,7 @@ public abstract class Utils extends MessageUtils {
      * @param runnable
      */
     protected void runAsync(Plugin plugin, Runnable runnable) {
-       SchedulerUtil.runAsync(plugin, runnable);
+        SchedulerUtil.runAsync(plugin, runnable);
     }
 
 

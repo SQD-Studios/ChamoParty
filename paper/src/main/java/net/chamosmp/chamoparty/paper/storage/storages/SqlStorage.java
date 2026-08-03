@@ -82,8 +82,6 @@ public class SqlStorage extends Utils implements IStorage {
 
                 this.iConnection.fetchVotes(this);
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
