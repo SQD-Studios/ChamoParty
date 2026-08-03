@@ -109,6 +109,11 @@ buildNumber.properties
 .flattened-pom.xml
 
 # Gradle Build/Run
-run/
+core/run/
 /.gradle/
 /build/
+/core/build/
+build
+*/run
+*/build
+/api/build/

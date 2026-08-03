@@ -1,0 +1,28 @@
+name: ChamoParty
+authors: ["SQD Studios"]
+main: net.chamosmp.chamoparty.paper.ChamoPartyPlugin
+loader: net.chamosmp.chamoparty.paper.ChamoPartyLoader
+version: '${version}'
+website: https://github.com/SQD-Studios/ChamoParty
+api-version: 1.21.11
+folia-supported: true
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Votifier:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    zMenu:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+libraries:
+  - "com.zaxxer:HikariCP:4.0.3"
+  - "redis.clients:jedis:7.2.0"
+  - "com.mysql:mysql-connector-j:8.3.0"

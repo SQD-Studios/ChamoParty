@@ -1,8 +1,0 @@
-name: ChamoParty
-authors: ["Chamogelastos", "SQD Studios"]
-main: net.chamosmp.chamoparty.ZVotePartyPlugin
-softdepend: [PlaceholderAPI, Votifier, zMenu]
-version: '${version}'
-website: https://github.com/SQD-Studios/ChamoParty
-api-version: 1.20
-folia-supported: true
