@@ -143,16 +143,6 @@ public abstract class Inventory extends Utils implements Cloneable {
         return inventory;
     }
 
-    /**
-     * @return the guiName
-     * @deprecated Use {@link Inventory#getGuiComponent()} instead
-     */
-    @Deprecated(since = "0.1.0")
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
-    public String getGuiName() {
-        return guiName;
-    }
-
     public Component getGuiComponent() {
         return title;
     }

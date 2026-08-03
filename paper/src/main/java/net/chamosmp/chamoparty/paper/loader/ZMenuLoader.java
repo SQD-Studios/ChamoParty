@@ -31,7 +31,7 @@ public class ZMenuLoader extends Utils {
 
     public void reload() {
         if (this.inventoryManager == null) {
-            this.plugin.getLogger().warning("Skipping inventory reload — zMenu is not available.");
+            this.plugin.getLogger().warning("Skipping inventories as zMenu is not available.");
             return;
         }
 
@@ -50,7 +50,7 @@ public class ZMenuLoader extends Utils {
             Inventory inventory = optional.get();
             this.inventoryManager.openInventory(player, inventory);
         } else
-            message(player, "§cErreur with inventory votes !");
+            message(player, "<red>Error with the inventories!");
     }
 
     public boolean isLoaded() {

@@ -314,7 +314,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     @Override
     public void removeVote(CommandSender sender, OfflinePlayer player) {
         this.plugin.getPlayerManager().getPlayer(player, optional -> {
-            if (!optional.isPresent() || optional.get().getVoteCount() == 0) {
+            if (optional.isEmpty() || optional.get().getVoteCount() == 0) {
                 message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
                 return;
             }

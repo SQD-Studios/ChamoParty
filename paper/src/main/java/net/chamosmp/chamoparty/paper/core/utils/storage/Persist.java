@@ -3,12 +3,15 @@ package net.chamosmp.chamoparty.paper.core.utils.storage;
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.core.utils.storage.DiscUtils;
 import net.chamosmp.chamoparty.paper.core.Plugin;
+import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.save.Config;
 
 import java.io.File;
 import java.lang.reflect.Type;
+
+import static net.chamosmp.chamoparty.paper.core.logger.Logger.log;
 
 public class Persist extends Utils {
 
@@ -67,7 +70,7 @@ public class Persist extends Utils {
     public <T> T loadOrSaveDefault(T def, Class<T> clazz, File file) {
         if (!file.exists()) {
             if (Config.enableLogMessage)
-                p.getLog().log("Creating default: " + file, LogType.SUCCESS);
+                log("Creating default: " + file, LogType.SUCCESS);
             this.save(def, file);
             return def;
         }
@@ -75,7 +78,7 @@ public class Persist extends Utils {
         T loaded = this.load(clazz, file);
 
         if (loaded == null) {
-            p.getLog().log("Using default as I failed to load: " + file, LogType.WARNING);
+            log("Using default as I failed to load: " + file, LogType.WARNING);
 
             /*
              * Create new config backup
@@ -84,7 +87,7 @@ public class Persist extends Utils {
             File backup = new File(file.getPath() + "_bad");
             if (backup.exists())
                 backup.delete();
-            p.getLog().log("Backing up copy of bad file to: " + backup, LogType.WARNING);
+            log("Backing up copy of bad file to: " + backup, LogType.WARNING);
 
             file.renameTo(backup);
 
@@ -92,7 +95,7 @@ public class Persist extends Utils {
         } else {
 
             if (Config.enableLogMessage)
-                p.getLog().log(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
+                log(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
 
         }
 
@@ -119,13 +122,13 @@ public class Persist extends Utils {
 
             boolean b = DiscUtils.writeCatch(file, p.getGson().toJson(instance));
             if (Config.enableLogMessage)
-                p.getLog().log(file.getAbsolutePath() + " successfully saved !", LogType.SUCCESS);
+                log(file.getAbsolutePath() + " successfully saved !", LogType.SUCCESS);
             return b;
 
         } catch (Exception e) {
 
             if (Config.enableLogMessage)
-                p.getLog().log("cannot save file " + file.getAbsolutePath(), LogType.ERROR);
+                log("cannot save file " + file.getAbsolutePath(), LogType.ERROR);
             e.printStackTrace();
 
             return false;
@@ -149,21 +152,19 @@ public class Persist extends Utils {
         }
 
         try {
-            T instance = p.getGson().fromJson(content, clazz);
-            return instance;
+            return p.getGson().fromJson(content, clazz);
         } catch (Exception ex) { // output the error message rather than full
             // stack trace; error parsing the file, most
             // likely
             if (Config.enableDebug)
                 ex.printStackTrace();
-            p.getLog().log(ex.getMessage(), LogType.ERROR);
+            log(ex.getMessage(), LogType.ERROR);
         }
 
         return null;
     }
 
     // LOAD BY TYPE
-    @SuppressWarnings("unchecked")
     public <T> T load(Type typeOfT, String name) {
         return load(typeOfT, getFile(name));
     }
@@ -180,7 +181,7 @@ public class Persist extends Utils {
         } catch (Exception ex) { // output the error message rather than full
             // stack trace; error parsing the file, most
             // likely
-            p.getLog().log(ex.getMessage(), LogType.ERROR);
+            log(ex.getMessage(), LogType.ERROR);
         }
 
         return null;

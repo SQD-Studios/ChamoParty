@@ -181,7 +181,7 @@ public class ChamoPartyPlugin extends Plugin {
 	public void get(UUID uuid, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
 		PlayerManager manager = this.getPlayerManager();
 		manager.getPlayer(uuid, optional -> {
-			consumer.accept(optional.isPresent() ? optional.get() : manager.createPlayer(uuid));
+			consumer.accept(optional.orElseGet(() -> manager.createPlayer(uuid)));
 		}, true);
 	}
 

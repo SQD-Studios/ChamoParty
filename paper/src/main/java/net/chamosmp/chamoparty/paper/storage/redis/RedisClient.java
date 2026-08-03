@@ -36,9 +36,9 @@ public class RedisClient {
 		RedisConfiguration.RedisPoolConfiguration poolConfig = config.getPoolConfig();
 		JedisPoolConfig poolConfigBuilder = new JedisPoolConfig();
 
-		poolConfigBuilder.setMaxTotal(poolConfig.getMaxTotal());
-		poolConfigBuilder.setMaxIdle(poolConfig.getMaxIdle());
-		poolConfigBuilder.setMinIdle(poolConfig.getMinIdle());
+		poolConfigBuilder.setMaxTotal(poolConfig.maxTotal());
+		poolConfigBuilder.setMaxIdle(poolConfig.maxIdle());
+		poolConfigBuilder.setMinIdle(poolConfig.minIdle());
 
 		return poolConfigBuilder;
 	}
