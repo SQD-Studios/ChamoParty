@@ -1,7 +1,12 @@
 # ChamoParty
+
+[![Build](https://img.shields.io/github/actions/workflow/status/SQD-Studios/ChamoParty/gradle.yml?style=flat-square)](https://github.com/SQD-Studios/ChamoItemSkins/actions)
+[![Documentation](https://img.shields.io/badge/Documentation-8A2BE2?style=flat-square)](https://sqd-studios.github.io/docs/chamoparty/administration/introduction/installing/)
+
 **A fork of zVoteParty to modernize the VoteParty plugins. Seriously, the most modern one was updated 5 years ago** <br>
 
 Here is the checklist:<br>
+
 - [x] Hook into NuVotifier (Idk how we ended up like this)<br>
 - [x] Hook into zMenu<br>
 - [ ] Better MySQL Support<br>
@@ -11,54 +16,78 @@ Here is the checklist:<br>
 - [x] Production Ready<br>
 
 ## Building
+
 Build with PowerShell or a Linux Console
-``` shell
+
+```shell
 ./gradlew shadowJar
 ```
+
 Build with a Windows CMD
-``` shell
+
+```shell
 gradlew shadowJar
 ```
 
 ## API
-To use the api
 
-Gradle Kotlin DSL (build.gradle.kts)
-``` kotlin
+### Repository
+
+<details>
+<summary>Gradle Kotlin DSL</summary>
+
+```kotlin
 maven {
     name = "chamosmpRepoReleases"
     url = uri("https://maven.chamosmp.net/releases")
 }
 ```
-``` kotlin
-compileOnly("net.chamosmp:ChamoParty:version")
+
+```kotlin
+compileOnly("net.chamosmp.chamoparty:paper:version")
+compileOnly("net.chamosmp.chamoparty:core:version")
 ```
-Maven (pom.xml)
-``` xml
+</details>
+<details>
+<summary>Maven</summary>
+
+```xml
 <repository>
-  <id>chamosmp-repo-releases</id>
-  <name>ChamoSMP Maven Repository</name>
-  <url>https://maven.chamosmp.net/releases</url>
+    <id>chamosmp-repo-releases</id>
+    <name>ChamoSMP Maven Repository</name>
+    <url>https://maven.chamosmp.net/releases</url>
 </repository>
 ```
-``` xml
+
+```xml
 <dependency>
-  <groupId>net.chamosmp</groupId>
-  <artifactId>ChamoParty</artifactId>
-  <version>version</version>
+    <groupId>net.chamosmp.chamoparty</groupId>
+    <artifactId>core</artifactId>
+    <version>version</version>
+</dependency>
+<dependency> 
+    <groupId>net.chamosmp.chamoparty</groupId>
+    <artifactId>paper</artifactId>
+    <version>version</version>
 </dependency>
 ```
-## FAQ
-### **Add-Ons**<br>
-Keep in mind that this plugin will not work with "addons" that worked with zVoteParty as it changed its classes to net.chamosmp.chamoparty and its plugin name to ChamoParty but that api has still remained the same
-### **Drop-in Replacement**
-This isn't a drop in replacement as it changed its structure to ChamoParty and its configs has changed a little but most is the same
+</details>
+<details>
+<summary>Gradle Groovy DSL</summary>
 
-## Licenses
-| License | Licensed Part |
-| ---------- | ------- |
-| [MIT License](https://github.com/SQD-Studios/ChamoParty/blob/master/LICENSE.WIKI) | [Wiki](https://github.com/SQD-Studios/ChamoParty/wiki) |
-| [GPL v3](https://github.com/SQD-Studios/ChamoParty/blob/master/LICENSE.CODE) | [Code](https://github.com/SQD-Studios/ChamoParty) |
+```groovy
+maven {
+    name = "chamosmpRepoReleases"
+    url = "https://maven.chamosmp.net/releases"
+}
+```
+
+```groovy
+compileOnly "net.chamosmp.chamoparty:paper:version"
+compileOnly "net.chamosmp.chamoparty:core:version"
+```
+</details>
 
 ## Want to get the original?
+
 The original project on which this was based can be found and built here: https://github.com/Maxlego08/zVoteParty

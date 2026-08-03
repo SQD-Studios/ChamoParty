@@ -1,7 +1,8 @@
+import org.gradle.api.internal.provider.ValueSupplier.ValueProducer.task
+
 plugins {
-    id("java-library")
+    id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.4.1"
 }
 
 allprojects {
@@ -10,7 +11,6 @@ allprojects {
     description = "ChamoParty v0.0.1 ready to thrive"
 
     repositories {
-        mavenCentral()
         maven {
             url = uri("https://jitpack.io")
         }
@@ -21,10 +21,6 @@ allprojects {
             url = uri("https://repo.groupez.dev/releases")
         }
         maven {
-            name = "tcoded-releases"
-            url = uri("https://repo.tcoded.com/releases")
-        }
-        maven {
             name = "papermc"
             url = uri("https://repo.papermc.io/repository/maven-public/")
         }
@@ -32,11 +28,11 @@ allprojects {
             name = "eldonexus"
             url = uri("https://eldonexus.de/repository/maven-public/")
         }
+        mavenCentral()
     }
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-Xlint:deprecation")
-        options.encoding = "UTF-8"
     }
 }
 

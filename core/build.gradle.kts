@@ -1,7 +1,6 @@
 plugins {
-    id("java-library")
+    id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.4.1"
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_25

@@ -1,7 +1,7 @@
 plugins {
-    id("java-library")
+    id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.4.1"
+    id("com.gradleup.shadow") version "9.6.1"
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
@@ -48,10 +48,14 @@ tasks {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
     }
+}
 
-    withType<Javadoc> {
-        options.encoding = "UTF-8"
+tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
+    javaLauncher = javaToolchains.launcherFor {
+        vendor = JvmVendorSpec.JETBRAINS
+        languageVersion = JavaLanguageVersion.of(21)
     }
+    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 }
 
 publishing {
