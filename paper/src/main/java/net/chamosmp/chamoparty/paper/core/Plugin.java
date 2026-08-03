@@ -71,6 +71,13 @@ public abstract class Plugin extends JavaPlugin {
                 this.saveResource("scripts/" + script.name().toLowerCase() + ".sql", false);
             }
         }
+
+        if (!Bukkit.getServerConfig().isProxyOnlineMode()) {
+            Logger.log("""
+                    It appears that you are running an offline mode server. We, do not provide support for setups that bypass Mojang's authentication.
+                    You are on your own to solve any issues that arise.
+                    """);
+        }
     }
 
     protected void postEnable() {
