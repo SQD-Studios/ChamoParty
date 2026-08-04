@@ -8,7 +8,7 @@ plugins {
 allprojects {
     group = "net.chamosmp.chamoparty"
     version = "0.1.0"
-    description = "ChamoParty v0.0.1 ready to thrive"
+    description = "ChamoParty, fork of zVoteParty, but just better"
 
     repositories {
         maven {

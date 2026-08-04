@@ -38,7 +38,7 @@ tasks {
     runPaper.folia.registerTask()
 
     processResources {
-        val props = mapOf("version" to project.version)
+        val props = mapOf("version" to project.version, "description" to project.description)
         filesMatching("paper-plugin.yml") {
             expand(props)
         }

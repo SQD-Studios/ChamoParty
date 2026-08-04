@@ -18,11 +18,6 @@ public interface IConnection {
      */
     Connection getConnection();
 
-    /*
-     *
-     */
-    void asyncConnect();
-
     /**
      *
      */

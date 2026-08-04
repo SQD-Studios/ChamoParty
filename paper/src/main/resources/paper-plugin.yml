@@ -2,6 +2,7 @@ name: ChamoParty
 authors: [ "SQD Studios" ]
 version: '${version}'
 website: https://github.com/SQD-Studios/ChamoParty
+description: '${description}'
 
 main: net.chamosmp.chamoparty.paper.ChamoPartyPlugin
 loader: net.chamosmp.chamoparty.paper.ChamoPartyLoader

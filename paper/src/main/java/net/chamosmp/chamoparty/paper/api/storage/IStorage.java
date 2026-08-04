@@ -34,12 +34,6 @@ public interface IStorage extends PlayerManager, Saveable {
      *
      * @param amount
      */
-    void removeVoteCount(long amount);
-
-    /**
-     *
-     * @param amount
-     */
     void setVoteCount(long amount);
 
     /**

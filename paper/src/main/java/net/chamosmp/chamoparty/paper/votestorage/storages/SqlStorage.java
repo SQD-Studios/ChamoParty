@@ -123,12 +123,6 @@ public class SqlStorage extends Utils implements IStorage {
     }
 
     @Override
-    public void removeVoteCount(long amount) {
-        this.voteCount -= amount;
-        this.iConnection.updateVoteCount(this.voteCount);
-    }
-
-    @Override
     public void setVoteCount(long amount) {
         this.voteCount = amount;
         this.iConnection.updateVoteCount(this.voteCount);

@@ -97,11 +97,6 @@ public class JsonStorage implements IStorage {
     }
 
     @Override
-    public void removeVoteCount(long amount) {
-        this.voteCount -= amount;
-    }
-
-    @Override
     public void setVoteCount(long amount) {
         this.voteCount = amount;
     }

@@ -49,24 +49,6 @@ public class Connection implements IConnection {
     }
 
     @Override
-    public void asyncConnect() {
-        Thread thread = new Thread("sql-connect") {
-
-            @Override
-            public void run() {
-                try {
-                    connect();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        };
-        thread.start();
-
-    }
-
-    @Override
     public void connect() throws SQLException {
         String url = this.storage.getUrlBase() + this.host + ":" + this.port + "/" + this.dataBase;
         this.connection = DriverManager.getConnection(url, this.user, this.password);
