@@ -55,9 +55,10 @@ public class SqlStorage extends Utils implements IStorage {
         String user = plugin.getConfig().getString("database.redis.sql.sql-credentials.user");
         String password = plugin.getConfig().getString("database.redis.sql.sql-credentials.password");
         String host = plugin.getConfig().getString("database.redis.sql.sql-credentials.host");
-        String dataBase = plugin.getConfig().getString("database.redis.sql.sql-credentials.database");
+        String database = plugin.getConfig().getString("database.redis.sql.sql-credentials.database");
         int port = plugin.getConfig().getInt("database.redis.sql.sql-credentials.port");
-        this.iConnection = new Connection(storage, user, password, host, dataBase, port);
+
+        this.iConnection = new Connection(storage, user, password, host, database, port);
 
         Logger.log("Connecting to database... (MySQL/MariaDB)");
         SchedulerUtil.runAsync(plugin, () -> {

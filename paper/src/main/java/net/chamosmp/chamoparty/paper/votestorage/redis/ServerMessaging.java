@@ -25,9 +25,9 @@ public class ServerMessaging extends JedisPubSub {
 
     private final Thread threadMessaging1;
 
-    private final List<UUID> sendingUUID = new ArrayList<UUID>();
+    private final List<UUID> sendingUUID = new ArrayList<>();
 
-    private final Map<UUID, RedisVoteResponse> voteResponses = new HashMap<UUID, RedisVoteResponse>();
+    private final Map<UUID, RedisVoteResponse> voteResponses = new HashMap<>();
 
     /**
      * @param plugin

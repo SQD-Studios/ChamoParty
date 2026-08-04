@@ -8,6 +8,7 @@ import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.votestorage.requets.*;
+import org.slf4j.LoggerFactory;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import java.util.function.Consumer;
 
 public class Connection implements IConnection {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Connection.class);
     private java.sql.Connection connection;
     private final Storage storage;
     private final String user;
@@ -74,7 +76,7 @@ public class Connection implements IConnection {
                         connect();
                         runnable.run();
                     } catch (SQLException e) {
-                        Logger.log(e.getMessage(), Logger.LogType.ERROR);
+                        log.error("Failed to get and refresh the connection: ", e);
                     }
                 });
                 thread.start();

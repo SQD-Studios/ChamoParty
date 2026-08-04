@@ -107,7 +107,8 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
             this.plugin.getLoader().open(player);
             return;
         }
-        if (!LegacyJsonConfig.enableVoteMessage) message(player, "§cError in configuration, please contact an administrator.");
+        if (!LegacyJsonConfig.enableVoteMessage)
+            message(player, "§cError in configuration, please contact an administrator.");
     }
 
     @Override
