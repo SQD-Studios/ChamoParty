@@ -1,0 +1,17 @@
+{
+  "id": "chamoparty",
+  "main": "net.chamosmp.chamoparty.velocity.ChamoPartyVelo",
+  "name": "chamoParty",
+  "version": "${version}",
+  "description": "${description}",
+  "url": "https://github.com/SQD-Studios/ChamoParty",
+  "authors": [
+    "SQD Studios"
+  ],
+  "dependencies": [
+    {
+      "id": "nuvotifier",
+      "optional": true
+    }
+  ]
+}
