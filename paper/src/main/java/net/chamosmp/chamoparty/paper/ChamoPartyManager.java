@@ -2,7 +2,6 @@ package net.chamosmp.chamoparty.paper;
 
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.api.enums.RewardType;
-import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
@@ -140,11 +139,6 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         if (reward == null) return;
 
         IStorage iStorage = this.plugin.getIStorage();
-
-        if (reward.needToBeOnline() && LegacyJsonConfig.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
-            iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName, offlinePlayer.getUniqueId());
-            return;
-        }
 
         this.plugin.get(offlinePlayer, playerVote -> {
             Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
