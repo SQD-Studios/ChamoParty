@@ -1,11 +1,11 @@
-package net.chamosmp.chamoparty.paper.storage.requets;
+package net.chamosmp.chamoparty.paper.votestorage.requets;
 
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +65,7 @@ public class InsertRunnable implements Runnable {
 
         } catch (SQLException e) {
             this.tryAmount++;
-            if (this.tryAmount < Config.maxSqlRetryAmoun) {
+            if (this.tryAmount < JsonConfig.maxSqlRetryAmoun) {
                 try {
                     this.iConnection.disconnect();
                     this.iConnection.connect();

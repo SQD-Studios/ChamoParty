@@ -1,14 +1,11 @@
 package net.chamosmp.chamoparty.paper.core.utils;
 
 import com.google.common.base.Strings;
-import net.chamosmp.chamoparty.core.enums.EnumInventory;
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.chamosmp.chamoparty.core.utils.ProgressBar;
-import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -95,52 +92,6 @@ public abstract class Utils extends MessageUtils {
     }
 
     /**
-     * @param items
-     * @return
-     */
-    protected int getMaxPage(Collection<?> items) {
-        return (items.size() / 45) + 1;
-    }
-
-    /**
-     * @param player
-     * @param inventoryId
-     */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory) throws CloneNotSupportedException {
-        createInventory(plugin, player, inventory, 1);
-    }
-
-    /**
-     * @param player
-     * @param inventoryId
-     * @param page
-     */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page) throws CloneNotSupportedException {
-        createInventory(plugin, player, inventory, page, new Object() {
-        });
-    }
-
-    /**
-     * @param player
-     * @param inventoryId
-     * @param page
-     * @param objects
-     */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, EnumInventory inventory, int page, Object... objects) throws CloneNotSupportedException {
-        plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
-    }
-
-    /**
-     * @param player
-     * @param inventory
-     * @param page
-     * @param objects
-     */
-    protected void createInventory(ChamoPartyPlugin plugin, Player player, int inventory, int page, Object... objects) throws CloneNotSupportedException {
-        plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
-    }
-
-    /**
      * @param item
      * @return
      */
@@ -194,13 +145,4 @@ public abstract class Utils extends MessageUtils {
         formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(l);
     }
-
-    /**
-     * @param runnable
-     */
-    protected void runAsync(Plugin plugin, Runnable runnable) {
-        SchedulerUtil.runAsync(plugin, runnable);
-    }
-
-
 }

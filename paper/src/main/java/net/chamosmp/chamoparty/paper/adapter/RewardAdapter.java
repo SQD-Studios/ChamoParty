@@ -60,7 +60,7 @@ public class RewardAdapter extends TypeAdapter<ChamoReward> {
             return;
         }
 
-        Map<String, Object> serial = new HashMap<String, Object>();
+        Map<String, Object> serial = new HashMap<>();
 
         serial.put(this.PERCENT, chamoReward.getPercent());
         serial.put(this.COMMANDS, chamoReward.getCommands());

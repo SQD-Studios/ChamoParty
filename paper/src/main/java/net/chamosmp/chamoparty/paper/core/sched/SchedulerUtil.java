@@ -13,8 +13,6 @@ import java.util.concurrent.Executors;
  * Utility for transparent Folia/Paper scheduling.
  */
 public final class SchedulerUtil {
-    private static final Executor VIRTUAL_THREAD_EXECUTOR = Executors.newVirtualThreadPerTaskExecutor();
-
     private SchedulerUtil() {
     }
 

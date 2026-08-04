@@ -4,10 +4,13 @@ import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.core.utils.ProgressBar;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
+import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.save.RedisConfiguration;
 import net.chamosmp.chamoparty.save.RedisConfiguration.RedisPoolConfiguration;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config implements Saveable {
+public class JsonConfig implements Saveable {
 
     public static Storage storage = Storage.JSON;
     public static Storage redisSqlStorage = Storage.MYSQL;
@@ -38,23 +41,23 @@ public class Config implements Saveable {
     /**
      * static Singleton instance.
      */
-    private static volatile Config instance;
+    private static volatile JsonConfig instance;
 
     /**
      * Private constructor for singleton.
      */
-    private Config() {
+    private JsonConfig() {
     }
 
     /**
      * Return a singleton instance of Config.
      */
-    public static Config getInstance() {
+    public static JsonConfig getInstance() {
         // Double lock for thread safety.
         if (instance == null) {
-            synchronized (Config.class) {
+            synchronized (JsonConfig.class) {
                 if (instance == null) {
-                    instance = new Config();
+                    instance = new JsonConfig();
                 }
             }
         }
@@ -66,7 +69,7 @@ public class Config implements Saveable {
     }
 
     public void load(Persist persist) {
-        persist.loadOrSaveDefault(getInstance(), Config.class);
+        persist.loadOrSaveDefault(getInstance(), JsonConfig.class);
     }
 
 }

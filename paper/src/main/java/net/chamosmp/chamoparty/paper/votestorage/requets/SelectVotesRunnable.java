@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.storage.requets;
+package net.chamosmp.chamoparty.paper.votestorage.requets;
 
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
@@ -8,7 +8,7 @@ import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
 import net.chamosmp.chamoparty.paper.implementations.ChamoReward;
 import net.chamosmp.chamoparty.paper.implementations.ChamoVote;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,7 +80,7 @@ public class SelectVotesRunnable extends Utils implements Runnable {
 
         } catch (SQLException e) {
             this.tryAmount++;
-            if (this.tryAmount < Config.maxSqlRetryAmoun) {
+            if (this.tryAmount < JsonConfig.maxSqlRetryAmoun) {
                 try {
                     this.iConnection.disconnect();
                     this.iConnection.connect();

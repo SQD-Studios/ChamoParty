@@ -60,7 +60,7 @@ public class PlayerAdapter extends TypeAdapter<net.chamosmp.chamoparty.paper.api
             return;
         }
 
-        Map<String, Object> serial = new HashMap<String, Object>();
+        Map<String, Object> serial = new HashMap<>();
 
         serial.put(this.UNIQUEID, playerVote.getUniqueId());
         serial.put(this.VOTES, playerVote.getVotes());

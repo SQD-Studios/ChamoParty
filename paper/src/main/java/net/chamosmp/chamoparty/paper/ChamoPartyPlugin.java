@@ -2,7 +2,6 @@ package net.chamosmp.chamoparty.paper;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.chamosmp.chamoparty.api.enums.InventoryName;
-import net.chamosmp.chamoparty.core.enums.EnumInventory;
 import net.chamosmp.chamoparty.core.utils.plugins.Plugins;
 import net.chamosmp.chamoparty.paper.api.PlayerManager;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -14,17 +13,15 @@ import net.chamosmp.chamoparty.paper.core.Plugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.chamosmp.chamoparty.paper.core.utils.plugins.VersionChecker;
-import net.chamosmp.chamoparty.paper.inventory.InventoryManager;
-import net.chamosmp.chamoparty.paper.inventory.inventories.InventoryConfig;
 import net.chamosmp.chamoparty.paper.listener.AdapterListener;
 import net.chamosmp.chamoparty.paper.listener.listeners.VoteListener;
 import net.chamosmp.chamoparty.paper.listener.listeners.VotifierListener;
 import net.chamosmp.chamoparty.paper.loader.ZMenuLoader;
 import net.chamosmp.chamoparty.paper.placeholder.PlaceholderAPI;
 import net.chamosmp.chamoparty.paper.placeholder.VotePartyExpansion;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 import net.chamosmp.chamoparty.paper.save.MessageLoader;
-import net.chamosmp.chamoparty.paper.storage.StorageManager;
+import net.chamosmp.chamoparty.paper.votestorage.StorageManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
@@ -52,7 +49,6 @@ public class ChamoPartyPlugin extends Plugin {
         this.saveDefaultConfig();
         this.reloadConfig();
 
-        this.inventoryManager = new InventoryManager(this);
 
         this.getServer().getServicesManager().register(VotePartyManager.class, this.manager, this,
                 ServicePriority.High);
@@ -64,25 +60,20 @@ public class ChamoPartyPlugin extends Plugin {
             VoteBrigadier.register(event.registrar(), this);
         }));
 
-        /* Inventories */
-
-        this.registerInventory(EnumInventory.INVENTORY_CONFIG, new InventoryConfig());
-
         /* Add Listener */
 
         this.addListener(new AdapterListener(this));
-        this.addListener(this.inventoryManager);
         this.addListener(new VoteListener(this));
 
         /* Add Saver */
-        this.addSave(Config.getInstance());
+        this.addSave(JsonConfig.getInstance());
         this.addSave(new MessageLoader(this));
         this.addSave(this.manager);
 
         this.getSavers().forEach(saver -> saver.load(this.getPersist()));
 
         // Load storage
-        this.storageManager = new StorageManager(Config.storage, this);
+        this.storageManager = new StorageManager(JsonConfig.storage, this);
         this.storageManager.load(this.getPersist());
 
         this.manager.loadConfiguration();

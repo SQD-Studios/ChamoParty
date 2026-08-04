@@ -11,8 +11,6 @@ public enum Storage {
 
     REDIS,
 
-    CUSTOM,
-
     ;
 
     private final String urlBase;
@@ -30,20 +28,6 @@ public enum Storage {
 
     public String getUrlBase() {
         return urlBase;
-    }
-
-    public boolean isDatabase() {
-        return switch (this) {
-            case CUSTOM, REDIS, JSON -> false;
-            default -> true;
-        };
-    }
-
-    public boolean isDefault() {
-        return switch (this) {
-            case CUSTOM, REDIS -> false;
-            default -> true;
-        };
     }
 
 }

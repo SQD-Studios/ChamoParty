@@ -5,7 +5,7 @@ import net.chamosmp.chamoparty.core.utils.storage.DiscUtils;
 import net.chamosmp.chamoparty.paper.core.Plugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -68,7 +68,7 @@ public class Persist extends Utils {
 
     public <T> T loadOrSaveDefault(T def, Class<T> clazz, File file) {
         if (!file.exists()) {
-            if (Config.enableLogMessage)
+            if (JsonConfig.enableLogMessage)
                 log("Creating default: " + file, LogType.SUCCESS);
             this.save(def, file);
             return def;
@@ -93,7 +93,7 @@ public class Persist extends Utils {
             return def;
         } else {
 
-            if (Config.enableLogMessage)
+            if (JsonConfig.enableLogMessage)
                 log(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
 
         }
@@ -118,15 +118,14 @@ public class Persist extends Utils {
     public boolean save(Object instance, File file) {
 
         try {
-
             boolean b = DiscUtils.writeCatch(file, p.getGson().toJson(instance));
-            if (Config.enableLogMessage)
+            if (JsonConfig.enableLogMessage)
                 log(file.getAbsolutePath() + " successfully saved !", LogType.SUCCESS);
             return b;
 
         } catch (Exception e) {
 
-            if (Config.enableLogMessage)
+            if (JsonConfig.enableLogMessage)
                 log("cannot save file " + file.getAbsolutePath(), LogType.ERROR);
             e.printStackTrace();
 
@@ -155,7 +154,7 @@ public class Persist extends Utils {
         } catch (Exception ex) { // output the error message rather than full
             // stack trace; error parsing the file, most
             // likely
-            if (Config.enableDebug)
+            if (JsonConfig.enableDebug)
                 ex.printStackTrace();
             log(ex.getMessage(), LogType.ERROR);
         }

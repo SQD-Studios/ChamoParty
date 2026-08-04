@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.storage.storages;
+package net.chamosmp.chamoparty.paper.votestorage.storages;
 
 import net.chamosmp.chamoparty.api.storage.Script;
 import net.chamosmp.chamoparty.api.storage.Storage;
@@ -15,7 +15,7 @@ import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.storage.utils.Connection;
+import net.chamosmp.chamoparty.paper.votestorage.utils.Connection;
 import net.chamosmp.chamoparty.storage.utils.ScriptRunner;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

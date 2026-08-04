@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.storage.storages;
+package net.chamosmp.chamoparty.paper.votestorage.storages;
 
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -10,7 +10,7 @@ import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -55,7 +55,7 @@ public class JsonStorage implements IStorage {
                 players.put(uniqueId, playerVote);
                 return Optional.of(playerVote);
             } catch (Exception e) {
-                if (Config.enableDebug) {
+                if (JsonConfig.enableDebug) {
                     e.printStackTrace();
                 }
             }

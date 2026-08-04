@@ -1,13 +1,11 @@
 package net.chamosmp.chamoparty.paper.command;
 
 
-import net.chamosmp.chamoparty.core.enums.EnumInventory;
 import net.chamosmp.chamoparty.paper.ChamoPartyManager;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.strokkur.commands.Aliases;
 import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
-import net.strokkur.commands.paper.Executor;
 import net.strokkur.commands.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -63,16 +61,6 @@ public class Base extends ChamoPartyManager {
     @Permission("chamoparty.help")
     @Executes("help")
     void onExecuteHelp(CommandSender sender) {
-    }
-
-    @Permission("chamoparty.config")
-    @Executes("config")
-    void onExecuteConfig(@Executor Player sender) {
-        try {
-            this.createInventory(plugin, sender, EnumInventory.INVENTORY_CONFIG);
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Permission("chamoparty.add")

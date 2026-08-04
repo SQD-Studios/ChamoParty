@@ -13,7 +13,6 @@
 #   - /vote » Open vote inventory - chamoparty.vote
 #   - /chamoparty » Show needed votes for vote party (aliases: /vp, /voteparty) - chamoparty.use
 #   - /chamoparty reload » Reload configuration - chamoparty.reload
-#   - /chamoparty config » Open ingame configuration - chamoparty.config
 #   - /chamoparty version » Show plugin version
 #   - /chamoparty help » Send commands description and syntax - chamoparty.help
 #   - /chamoparty add » Add vote to player - chamoparty.add
@@ -55,10 +54,10 @@ rewards:
     percent: 30
     needToBeOnline: true # Player must be online to receive the reward
     commands:
-      - "cr give %player% diamand"
+      - "cr give %player% diamond"
     broadcast:
       - "<gray><st>----------"
-      - "<white>%player% <gray>just won <green>x1 diamand"
+      - "<white>%player% <gray>just won <green>x1 diamond"
       - "<gray><st>----------"
 
 party:
@@ -86,14 +85,6 @@ party:
       percent: 50
       commands:
         - "cr give %player% test"
-
-#Database informations
-sql:
-  user: "homestead"
-  password: "secret"
-  port: 3306
-  host: "192.168.10.10"
-  database: "chamoparty"
 
 database:
   # JSON (one-server), REDIS (Multi-Server, requires a SQL Database too)
@@ -124,6 +115,13 @@ database:
         maxIdle: 128
         minIdle: 16
 
+debug:
+  enabled: false
+
+only-voters-rewards: true
+
+ActionBarVoteAnnounce: true,
+TchatVoteAnnounce: false,
 
 # Currently does nothing
 proxy:

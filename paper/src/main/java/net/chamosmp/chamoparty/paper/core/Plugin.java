@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.chamosmp.chamoparty.api.enums.InventoryName;
 import net.chamosmp.chamoparty.api.storage.Script;
-import net.chamosmp.chamoparty.core.enums.EnumInventory;
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.core.utils.plugins.Plugins;
 import net.chamosmp.chamoparty.exceptions.ListenerNullException;
@@ -16,17 +15,13 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.utils.gson.PotionEffectAdapter;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
-import net.chamosmp.chamoparty.paper.inventory.Inventory;
-import net.chamosmp.chamoparty.paper.inventory.InventoryManager;
 import net.chamosmp.chamoparty.paper.listener.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
@@ -38,7 +33,6 @@ public abstract class Plugin extends JavaPlugin {
     private final List<Saveable> savers = new ArrayList<>();
     private final List<ListenerAdapter> listenerAdapters = new ArrayList<>();
     private final List<String> files = new ArrayList<>();
-    protected InventoryManager inventoryManager;
     private Gson gson;
     private Persist persist;
     private long enableTime;
@@ -76,16 +70,12 @@ public abstract class Plugin extends JavaPlugin {
             Logger.log("""
                     It appears that you are running an offline mode server. We, do not provide support for setups that bypass Mojang's authentication.
                     You are on your own to solve any issues that arise.
-                    """);
+                    """, LogType.WARNING);
         }
     }
 
     protected void postEnable() {
-
-        if (this.inventoryManager != null) this.inventoryManager.sendLog();
-
         Logger.log("Done enabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
-
     }
 
     protected void preDisable() {
@@ -95,7 +85,6 @@ public abstract class Plugin extends JavaPlugin {
 
     protected void postDisable() {
         Logger.log("Done disabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
-
     }
 
     /**
@@ -104,7 +93,7 @@ public abstract class Plugin extends JavaPlugin {
      * @return
      */
     public GsonBuilder getGsonBuilder() {
-        return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE).registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter(this)).registerTypeAdapter(PlayerVote.class, new PlayerAdapter(this)).registerTypeAdapter(Vote.class, new VoteAdapter(this)).registerTypeAdapter(Reward.class, new RewardAdapter(this));
+        return new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE).registerTypeAdapter(PlayerVote.class, new PlayerAdapter(this)).registerTypeAdapter(Vote.class, new VoteAdapter(this)).registerTypeAdapter(Reward.class, new RewardAdapter(this));
     }
 
     /**
@@ -180,13 +169,6 @@ public abstract class Plugin extends JavaPlugin {
     }
 
     /**
-     * @return the inventoryManager
-     */
-    public InventoryManager getZInventoryManager() {
-        return inventoryManager;
-    }
-
-    /**
      * Check if plugin is enable
      *
      * @param pluginName
@@ -200,21 +182,11 @@ public abstract class Plugin extends JavaPlugin {
     /**
      * Get plugin for plugins enum
      *
-     * @param pluginName
+     * @param plugin
      * @return
      */
     protected org.bukkit.plugin.Plugin getPlugin(Plugins plugin) {
         return Bukkit.getPluginManager().getPlugin(plugin.getName());
-    }
-
-    /**
-     * Register Inventory
-     *
-     * @param inventory
-     * @param vInventory
-     */
-    protected void registerInventory(EnumInventory inventory, Inventory vInventory) {
-        this.inventoryManager.registerInventory(inventory, vInventory);
     }
 
     protected void registerFile(InventoryName file) {

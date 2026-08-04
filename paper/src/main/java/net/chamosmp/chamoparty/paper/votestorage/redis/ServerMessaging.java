@@ -1,12 +1,12 @@
-package net.chamosmp.chamoparty.paper.storage.redis;
+package net.chamosmp.chamoparty.paper.votestorage.redis;
 
 import net.chamosmp.chamoparty.api.storage.RedisSubChannel;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
-import net.chamosmp.chamoparty.paper.save.Config;
-import net.chamosmp.chamoparty.paper.storage.storages.RedisStorage;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
 import net.chamosmp.chamoparty.storage.redis.RedisVoteResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -42,7 +42,7 @@ public class ServerMessaging extends JedisPubSub {
 
         this.threadMessaging1 = new Thread(() -> {
             try (Jedis jedis = client.getPool()) {
-                jedis.subscribe(this, Config.redisChannel);
+                jedis.subscribe(this, JsonConfig.redisChannel);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,7 +59,7 @@ public class ServerMessaging extends JedisPubSub {
 
         try {
 
-            if (channel.equals(Config.redisChannel)) {
+            if (channel.equals(JsonConfig.redisChannel)) {
 
                 String[] values = message.split(this.SEPARATOR);
 
@@ -120,7 +120,7 @@ public class ServerMessaging extends JedisPubSub {
                     jMessage += this.SEPARATOR + message;
                 }
 
-                jedis.publish(Config.redisChannel, jMessage);
+                jedis.publish(JsonConfig.redisChannel, jMessage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -133,7 +133,7 @@ public class ServerMessaging extends JedisPubSub {
      */
     public void stop() {
         this.threadMessaging1.interrupt();
-        this.unsubscribe(Config.redisChannel);
+        this.unsubscribe(JsonConfig.redisChannel);
     }
 
     /**
@@ -233,7 +233,7 @@ public class ServerMessaging extends JedisPubSub {
 
             redisVoteResponse.addResponse(userId);
 
-            if (redisVoteResponse.getResponseCount() >= Config.redisServerAmount) {
+            if (redisVoteResponse.getResponseCount() >= JsonConfig.redisServerAmount) {
 
                 // We will check if the UUID of the player exists, if yes then
                 // we will give a reward so that the player can recover it when

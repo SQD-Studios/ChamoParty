@@ -1,13 +1,8 @@
 package net.chamosmp.chamoparty.core.utils.plugins;
 
 public enum Plugins {
-
-    VAULT("Vault"),
-    ESSENTIALS("Essentials"),
-    HEADDATABASE("HeadDatabase"),
+    
     PLACEHOLDER("PlaceholderAPI"),
-    CITIZENS("Citizens"),
-    TRANSLATIONAPI("TranslationAPI"),
     VOTIFIER("Votifier"),
     ZMENU("zMenu"),
 

@@ -48,7 +48,6 @@ public abstract class MessageUtils extends PapiUtils {
                 sender.sendMessage(messageComponent);
             }
         } else {
-
             Player player = (Player) sender;
             switch (message.getType()) {
                 case ACTION:
@@ -71,7 +70,6 @@ public abstract class MessageUtils extends PapiUtils {
                         sender.sendMessage(papi(getCenteredMessage(getMessage(message, args)), player));
                     break;
                 case TITLE:
-                    // gestion du title message
                     String title = message.getTitle();
                     String subTitle = message.getSubTitle();
                     int fadeInTime = message.getStart();
@@ -80,9 +78,6 @@ public abstract class MessageUtils extends PapiUtils {
                     this.title(player, this.papi(title, player), this.papi(subTitle, player), fadeInTime, showTime,
                             fadeOutTime);
                     break;
-                default:
-                    break;
-
             }
 
         }

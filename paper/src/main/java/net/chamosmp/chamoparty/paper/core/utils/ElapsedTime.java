@@ -1,6 +1,6 @@
 package net.chamosmp.chamoparty.paper.core.utils;
 
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 
 public class ElapsedTime extends Utils {
 
@@ -37,7 +37,7 @@ public class ElapsedTime extends Utils {
 
     public void endDisplay() {
         this.end();
-        if (Config.enableDebugTime) {
+        if (JsonConfig.enableDebugTime) {
             System.out.println("[ElapsedTime] " + name + " -> " + super.format(this.getElapsedTime(), ' '));
         }
     }

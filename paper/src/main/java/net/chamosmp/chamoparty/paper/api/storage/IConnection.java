@@ -25,7 +25,6 @@ public interface IConnection {
 
     /**
      *
-     * @throws SQLException
      */
     void connect() throws SQLException;
 

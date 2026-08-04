@@ -50,14 +50,6 @@ tasks {
     }
 }
 
-tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
-    javaLauncher = javaToolchains.launcherFor {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
-}
-
 publishing {
     publications {
         create<MavenPublication>("maven") {

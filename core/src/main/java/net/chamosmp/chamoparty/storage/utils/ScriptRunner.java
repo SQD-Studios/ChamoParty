@@ -117,8 +117,8 @@ public class ScriptRunner {
     public void closeConnection() {
         try {
             connection.close();
-        } catch (Exception e) {
-            // ignore
+        } catch (Exception _) {
+
         }
     }
 
@@ -159,7 +159,7 @@ public class ScriptRunner {
     }
 
     private StringBuilder handleLine(StringBuilder command, String line)
-            throws SQLException, UnsupportedEncodingException {
+            throws SQLException {
         String trimmedLine = line.trim();
         if (lineIsComment(trimmedLine)) {
             final String cleanedString = trimmedLine.substring(2).trim().replaceFirst("//", "");

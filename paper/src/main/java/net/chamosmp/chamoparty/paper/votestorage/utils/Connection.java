@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.storage.utils;
+package net.chamosmp.chamoparty.paper.votestorage.utils;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -7,7 +7,7 @@ import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.storage.requets.*;
+import net.chamosmp.chamoparty.paper.votestorage.requets.*;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;

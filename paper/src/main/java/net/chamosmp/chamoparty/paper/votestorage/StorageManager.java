@@ -1,14 +1,14 @@
-package net.chamosmp.chamoparty.paper.storage;
+package net.chamosmp.chamoparty.paper.votestorage;
 
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
-import net.chamosmp.chamoparty.paper.save.Config;
+import net.chamosmp.chamoparty.paper.save.JsonConfig;
 import net.chamosmp.chamoparty.paper.save.VoteStorage;
-import net.chamosmp.chamoparty.paper.storage.storages.JsonStorage;
-import net.chamosmp.chamoparty.paper.storage.storages.RedisStorage;
-import net.chamosmp.chamoparty.paper.storage.storages.SqlStorage;
+import net.chamosmp.chamoparty.paper.votestorage.storages.JsonStorage;
+import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
+import net.chamosmp.chamoparty.paper.votestorage.storages.SqlStorage;
 
 public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage.StorageManager {
 
@@ -36,7 +36,7 @@ public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage
                 this.iStorage = new SqlStorage(plugin, storage);
                 break;
             case REDIS:
-                this.iStorage = new RedisStorage(Config.redisSqlStorage, plugin);
+                this.iStorage = new RedisStorage(JsonConfig.redisSqlStorage, plugin);
                 break;
             default:
                 break;

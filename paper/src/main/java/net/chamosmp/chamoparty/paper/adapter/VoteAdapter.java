@@ -70,7 +70,7 @@ public class VoteAdapter extends TypeAdapter<ChamoVote> {
             return;
         }
 
-        Map<String, Object> serial = new HashMap<String, Object>();
+        Map<String, Object> serial = new HashMap<>();
 
         serial.put(this.SERVICENAME, chamoVote.getServiceName());
         serial.put(this.REWARD, chamoVote.getReward());

@@ -1,12 +1,12 @@
-package net.chamosmp.chamoparty.paper.storage.storages;
+package net.chamosmp.chamoparty.paper.votestorage.storages;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.utils.ElapsedTime;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
-import net.chamosmp.chamoparty.paper.storage.redis.RedisClient;
-import net.chamosmp.chamoparty.paper.storage.redis.ServerMessaging;
+import net.chamosmp.chamoparty.paper.votestorage.redis.RedisClient;
+import net.chamosmp.chamoparty.paper.votestorage.redis.ServerMessaging;
 
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ public class RedisStorage extends SqlStorage implements IStorage {
         super.save(persist);
         try {
             this.messaging.stop();
-        } catch (Exception e) {
+        } catch (Exception _) {
         }
     }
 
