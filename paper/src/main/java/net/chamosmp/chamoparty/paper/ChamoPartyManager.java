@@ -22,6 +22,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +62,36 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void loadConfiguration() {
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), "config.yml"));
+        File file = new File(this.plugin.getDataFolder(), "config.yml");
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection configurationSection;
+
+        InputStream resourceStream = plugin.getResource(file.getName());
+        if (resourceStream != null) {
+            try (InputStreamReader reader = new InputStreamReader(resourceStream, StandardCharsets.UTF_8)) {
+                YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(reader);
+                boolean changed = false;
+                for (String key : defaultConfig.getKeys(true)) {
+                    if (!configuration.contains(key)) {
+                        if (!key.startsWith("categories.") && !key.startsWith("rarities.")) {
+                            configuration.set(key, defaultConfig.get(key));
+                            changed = true;
+                        }
+                    }
+                }
+
+                if (changed) {
+                    try {
+                        configuration.save(file);
+                    } catch (IOException e) {
+                        Logger.log("Could not save adapted config " + e.getMessage(), LogType.ERROR);
+                    }
+                }
+            } catch (IOException e) {
+                Logger.log("Could not read default config: " + e.getMessage(), LogType.ERROR);
+            }
+
+        }
 
         this.rewards.clear();
         Loader<Reward> loader = new RewardLoader();
@@ -94,7 +126,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
                     Reward reward = loader.load(configuration, path);
                     if (reward != null) this.partyRewards.add(reward);
                 }
-            } catch (Exception ignored) {
+            } catch (Exception _) {
             }
         }
     }
