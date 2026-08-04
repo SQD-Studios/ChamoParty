@@ -85,6 +85,7 @@ party:
       percent: 50
       commands:
         - "cr give %player% test"
+  only-voters-rewards: true
 
 database:
   # JSON (one-server), REDIS (Multi-Server, requires a SQL Database too)
@@ -118,10 +119,11 @@ database:
 debug:
   enabled: false
 
-only-voters-rewards: true
+action-vote-announcement: true
+tchat-vote-annonce: false
 
-ActionBarVoteAnnounce: true,
-TchatVoteAnnounce: false,
+vote-inventory:
+  enabled: true
 
 # Currently does nothing
 proxy:

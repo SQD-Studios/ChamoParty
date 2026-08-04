@@ -66,7 +66,6 @@ public class ChamoPartyPlugin extends Plugin {
         this.addListener(new VoteListener(this));
 
         /* Add Saver */
-        this.addSave(JsonConfig.getInstance());
         this.addSave(new MessageLoader(this));
         this.addSave(this.manager);
 

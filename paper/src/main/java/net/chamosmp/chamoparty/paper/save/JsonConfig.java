@@ -2,15 +2,12 @@ package net.chamosmp.chamoparty.paper.save;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.core.utils.ProgressBar;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
-import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.save.RedisConfiguration;
 import net.chamosmp.chamoparty.save.RedisConfiguration.RedisPoolConfiguration;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 
-public class JsonConfig implements Saveable {
+public class JsonConfig {
 
     public static Storage storage = Storage.JSON;
     public static Storage redisSqlStorage = Storage.MYSQL;
@@ -46,30 +43,56 @@ public class JsonConfig implements Saveable {
     /**
      * Private constructor for singleton.
      */
-    private JsonConfig() {
+    private JsonConfig(Plugin plugin) {
+        FileConfiguration config = plugin.getConfig();
+
+        enableDebug = config.getBoolean("debug.enabled", false);
+        enableDebugTime = config.getBoolean("debug.enabled", false);
+        enableLogMessage = true;
+        enableVoteInventory = config.getBoolean("vote-inventory.enabled", true);
+        enableVoteMessage = true;
+
+        enableActionBarVoteAnnonce = config.getBoolean("action-vote-announcement", true);
+        enableTchatVoteAnnonce = config.getBoolean("tchat-vote-annonce", true);
+
+        only_voters_rewards = config.getBoolean("party.only-voters-rewards", true);
+
+        redisServerAmount = config.getInt("database.redis.redis-credentials.server-amount", 2);
+        redisChannel = config.getString("database.redis.redis-credentials.channel", "chamoparty");
+        redis = new RedisConfiguration(
+                config.getString("database.redis.redis-credentials.host", "localhost"),
+                config.getInt("database.redis.redis-credentials.port", 6379),
+                config.getString("database.redis.redis-credentials.password", null),
+                config.getInt("database.redis.redis-credentials.databaseIndex", 0),
+                new RedisPoolConfiguration(
+                        config.getInt("database.redis.redis-credentials.poolConfig.maxTotal", 128),
+                        config.getInt("database.redis.redis-credentials.poolConfig.maxIdle", 128),
+                        config.getInt("database.redis.redis-credentials.poolConfig.minTotal", 16)
+                )
+        );
     }
 
     /**
      * Return a singleton instance of Config.
      */
-    public static JsonConfig getInstance() {
+    public static JsonConfig getInstance(Plugin plugin) {
         // Double lock for thread safety.
         if (instance == null) {
             synchronized (JsonConfig.class) {
                 if (instance == null) {
-                    instance = new JsonConfig();
+                    instance = new JsonConfig(plugin);
                 }
             }
         }
         return instance;
     }
 
-    public void save(Persist persist) {
-        persist.save(getInstance());
+    public void save(Plugin plugin) {
+        getInstance(plugin);
     }
 
-    public void load(Persist persist) {
-        persist.loadOrSaveDefault(getInstance(), JsonConfig.class);
+    public void load(Plugin plugin) {
+        getInstance(plugin);
     }
 
 }
