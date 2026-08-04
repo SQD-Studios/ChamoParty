@@ -1,15 +1,17 @@
 package net.chamosmp.chamoparty.velocity;
 
+import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
-import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.chamosmp.chamoparty.velocity.commands.BaseBrigadier;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
 import net.chamosmp.chamoparty.velocity.pluginmessaging.BackendToVelocity;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
+import org.spongepowered.configurate.ConfigurateException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,8 +20,9 @@ import java.nio.file.Path;
 public class ChamoPartyVelo {
     private final ProxyServer server;
     private final Logger logger;
-    private final Path configPath;
+    public final Path pluginFolderPath;
     private final Metrics.Factory metricsFactory;
+    public final Path configPath;
 
     private YamlLoader yamlLoader;
 
@@ -27,8 +30,9 @@ public class ChamoPartyVelo {
     public ChamoPartyVelo(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
         this.server = server;
         this.logger = logger;
-        this.configPath = dataDirectory;
+        this.pluginFolderPath = dataDirectory;
         this.metricsFactory = metricsFactory;
+        this.configPath = dataDirectory.resolve("config.yml");
     }
 
     @Subscribe
@@ -41,9 +45,14 @@ public class ChamoPartyVelo {
 
         registerChannels();
 
+        // Registering the commands
+        BaseBrigadier.register(this.server, this, yamlLoader, this);
+        logger.info("Registered commands");
+
+
         if (configPath != null) {
             try {
-                yamlLoader.loadConfig(configPath.resolve("config.yml"));
+                yamlLoader.loadConfig(configPath);
                 logger.info("Loaded config files");
             } catch (IOException e) {
                 logger.error("Failed to load config!", e);
@@ -60,19 +69,16 @@ public class ChamoPartyVelo {
         }
     }
 
-
-    @Subscribe
-    public void onProxyShutdown(ProxyShutdownEvent event) {
-
-    }
-
     public void registerChannels() {
         server.getChannelRegistrar().register(BackendToVelocity.VOTE);
         logger.info("Registered plugin messaging channels");
     }
 
     public void initInstances() {
-        this.yamlLoader = new YamlLoader();
+        this.yamlLoader = new YamlLoader(this);
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
 }
