@@ -3,10 +3,12 @@ package net.chamosmp.chamoparty.paper.core.logger;
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.slf4j.LoggerFactory;
 
 public class Logger {
 
     private static final Component prefix = ColorUtils.parse("<aqua>ChamoParty| </aqua>");
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Logger.class);
 
     public Logger() {
     }
@@ -35,6 +37,4 @@ public class Logger {
     public static void log(String message) {
         Bukkit.getConsoleSender().sendMessage(prefix.append(ColorUtils.parse(message)));
     }
-
-
 }

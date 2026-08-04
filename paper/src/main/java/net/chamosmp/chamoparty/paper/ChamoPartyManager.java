@@ -15,7 +15,7 @@ import net.chamosmp.chamoparty.paper.core.utils.loader.Loader;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.paper.loader.RewardLoader;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -102,12 +102,12 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void openVote(Player player) {
-        if (JsonConfig.enableVoteMessage) message(player, Message.VOTE_INFORMATIONS);
-        if (JsonConfig.enableVoteInventory && this.plugin.getLoader() != null) {
+        if (LegacyJsonConfig.enableVoteMessage) message(player, Message.VOTE_INFORMATIONS);
+        if (LegacyJsonConfig.enableVoteInventory && this.plugin.getLoader() != null) {
             this.plugin.getLoader().open(player);
             return;
         }
-        if (!JsonConfig.enableVoteMessage) message(player, "§cError in configuration, please contact an administrator.");
+        if (!LegacyJsonConfig.enableVoteMessage) message(player, "§cError in configuration, please contact an administrator.");
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
         IStorage iStorage = this.plugin.getIStorage();
 
-        if (reward.needToBeOnline() && JsonConfig.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
+        if (reward.needToBeOnline() && LegacyJsonConfig.storage.equals(Storage.REDIS) && !offlinePlayer.isOnline()) {
             iStorage.performCustomVoteAction(offlinePlayer.getName(), serviceName, offlinePlayer.getUniqueId());
             return;
         }
@@ -157,7 +157,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
             boolean eligible = true;
             // Check if only voters should receive rewards
-            if (JsonConfig.only_voters_rewards) {
+            if (LegacyJsonConfig.only_voters_rewards) {
                 long votes = this.plugin.getPlayerManager().getSyncPlayer(player)
                         .map(PlayerVote::getVoteCount)
                         .orElse(0);
@@ -234,7 +234,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         this.plugin.get(player, playerVote -> {
             List<Vote> votes = playerVote.getNeedRewardVotes();
             if (!votes.isEmpty()) {
-                schedule((int) JsonConfig.joinGiveVoteMilliSecond, () -> {
+                schedule((int) LegacyJsonConfig.joinGiveVoteMilliSecond, () -> {
                     message(player, Message.VOTE_LATER, "%amount%", votes.size());
                     votes.forEach(e -> e.giveReward(this.plugin, player));
                 });

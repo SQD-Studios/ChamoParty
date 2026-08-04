@@ -5,7 +5,7 @@ import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -66,9 +66,9 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
                     }
                 }
 
-                if (JsonConfig.enableActionBarVoteAnnonce)
+                if (LegacyJsonConfig.enableActionBarVoteAnnonce)
                     broadcast(Message.VOTE_BROADCAST_ACTION, "%player%", offlinePlayer.getName());
-                if (JsonConfig.enableTchatVoteAnnonce)
+                if (LegacyJsonConfig.enableTchatVoteAnnonce)
                     broadcast(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
 
                 if (reward.needToBeOnline()) {

@@ -19,7 +19,7 @@ import net.chamosmp.chamoparty.paper.listener.listeners.VotifierListener;
 import net.chamosmp.chamoparty.paper.loader.ZMenuLoader;
 import net.chamosmp.chamoparty.paper.placeholder.PlaceholderAPI;
 import net.chamosmp.chamoparty.paper.placeholder.VotePartyExpansion;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.save.MessageLoader;
 import net.chamosmp.chamoparty.paper.votestorage.StorageManager;
 import org.bstats.bukkit.Metrics;
@@ -39,8 +39,9 @@ public class ChamoPartyPlugin extends Plugin {
     public void onEnable() {
         PlaceholderAPI.getInstance().setPlugin(this);
 
-        /* Register inventories */
-
+        /*
+        Register inventories
+         */
         for (InventoryName inventoryName : InventoryName.values())
             this.registerFile(inventoryName);
 
@@ -50,29 +51,31 @@ public class ChamoPartyPlugin extends Plugin {
         this.reloadConfig();
 
 
-        this.getServer().getServicesManager().register(VotePartyManager.class, this.manager, this,
-                ServicePriority.High);
+        this.getServer().getServicesManager().register(VotePartyManager.class, this.manager, this, ServicePriority.High);
 
-        /* Commands */
+        /*
+        Commands
+        */
+        registerCommands();
 
-        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            BaseBrigadier.register(event.registrar(), this);
-            VoteBrigadier.register(event.registrar(), this);
-        }));
-
-        /* Add Listener */
+        /*
+        Add Listener
+        */
 
         this.addListener(new AdapterListener(this));
         this.addListener(new VoteListener(this));
 
-        /* Add Saver */
+        /*
+        Add Saver
+        */
         this.addSave(new MessageLoader(this));
         this.addSave(this.manager);
 
         this.getSavers().forEach(saver -> saver.load(this.getPersist()));
 
         // Load storage
-        this.storageManager = new StorageManager(JsonConfig.storage, this);
+        LegacyJsonConfig.getInstance(this);
+        this.storageManager = new StorageManager(LegacyJsonConfig.storage, this);
         this.storageManager.load(this.getPersist());
 
         this.manager.loadConfiguration();
@@ -83,7 +86,7 @@ public class ChamoPartyPlugin extends Plugin {
         }
 
         if (this.isEnable(Plugins.VOTIFIER)) {
-            Logger.log("Hook NuVotifier");
+            Logger.log("Hooked into (Nu)Votifier");
             this.addListener(new VotifierListener(this));
         }
 
@@ -107,6 +110,10 @@ public class ChamoPartyPlugin extends Plugin {
             throw new RuntimeException(e);
         }
 
+
+        /*
+        Metrics
+         */
         int pluginId = 31621;
         Metrics metrics = new Metrics(this, pluginId);
 
@@ -115,13 +122,19 @@ public class ChamoPartyPlugin extends Plugin {
 
     @Override
     public void onDisable() {
-        this.preDisable();
-
         this.getSavers().forEach(saver -> saver.save(this.getPersist()));
         this.storageManager.save(this.getPersist());
 
         this.postDisable();
     }
+
+    public void registerCommands() {
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
+            BaseBrigadier.register(event.registrar(), this);
+            VoteBrigadier.register(event.registrar(), this);
+        }));
+    }
+
 
     /**
      * Return the manager for the voteparty
@@ -163,6 +176,9 @@ public class ChamoPartyPlugin extends Plugin {
         }, true);
     }
 
+    /*
+    Inventory/zMenu
+     */
     public void reloadInventories() {
         if (this.loader == null) return; // zMenu not present
         this.loader.reload();

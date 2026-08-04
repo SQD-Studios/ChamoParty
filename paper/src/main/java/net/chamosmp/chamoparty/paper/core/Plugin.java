@@ -35,15 +35,8 @@ public abstract class Plugin extends JavaPlugin {
     private final List<String> files = new ArrayList<>();
     private Gson gson;
     private Persist persist;
-    private long enableTime;
 
     protected void preEnable() {
-
-        this.enableTime = System.currentTimeMillis();
-
-        Logger.log("Enabling");
-        Logger.log("Plugin Version v" + this.getPluginMeta().getVersion(), LogType.INFO);
-
         this.getDataFolder().mkdirs();
 
         for (Folder folder : Folder.values()) {
@@ -75,16 +68,11 @@ public abstract class Plugin extends JavaPlugin {
     }
 
     protected void postEnable() {
-        Logger.log("Done enabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
-    }
-
-    protected void preDisable() {
-        this.enableTime = System.currentTimeMillis();
-        Logger.log("Starting disabling");
+        Logger.log("Done enabling");
     }
 
     protected void postDisable() {
-        Logger.log("Done disabling (" + Math.abs(enableTime - System.currentTimeMillis()) + "ms)");
+        Logger.log("Done disabling");
     }
 
     /**
@@ -149,13 +137,13 @@ public abstract class Plugin extends JavaPlugin {
     }
 
     /**
-     * @param classz
+     * @param providerClass
      * @return
      */
-    public <T> T getProvider(Class<T> classz) {
-        RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(classz);
+    public <T> T getProvider(Class<T> providerClass) {
+        RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(providerClass);
         if (provider == null) {
-            Logger.log("Unable to retrieve the provider " + classz, LogType.WARNING);
+            Logger.log("Unable to retrieve the provider " + providerClass, LogType.WARNING);
             return null;
         }
         return provider.getProvider();

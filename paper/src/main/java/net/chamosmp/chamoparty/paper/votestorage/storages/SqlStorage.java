@@ -19,6 +19,7 @@ import net.chamosmp.chamoparty.paper.votestorage.utils.Connection;
 import net.chamosmp.chamoparty.storage.utils.ScriptRunner;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -30,12 +31,13 @@ import java.util.function.Consumer;
 
 public class SqlStorage extends Utils implements IStorage {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger("ChamoParty");
     protected final ChamoPartyPlugin plugin;
     protected final Storage storage;
 
     protected IConnection iConnection;
 
-    protected transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
+    protected transient final Map<UUID, PlayerVote> players = new HashMap<>();
     protected long voteCount = 1;
 
     /**
@@ -50,22 +52,20 @@ public class SqlStorage extends Utils implements IStorage {
 
     @Override
     public void load(Persist persist) {
-
-        Logger.log("Load SQL...");
-        String user = plugin.getConfig().getString("sql.user");
-        String password = plugin.getConfig().getString("sql.password");
-        String host = plugin.getConfig().getString("sql.host");
-        String dataBase = plugin.getConfig().getString("sql.database");
-        int port = plugin.getConfig().getInt("sql.port");
+        String user = plugin.getConfig().getString("database.redis.sql.sql-credentials.user");
+        String password = plugin.getConfig().getString("database.redis.sql.sql-credentials.password");
+        String host = plugin.getConfig().getString("database.redis.sql.sql-credentials.host");
+        String dataBase = plugin.getConfig().getString("database.redis.sql.sql-credentials.database");
+        int port = plugin.getConfig().getInt("database.redis.sql.sql-credentials.port");
         this.iConnection = new Connection(storage, user, password, host, dataBase, port);
 
+        Logger.log("Connecting to database... (MySQL/MariaDB)");
         SchedulerUtil.runAsync(plugin, () -> {
-
             try {
                 this.iConnection.connect();
-                Logger.log("Database connect to " + host);
+                log.info("Connected to database");
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("Could not connect to database: ", e);
                 return;
             }
 
@@ -76,9 +76,9 @@ public class SqlStorage extends Utils implements IStorage {
                     ScriptRunner runner = new ScriptRunner(iConnection.getConnection());
                     Reader reader = new BufferedReader(new FileReader(file));
                     runner.runScript(reader);
-                    Logger.log("Script " + script.name() + " successfuly run", LogType.SUCCESS);
                     reader.close();
                 }
+                log.info("Successfully run all the scripts");
 
                 this.iConnection.fetchVotes(this);
 

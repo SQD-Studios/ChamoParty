@@ -4,7 +4,7 @@ import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.save.VoteStorage;
 import net.chamosmp.chamoparty.paper.votestorage.storages.JsonStorage;
 import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
@@ -25,20 +25,18 @@ public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage
         this.storage = storage;
         this.plugin = plugin;
 
+        if (storage == null) {
+            return;
+        }
         switch (storage) {
             case JSON:
                 this.iStorage = new JsonStorage(plugin);
                 break;
-            case MYSQL:
-            case SQLITE:
-            case PGSQL:
-            case MARIADB:
+            case MYSQL, MARIADB:
                 this.iStorage = new SqlStorage(plugin, storage);
                 break;
             case REDIS:
-                this.iStorage = new RedisStorage(JsonConfig.redisSqlStorage, plugin);
-                break;
-            default:
+                this.iStorage = new RedisStorage(LegacyJsonConfig.redisSqlStorage, plugin);
                 break;
         }
     }
@@ -55,32 +53,23 @@ public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage
                     }
                 });
                 break;
-            case MYSQL:
-            case SQLITE:
-            case PGSQL:
-            case MARIADB:
             case REDIS:
                 this.iStorage.save(persist);
-                break;
-            default:
                 break;
         }
     }
 
     @Override
     public void load(Persist persist) {
+        if (this.storage == null) {
+            return;
+        }
         switch (this.storage) {
             case JSON:
                 VoteStorage.getInstance().load(this.plugin.getPersist());
                 this.iStorage.setVoteCount(VoteStorage.voteCount);
-            case MYSQL:
-            case SQLITE:
-            case PGSQL:
-            case MARIADB:
             case REDIS:
                 this.iStorage.load(persist);
-                break;
-            default:
                 break;
         }
     }

@@ -94,7 +94,7 @@ database:
   # Redis Only
   redis:
     sql:
-    # Types are MYSQL, PGSQL or MARIADB
+    # Types are MYSQL or MARIADB
       sql-database: MYSQL
       sql-credentials:
         user: "homestead"
@@ -119,7 +119,7 @@ database:
 debug:
   enabled: false
 
-action-vote-announcement: true
+action-vote-announcement: false
 tchat-vote-annonce: false
 
 vote-inventory:

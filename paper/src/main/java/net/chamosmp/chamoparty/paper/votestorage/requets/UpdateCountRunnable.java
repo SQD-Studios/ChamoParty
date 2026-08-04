@@ -3,7 +3,7 @@ package net.chamosmp.chamoparty.paper.votestorage.requets;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,7 +75,7 @@ public class UpdateCountRunnable implements Runnable {
 
         } catch (SQLException e) {
             this.tryAmount++;
-            if (this.tryAmount < JsonConfig.maxSqlRetryAmoun) {
+            if (this.tryAmount < LegacyJsonConfig.maxSqlRetryAmoun) {
                 try {
                     this.iConnection.disconnect();
                     this.iConnection.connect();

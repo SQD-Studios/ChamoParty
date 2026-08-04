@@ -10,7 +10,7 @@ import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class JsonStorage implements IStorage {
 
     private transient final Plugin plugin;
-    private transient final Map<UUID, PlayerVote> players = new HashMap<UUID, PlayerVote>();
+    private transient final Map<UUID, PlayerVote> players = new HashMap<>();
 
     private long voteCount = 1;
 
@@ -55,7 +55,7 @@ public class JsonStorage implements IStorage {
                 players.put(uniqueId, playerVote);
                 return Optional.of(playerVote);
             } catch (Exception e) {
-                if (JsonConfig.enableDebug) {
+                if (LegacyJsonConfig.enableDebug) {
                     e.printStackTrace();
                 }
             }

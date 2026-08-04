@@ -60,7 +60,7 @@ public class Connection implements IConnection {
             try {
                 this.connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                Logger.log("Connection close failed" + e);
             }
         }
     }
@@ -69,17 +69,14 @@ public class Connection implements IConnection {
     public void getAndRefreshConnection(Runnable runnable) {
         try {
             if (this.connection == null || this.connection.isClosed()) {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            connect();
-                            runnable.run();
-                        } catch (SQLException e) {
-                            Logger.log(e.getMessage(), Logger.LogType.ERROR);
-                        }
+                Thread thread = new Thread(() -> {
+                    try {
+                        connect();
+                        runnable.run();
+                    } catch (SQLException e) {
+                        Logger.log(e.getMessage(), Logger.LogType.ERROR);
                     }
-                };
+                });
                 thread.start();
             } else {
                 runnable.run();

@@ -8,7 +8,7 @@ import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
 import net.chamosmp.chamoparty.paper.implementations.ChamoReward;
 import net.chamosmp.chamoparty.paper.implementations.ChamoVote;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,7 +80,7 @@ public class SelectVotesRunnable extends Utils implements Runnable {
 
         } catch (SQLException e) {
             this.tryAmount++;
-            if (this.tryAmount < JsonConfig.maxSqlRetryAmoun) {
+            if (this.tryAmount < LegacyJsonConfig.maxSqlRetryAmoun) {
                 try {
                     this.iConnection.disconnect();
                     this.iConnection.connect();

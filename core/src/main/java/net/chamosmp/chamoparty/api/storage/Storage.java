@@ -2,32 +2,40 @@ package net.chamosmp.chamoparty.api.storage;
 
 public enum Storage {
 
-    MYSQL("jdbc:mysql://"),
+    MYSQL(Type.REDIS_SQL, "jdbc:mysql://"),
 
-    MARIADB("jdbc:mariadb://"),
-    PGSQL("jdbc:postgresql://"),
-    SQLITE(""),
-    JSON,
+    MARIADB(Type.REDIS_SQL, "jdbc:mariadb://"),
+    PGSQL(Type.REDIS_SQL, "jdbc:postgresql://"),
+    SQLITE(Type.REDIS_SQL, ""),
 
-    REDIS,
+    JSON(Type.VOTE_STORING),
+    REDIS(Type.VOTE_STORING),
 
     ;
 
     private final String urlBase;
+    private final Type type;
 
-    /**
-     * @param urlBase
-     */
-    Storage(String urlBase) {
+    Storage(Type storageType, String urlBase) {
         this.urlBase = urlBase;
+        this.type = storageType;
     }
 
-    Storage() {
-        this(null);
+    Storage(Type type) {
+        this.urlBase = null;
+        this.type = type;
     }
 
     public String getUrlBase() {
         return urlBase;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public enum Type {
+        REDIS_SQL,
+        VOTE_STORING
+    }
 }

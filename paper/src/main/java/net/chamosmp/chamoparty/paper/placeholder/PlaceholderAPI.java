@@ -4,7 +4,7 @@ import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
@@ -94,7 +94,7 @@ public class PlaceholderAPI extends Utils {
             case "votes_required_party" -> String.valueOf(manager.getNeedVotes() - iStorage.getVoteCount());
             case "votes_required_total" -> String.valueOf(manager.getNeedVotes());
             case "votes_progressbar" ->
-                    this.getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), JsonConfig.progressBar);
+                    this.getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), LegacyJsonConfig.progressBar);
             case "player_votes" -> player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
             default -> null;
         };

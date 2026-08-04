@@ -7,7 +7,9 @@ import net.chamosmp.chamoparty.save.RedisConfiguration.RedisPoolConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
-public class JsonConfig {
+import java.util.Objects;
+
+public class LegacyJsonConfig {
 
     public static Storage storage = Storage.JSON;
     public static Storage redisSqlStorage = Storage.MYSQL;
@@ -38,14 +40,27 @@ public class JsonConfig {
     /**
      * static Singleton instance.
      */
-    private static volatile JsonConfig instance;
+    private static volatile LegacyJsonConfig instance = null;
 
-    /**
-     * Private constructor for singleton.
-     */
-    private JsonConfig(Plugin plugin) {
+    public LegacyJsonConfig(Plugin plugin) {
         FileConfiguration config = plugin.getConfig();
 
+        switch (Objects.requireNonNull(config.getString("database.type")).toLowerCase()) {
+            case "json":
+                storage = Storage.JSON;
+                break;
+            case "redis":
+                storage = Storage.REDIS;
+                break;
+        }
+        switch (Objects.requireNonNull(config.getString("database.redis.sql.sql-database")).toLowerCase()) {
+            case "mysql":
+                redisSqlStorage = Storage.MYSQL;
+                break;
+            case "mariadb":
+                redisSqlStorage = Storage.MARIADB;
+                break;
+        }
         enableDebug = config.getBoolean("debug.enabled", false);
         enableDebugTime = config.getBoolean("debug.enabled", false);
         enableLogMessage = true;
@@ -75,24 +90,13 @@ public class JsonConfig {
     /**
      * Return a singleton instance of Config.
      */
-    public static JsonConfig getInstance(Plugin plugin) {
-        // Double lock for thread safety.
+    public static void getInstance(Plugin plugin) {
         if (instance == null) {
-            synchronized (JsonConfig.class) {
+            synchronized (LegacyJsonConfig.class) {
                 if (instance == null) {
-                    instance = new JsonConfig(plugin);
+                    instance = new LegacyJsonConfig(plugin);
                 }
             }
         }
-        return instance;
     }
-
-    public void save(Plugin plugin) {
-        getInstance(plugin);
-    }
-
-    public void load(Plugin plugin) {
-        getInstance(plugin);
-    }
-
 }

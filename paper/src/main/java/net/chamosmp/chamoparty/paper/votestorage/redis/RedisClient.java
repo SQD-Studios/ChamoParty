@@ -1,6 +1,6 @@
 package net.chamosmp.chamoparty.paper.votestorage.redis;
 
-import net.chamosmp.chamoparty.paper.save.JsonConfig;
+import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.save.RedisConfiguration;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -12,7 +12,7 @@ public class RedisClient {
     private final JedisPool jedis;
 
     public RedisClient() {
-        RedisConfiguration config = JsonConfig.redis;
+        RedisConfiguration config = LegacyJsonConfig.redis;
 
         this.jedis = config.getPassword() != null
                 ? new JedisPool(buildPoolConfig(config), config.getHost(), config.getPort(), Protocol.DEFAULT_TIMEOUT,
@@ -24,7 +24,7 @@ public class RedisClient {
     public Jedis getPool() {
         Jedis jedis = this.jedis.getResource();
 
-        RedisConfiguration config = JsonConfig.redis;
+        RedisConfiguration config = LegacyJsonConfig.redis;
         if (config.getDatabaseIndex() != 0) {
             jedis.select(config.getDatabaseIndex());
         }
