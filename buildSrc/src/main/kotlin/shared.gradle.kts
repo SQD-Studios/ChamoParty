@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.chamosmp.chamoparty"
-version = "1.0.0"
+version = "1.0.1"
 description = "ChamoParty, fork of zVoteParty, but just better"
 java.sourceCompatibility = JavaVersion.VERSION_25
 java.targetCompatibility = JavaVersion.VERSION_25
