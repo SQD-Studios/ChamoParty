@@ -58,11 +58,6 @@ public class Base extends ChamoPartyManager {
         forceStart(sender);
     }
 
-    @Permission("chamoparty.help")
-    @Executes("help")
-    void onExecuteHelp(CommandSender sender) {
-    }
-
     @Permission("chamoparty.add")
     @Executes("add")
     void onExecuteAdd(CommandSender sender, Player target) {

@@ -1,13 +1,12 @@
-import org.gradle.api.internal.provider.ValueSupplier.ValueProducer.task
-
 plugins {
     id("java")
     id("maven-publish")
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 allprojects {
     group = "net.chamosmp.chamoparty"
-    version = "0.1.0"
+    version = "1.0.0"
     description = "ChamoParty, fork of zVoteParty, but just better"
 
     repositories {

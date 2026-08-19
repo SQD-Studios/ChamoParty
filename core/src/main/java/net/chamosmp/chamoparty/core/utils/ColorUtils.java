@@ -14,8 +14,7 @@ public class ColorUtils {
      * What are these weird things I do for YOU
      *
      * @param message The message to make the Legacy to minimessage
-     * @return The minimessage from legacy String
-     * @apiNote It's not finished yet so write it in MiniMessage to begin with
+     * @return The mini message tagged string from legacy tagged
      */
     public static String legacyToMiniMessage(String message) {
         String oneChar = message.replace("§", "&");

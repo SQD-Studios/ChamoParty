@@ -54,10 +54,6 @@ public class Persist extends Utils {
 
     // NICE WRAPPERS
 
-    public <T> void loadOrSaveDefault(T def, Class<T> clazz) {
-        loadOrSaveDefault(def, clazz, getFile(clazz));
-    }
-
     public <T> void loadOrSaveDefault(T def, Class<T> clazz, String name) {
         loadOrSaveDefault(def, clazz, getFile(name));
     }

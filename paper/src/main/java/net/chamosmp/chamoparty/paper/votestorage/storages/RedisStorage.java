@@ -3,7 +3,6 @@ package net.chamosmp.chamoparty.paper.votestorage.storages;
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.utils.ElapsedTime;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.votestorage.redis.RedisClient;
 import net.chamosmp.chamoparty.paper.votestorage.redis.ServerMessaging;
@@ -57,10 +56,7 @@ public class RedisStorage extends SqlStorage implements IStorage {
     @Override
     public void addVoteCount(long amount) {
         super.addVoteCount(amount);
-        ElapsedTime elapsedTime = new ElapsedTime("Redis message");
-        elapsedTime.start();
         this.messaging.sendAddVoteCount();
-        elapsedTime.endDisplay();
     }
 
     @Override

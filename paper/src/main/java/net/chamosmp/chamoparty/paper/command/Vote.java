@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 @Description("Open the vote gui")
 public class Vote extends ChamoPartyManager {
 
-
     public Vote(ChamoPartyPlugin plugin) {
         super(plugin);
     }

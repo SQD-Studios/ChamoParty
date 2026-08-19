@@ -12,7 +12,7 @@ import java.util.Map;
 
 public enum Message {
 
-    PREFIX(ColorUtils.parse("<aqua>ChamoParty</aqua>| <r>")),
+    PREFIX(ColorUtils.parse("<aqua>ChamoParty</aqua>| ")),
 
     INVENTORY_CLONE_NULL(ColorUtils.parse("<red>The inventory clone is null!")),
     INVENTORY_OPEN_ERROR(ColorUtils.parse("<red>An error occurred with the opening of the inventory <gold>%id%<red>.")),

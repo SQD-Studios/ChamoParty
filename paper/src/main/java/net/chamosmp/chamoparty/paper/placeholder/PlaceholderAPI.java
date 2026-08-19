@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 public class PlaceholderAPI extends Utils {
 
     private ChamoPartyPlugin plugin;
-    private final String prefix = "chamoparty";
     private final Pattern pattern = Pattern.compile("%([^%]+)%");
 
     /**
@@ -63,7 +62,8 @@ public class PlaceholderAPI extends Utils {
             return placeholder;
         }
 
-        final String realPrefix = this.prefix + "_";
+        String prefix = "chamoparty";
+        final String realPrefix = prefix + "_";
 
         Matcher matcher = this.pattern.matcher(placeholder);
         while (matcher.find()) {

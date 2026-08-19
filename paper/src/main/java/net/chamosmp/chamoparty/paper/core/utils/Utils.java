@@ -3,16 +3,17 @@ package net.chamosmp.chamoparty.paper.core.utils;
 import com.google.common.base.Strings;
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.chamosmp.chamoparty.core.utils.ProgressBar;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public abstract class Utils extends MessageUtils {

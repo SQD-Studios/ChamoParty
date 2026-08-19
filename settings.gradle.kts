@@ -1,4 +1,4 @@
-rootProject.name = "ChamoParty"
+rootProject.name = "chamoParty"
 
 include(":core")
 include(":paper")

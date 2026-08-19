@@ -3,14 +3,12 @@ package net.chamosmp.chamoparty.paper.core.logger;
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.slf4j.LoggerFactory;
 
-public class Logger {
+public final class Logger {
 
-    private static final Component prefix = ColorUtils.parse("<aqua>ChamoParty| </aqua>");
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Logger.class);
+    private static final Component prefix = ColorUtils.parse("<aqua>chamoParty</aqua>| ");
 
-    public Logger() {
+    private Logger() {
     }
 
     public enum LogType {

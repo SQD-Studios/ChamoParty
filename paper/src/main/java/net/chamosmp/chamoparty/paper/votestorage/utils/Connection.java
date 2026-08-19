@@ -19,13 +19,13 @@ import java.util.function.Consumer;
 public class Connection implements IConnection {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(Connection.class);
-    private java.sql.Connection connection;
     private final Storage storage;
     private final String user;
     private final String password;
     private final String host;
     private final String dataBase;
     private final int port;
+    private java.sql.Connection connection;
 
     /**
      * @param connection

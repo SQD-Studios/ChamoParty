@@ -5,15 +5,23 @@
 
 **A fork of zVoteParty to modernize the VoteParty plugins. Seriously, the most modern one was updated 5 years ago** <br>
 
-Here is the checklist:<br>
+### Differences
 
-- [x] Hook into NuVotifier (Idk how we ended up like this)<br>
-- [x] Hook into zMenu<br>
-- [ ] Better MySQL Support<br>
-- [x] Use better systems<br>
-- [x] Modern Version support (Kind of?)<br>
-- [ ] Good Api<br>
-- [x] Production Ready<br>
+There are some big differences from this plugin and zVoteParty. The biggest differences are though:
+
+- Adventure Support (Replacing legacy color codes with mini message)
+- Removed a significant much of the plugin
+- Only supports paper (And forks)
+- Changed stuff of the user experience
+- It's maintained!
+
+## Installing
+
+There really isn't a difference downloading this plugin from any other plugin
+
+1. Download the jarfile
+2. Put the jarfile in the `/plugins` directory of your server
+3. Restart your server
 
 ## Building
 
@@ -47,11 +55,13 @@ maven {
 compileOnly("net.chamosmp.chamoparty:paper:version")
 compileOnly("net.chamosmp.chamoparty:core:version")
 ```
+
 </details>
 <details>
 <summary>Maven</summary>
 
 ```xml
+
 <repository>
     <id>chamosmp-repo-releases</id>
     <name>ChamoSMP Maven Repository</name>
@@ -60,17 +70,19 @@ compileOnly("net.chamosmp.chamoparty:core:version")
 ```
 
 ```xml
+
 <dependency>
     <groupId>net.chamosmp.chamoparty</groupId>
     <artifactId>core</artifactId>
     <version>version</version>
 </dependency>
-<dependency> 
-    <groupId>net.chamosmp.chamoparty</groupId>
-    <artifactId>paper</artifactId>
-    <version>version</version>
+<dependency>
+<groupId>net.chamosmp.chamoparty</groupId>
+<artifactId>paper</artifactId>
+<version>version</version>
 </dependency>
 ```
+
 </details>
 <details>
 <summary>Gradle Groovy DSL</summary>
@@ -86,6 +98,7 @@ maven {
 compileOnly "net.chamosmp.chamoparty:paper:version"
 compileOnly "net.chamosmp.chamoparty:core:version"
 ```
+
 </details>
 
 ## Want to get the original?

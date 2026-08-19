@@ -19,12 +19,12 @@ public class VotePartyExpansion extends PlaceholderExpansion {
 
     @Override
     public @NonNull String getAuthor() {
-        return "Chamogelastos";
+        return plugin.getPluginMeta().getAuthors().toString();
     }
 
     @Override
     public @NonNull String getIdentifier() {
-        return "chamoparty";
+        return plugin.getPluginMeta().getName().toLowerCase();
     }
 
     @Override
