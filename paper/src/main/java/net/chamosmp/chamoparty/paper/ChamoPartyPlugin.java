@@ -114,8 +114,12 @@ public class ChamoPartyPlugin extends Plugin {
         /*
         Metrics
          */
-        int pluginId = 31621;
-        Metrics metrics = new Metrics(this, pluginId);
+        try {
+            Metrics metrics = new Metrics(this, 31621);
+            Logger.log("Successfully started metrics!");
+        } catch (Exception ignored) {
+            Logger.log("Failed to hook into Metrics.", Logger.LogType.ERROR);
+        }
 
         this.postEnable();
     }

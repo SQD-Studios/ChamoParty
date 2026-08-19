@@ -1,11 +1,8 @@
 plugins {
-    id("java")
-    id("maven-publish")
+    id("shared")
     id("com.gradleup.shadow") version "9.6.1"
     id("xyz.jpenilla.run-velocity") version "3.1.0"
 }
-
-java.sourceCompatibility = JavaVersion.VERSION_25
 
 dependencies {
     // Velocity and configurate
@@ -43,31 +40,5 @@ tasks {
     shadowJar {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-    }
-    repositories {
-        maven {
-            name = "ChamoSMP-Releases"
-            url = uri("https://maven.chamosmp.net/releases")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
-        maven {
-            name = "ChamoSMP-Snapshots"
-            url = uri("https://maven.chamosmp.net/snapshots")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
     }
 }

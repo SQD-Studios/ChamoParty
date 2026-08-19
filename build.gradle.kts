@@ -1,67 +1,17 @@
 plugins {
-    id("java")
-    id("maven-publish")
+    id("shared")
     id("com.gradleup.shadow") version "9.6.1"
 }
 
-allprojects {
-    group = "net.chamosmp.chamoparty"
-    version = "1.0.0"
-    description = "ChamoParty, fork of zVoteParty, but just better"
-
-    repositories {
-        maven {
-            url = uri("https://jitpack.io")
-        }
-        maven {
-            url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-        }
-        maven {
-            url = uri("https://repo.groupez.dev/releases")
-        }
-        maven {
-            name = "papermc"
-            url = uri("https://repo.papermc.io/repository/maven-public/")
-        }
-        maven {
-            name = "eldonexus"
-            url = uri("https://eldonexus.de/repository/maven-public/")
-        }
-        mavenCentral()
-    }
-
-    tasks.withType<JavaCompile> {
-        options.compilerArgs.add("-Xlint:deprecation")
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-    }
-    repositories {
-        maven {
-            name = "ChamoSMP-Releases"
-            url = uri("https://maven.chamosmp.net/releases")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
-        maven {
-            name = "ChamoSMP-Snapshots"
-            url = uri("https://maven.chamosmp.net/snapshots")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
-    }
-}
-
 dependencies {
-    compileOnly(project(":core"))
     implementation(project(":paper"))
+}
+
+tasks {
+    shadowJar {
+        dependsOn(project(":paper").tasks.shadowJar)
+    }
+    build {
+        dependsOn(shadowJar)
+    }
 }

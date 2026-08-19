@@ -1,14 +1,14 @@
 plugins {
-    id("java")
-    id("maven-publish")
+    id("shared")
     id("com.gradleup.shadow") version "9.6.1"
     id("xyz.jpenilla.run-paper") version "3.1.0"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_25
-
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+") { // Exclude these "vulnerable" dependencies, and we didn't need them anyway.
+        exclude("org.codehaus.plexus", "plexus-utils")
+        exclude("org.apache.commons", "commons-lang3")
+    }
 
     compileOnly("redis.clients:jedis:5.1.3")
     compileOnly("com.zaxxer:HikariCP:4.0.3")
@@ -29,7 +29,7 @@ tasks {
     runServer {
         downloadPlugins {
             github("NuVotifier", "NuVotifier", "v2.7.3", "nuvotifier.jar")
-            modrinth("XPQ42u1g", "1.1.1.6")
+            modrinth("XPQ42u1g", "1.1.1.7")
             github("PlaceholderAPI", "PlaceholderAPI", "2.12.3", "PlaceholderAPI-2.12.3.jar")
         }
 
@@ -47,31 +47,5 @@ tasks {
     shadowJar {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-    }
-    repositories {
-        maven {
-            name = "ChamoSMP-Releases"
-            url = uri("https://maven.chamosmp.net/releases")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
-        maven {
-            name = "ChamoSMP-Snapshots"
-            url = uri("https://maven.chamosmp.net/snapshots")
-            credentials {
-                username = System.getenv("REPOSILITE_USER")
-                password = System.getenv("REPOSILITE_TOKEN")
-            }
-        }
     }
 }
