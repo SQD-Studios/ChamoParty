@@ -47,5 +47,7 @@ tasks {
     shadowJar {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
+
+        dependsOn(processResources)
     }
 }
