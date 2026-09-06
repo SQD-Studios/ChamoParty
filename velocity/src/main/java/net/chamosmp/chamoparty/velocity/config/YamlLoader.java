@@ -51,13 +51,6 @@ public class YamlLoader {
                 throw e;
             }
             System.out.println("Config saved successfully.");
-
-            // Verify
-            if (Files.exists(path)) {
-                System.out.println("✅ File exists immediately after save.");
-            } else {
-                System.err.println("❌ File does NOT exist after save!");
-            }
             this.configNode = bundledNode;
             return;
         }

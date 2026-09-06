@@ -1,15 +1,22 @@
-package net.chamosmp.chamoparty.velocity.pluginmessaging;
+package net.chamosmp.chamoparty.velocity.messaging;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
-import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 public class BackendToVelocity {
     public static final MinecraftChannelIdentifier VOTE = MinecraftChannelIdentifier.from("chamoparty:votifiersendvote");
+
+    private final VelocityToBackend velocityToBackend;
+    private final ProxyServer proxyServer;
+
+    public BackendToVelocity(VelocityToBackend velocityToBackend, ProxyServer proxyServer) {
+        this.velocityToBackend = velocityToBackend;
+        this.proxyServer = proxyServer;
+    }
 
     @Subscribe
     public void onPluginMessageFromBackend(PluginMessageEvent event) {
@@ -25,6 +32,8 @@ public class BackendToVelocity {
             return;
         }
 
-        ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
+        for (RegisteredServer server : proxyServer.getAllServers()) {
+            velocityToBackend.sendPluginMessageToBackend(server, VOTE, event.getData());
+        }
     }
 }

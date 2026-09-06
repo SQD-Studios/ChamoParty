@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.velocity.pluginmessaging;
+package net.chamosmp.chamoparty.velocity.messaging;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;

@@ -1,6 +1,5 @@
 package net.chamosmp.chamoparty.velocity;
 
-import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -8,10 +7,10 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.chamosmp.chamoparty.velocity.commands.BaseBrigadier;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
-import net.chamosmp.chamoparty.velocity.pluginmessaging.BackendToVelocity;
+import net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity;
+import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
-import org.spongepowered.configurate.ConfigurateException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,8 +38,7 @@ public class ChamoPartyVelo {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         initInstances();
 
-        int pluginId = 33142;
-        Metrics metrics = metricsFactory.make(this, pluginId);
+        Metrics metrics = metricsFactory.make(this, 33142);
         logger.info("Enabled metrics");
 
         registerChannels();
@@ -70,7 +68,7 @@ public class ChamoPartyVelo {
     }
 
     public void registerChannels() {
-        server.getChannelRegistrar().register(BackendToVelocity.VOTE);
+        server.getChannelRegistrar().register(new BackendToVelocity(new VelocityToBackend(), server).VOTE);
         logger.info("Registered plugin messaging channels");
     }
 

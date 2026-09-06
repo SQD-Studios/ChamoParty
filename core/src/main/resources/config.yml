@@ -122,7 +122,6 @@ vote-inventory:
 
 # Currently does nothing
 proxy:
-  is-this-proxy: false # Is this the proxy?
   proxy-mode: false # If servers running on a proxy
   plugin-messaging: false # Not implemented
   where-is-the-votifier: BACKEND # BACKEND or PROXY
