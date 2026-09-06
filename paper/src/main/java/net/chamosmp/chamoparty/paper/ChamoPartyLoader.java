@@ -15,8 +15,7 @@ public class ChamoPartyLoader implements PluginLoader {
         MavenLibraryResolver mavenCentral = new MavenLibraryResolver();
         mavenCentral.addRepository(new RemoteRepository.Builder("central", "default", MavenLibraryResolver.MAVEN_CENTRAL_DEFAULT_MIRROR).build());
         mavenCentral.addDependency(new Dependency(new DefaultArtifact("com.zaxxer:HikariCP:4.0.3"), null));
-        mavenCentral.addDependency(new Dependency(new DefaultArtifact("redis.clients:jedis:7.2.0"), null));
-        mavenCentral.addDependency(new Dependency(new DefaultArtifact("com.mysql:mysql-connector-j:8.3.0"), null));
+        mavenCentral.addDependency(new Dependency(new DefaultArtifact("io.lettuce:lettuce-core:7.0.0.RELEASE"), null));
 
         classpathBuilder.addLibrary(mavenCentral);
     }

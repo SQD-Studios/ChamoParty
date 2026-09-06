@@ -10,8 +10,9 @@ dependencies {
         exclude("org.apache.commons", "commons-lang3")
     }
 
-    compileOnly("redis.clients:jedis:5.1.3")
+    compileOnly("io.lettuce:lettuce-core:7.0.0.RELEASE")
     compileOnly("com.zaxxer:HikariCP:4.0.3")
+
     implementation("org.bstats:bstats-bukkit:3.2.1")
 
     compileOnly("com.github.NuVotifier.NuVotifier:nuvotifier-api:2.7.2")

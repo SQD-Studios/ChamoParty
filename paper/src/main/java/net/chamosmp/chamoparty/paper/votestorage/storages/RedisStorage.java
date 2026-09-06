@@ -4,16 +4,16 @@ import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
-import net.chamosmp.chamoparty.paper.votestorage.redis.RedisClient;
-import net.chamosmp.chamoparty.paper.votestorage.redis.ServerMessaging;
+import net.chamosmp.chamoparty.paper.votestorage.redis.ChamoRedisClient;
+import net.chamosmp.chamoparty.paper.votestorage.redis.RedisPubSub;
 
 import java.util.UUID;
 
 
 public class RedisStorage extends SqlStorage implements IStorage {
 
-    private final RedisClient redisClient;
-    private final ServerMessaging messaging;
+    private final ChamoRedisClient redisClient;
+    private final RedisPubSub messaging;
 
     /**
      * @param storage
@@ -21,8 +21,8 @@ public class RedisStorage extends SqlStorage implements IStorage {
      */
     public RedisStorage(Storage storage, ChamoPartyPlugin plugin) {
         super(plugin, storage);
-        this.redisClient = new RedisClient();
-        this.messaging = new ServerMessaging(plugin, this, this.redisClient);
+        this.redisClient = new ChamoRedisClient();
+        this.messaging = new RedisPubSub(plugin, this, this.redisClient);
     }
 
     @Override

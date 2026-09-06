@@ -3,7 +3,6 @@ package net.chamosmp.chamoparty.paper.save;
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.core.utils.ProgressBar;
 import net.chamosmp.chamoparty.save.RedisConfiguration;
-import net.chamosmp.chamoparty.save.RedisConfiguration.RedisPoolConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -31,8 +30,8 @@ public class LegacyJsonConfig {
 
     public static int redisServerAmount = 2;
     public static String redisChannel = "chamoparty";
-    public static RedisConfiguration redis = new RedisConfiguration("192.168.10.10", 6379, null, 0,
-            new RedisPoolConfiguration(128, 128, 16));
+    public static RedisConfiguration redis = new RedisConfiguration("192.168.10.10", 6379, null
+    );
     public static int maxSqlRetryAmoun = 5;
 
     public static ProgressBar progressBar = new ProgressBar(20, '|', "§a", "§8");
@@ -77,13 +76,7 @@ public class LegacyJsonConfig {
         redis = new RedisConfiguration(
                 config.getString("database.redis.redis-credentials.host", "localhost"),
                 config.getInt("database.redis.redis-credentials.port", 6379),
-                config.getString("database.redis.redis-credentials.password", null),
-                config.getInt("database.redis.redis-credentials.databaseIndex", 0),
-                new RedisPoolConfiguration(
-                        config.getInt("database.redis.redis-credentials.poolConfig.maxTotal", 128),
-                        config.getInt("database.redis.redis-credentials.poolConfig.maxIdle", 128),
-                        config.getInt("database.redis.redis-credentials.poolConfig.minTotal", 16)
-                )
+                config.getString("database.redis.redis-credentials.password", null)
         );
     }
 

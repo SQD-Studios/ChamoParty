@@ -1,5 +1,9 @@
 package net.chamosmp.chamoparty.paper.votestorage.redis;
 
+import io.lettuce.core.RedisFuture;
+import io.lettuce.core.pubsub.RedisPubSubListener;
+import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import net.chamosmp.chamoparty.api.storage.RedisSubChannel;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
@@ -10,20 +14,19 @@ import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
 import net.chamosmp.chamoparty.storage.redis.RedisVoteResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPubSub;
 
 import java.util.*;
 
-public class ServerMessaging extends JedisPubSub {
+public class RedisPubSub implements RedisPubSubListener<String, String> {
 
     private final String SEPARATOR = ";;";
 
     private final ChamoPartyPlugin plugin;
     private final RedisStorage storage;
-    private final RedisClient client;
 
-    private final Thread threadMessaging1;
+    private final ChamoRedisClient chamoRedisClient;
+    private final RedisPubSubAsyncCommands<String, String> asyncCommands;
+    private final StatefulRedisPubSubConnection<String, String> connection;
 
     private final List<UUID> sendingUUID = new ArrayList<>();
 
@@ -34,70 +37,23 @@ public class ServerMessaging extends JedisPubSub {
      * @param storage
      * @param client
      */
-    public ServerMessaging(ChamoPartyPlugin plugin, RedisStorage storage, RedisClient client) {
-        super();
+    public RedisPubSub(ChamoPartyPlugin plugin, RedisStorage storage, ChamoRedisClient chamoRedisClient) {
         this.plugin = plugin;
         this.storage = storage;
-        this.client = client;
 
-        this.threadMessaging1 = new Thread(() -> {
-            try (Jedis jedis = client.getPool()) {
-                jedis.subscribe(this, LegacyJsonConfig.redisChannel);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        this.threadMessaging1.start();
-    }
+        this.chamoRedisClient = chamoRedisClient;
 
-    @Override
-    public void onMessage(String channel, String message) {
-
-        if (!this.plugin.isEnabled()) {
-            return;
-        }
+        connection = chamoRedisClient.getConnection();
+        asyncCommands = chamoRedisClient.getAsyncCommands();
 
         try {
+            connection.addListener(this);
+            RedisFuture<Void> future =
+                    asyncCommands.subscribe(LegacyJsonConfig.redisChannel);
 
-            if (channel.equals(LegacyJsonConfig.redisChannel)) {
-
-                String[] values = message.split(this.SEPARATOR);
-
-                RedisSubChannel subChannel = RedisSubChannel.byName(values[0]);
-                String uuidAsString = values[1];
-                UUID uuid = UUID.fromString(uuidAsString);
-
-                // Allows to verify that the server sending the information does
-                // not receive it.
-
-                if (this.sendingUUID.contains(uuid)) {
-                    this.sendingUUID.remove(uuid);
-                    return;
-                }
-
-                switch (subChannel) {
-                    case ADD_VOTEPARTY:
-                        this.storage.addSecretVoteCount(1);
-                        break;
-                    case HANDLE_VOTEPARTY:
-                        this.storage.setSecretVoteCount(0);
-                        this.plugin.getManager().secretStart();
-                        break;
-                    case ADD_VOTE:
-                        this.handleVoteResponse(uuid, true, null);
-                        break;
-                    case VOTE_RESPONSE:
-                        UUID messageId = UUID.fromString(values[2]);
-                        boolean isSuccess = Boolean.valueOf(values[3]);
-                        String userId = values[4];
-                        this.processResponse(messageId, isSuccess, userId);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
+            future.thenAccept(_ -> {
+                Logger.log("Subscribed to the redis channel");
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,15 +68,12 @@ public class ServerMessaging extends JedisPubSub {
     private UUID sendMessage(RedisSubChannel channel, String message) {
         final UUID uuid = UUID.randomUUID();
         SchedulerUtil.runAsync(plugin, () -> {
-            try (Jedis jedis = this.client.getPool()) {
-                this.sendingUUID.add(uuid);
-
-                String jMessage = channel.name() + this.SEPARATOR + uuid;
+            try {
+                String jMessage = channel.name() + SEPARATOR + uuid;
                 if (message != null) {
                     jMessage += this.SEPARATOR + message;
                 }
-
-                jedis.publish(LegacyJsonConfig.redisChannel, jMessage);
+                asyncCommands.publish(LegacyJsonConfig.redisChannel, jMessage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -132,8 +85,11 @@ public class ServerMessaging extends JedisPubSub {
      * Allows to stop the thread
      */
     public void stop() {
-        this.threadMessaging1.interrupt();
-        this.unsubscribe(LegacyJsonConfig.redisChannel);
+        RedisFuture<Void> unsubscribe =
+                asyncCommands.unsubscribe(LegacyJsonConfig.redisChannel);
+        unsubscribe.thenAccept(_ -> {
+           chamoRedisClient.close();
+        });
     }
 
     /**
@@ -188,7 +144,6 @@ public class ServerMessaging extends JedisPubSub {
     private void handleVoteResponseError(UUID uuid, String username, String serviceName) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
         this.handleVoteResponse(uuid, false, offlinePlayer.getUniqueId().toString());
-
     }
 
     /**
@@ -199,10 +154,8 @@ public class ServerMessaging extends JedisPubSub {
      * @param message
      */
     private void handleVoteResponse(UUID uuid, boolean isSuccess, String message) {
-
         String jMessage = uuid.toString() + this.SEPARATOR + isSuccess + this.SEPARATOR + message;
         this.sendMessage(RedisSubChannel.VOTE_RESPONSE, jMessage);
-
     }
 
     /**
@@ -259,4 +212,84 @@ public class ServerMessaging extends JedisPubSub {
 
     }
 
+    @Override
+    public void message(String channel, String message) {
+        if (!this.plugin.isEnabled()) {
+            return;
+        }
+
+        try {
+            if (channel.equals(LegacyJsonConfig.redisChannel)) {
+
+                String[] values = message.split(this.SEPARATOR);
+
+                RedisSubChannel subChannel = RedisSubChannel.byName(values[0]);
+                String uuidAsString = values[1];
+                UUID uuid = UUID.fromString(uuidAsString);
+
+                // Allows to verify that the server sending the information does
+                // not receive it.
+
+                if (this.sendingUUID.contains(uuid)) {
+                    this.sendingUUID.remove(uuid);
+                    return;
+                }
+
+                switch (subChannel) {
+                    case ADD_VOTEPARTY:
+                        this.storage.addSecretVoteCount(1);
+                        break;
+                    case HANDLE_VOTEPARTY:
+                        this.storage.setSecretVoteCount(0);
+                        this.plugin.getManager().secretStart();
+                        break;
+                    case ADD_VOTE:
+                        this.handleVoteResponse(uuid, true, null);
+                        break;
+                    case VOTE_RESPONSE:
+                        UUID messageId = UUID.fromString(values[2]);
+                        boolean isSuccess = Boolean.valueOf(values[3]);
+                        String userId = values[4];
+                        this.processResponse(messageId, isSuccess, userId);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*
+    Useless redis listener stuff
+     */
+
+    @Override
+    public void message(String pattern, String channel, String message) {
+
+    }
+
+    @Override
+    public void subscribed(String channel, long count) {
+
+    }
+
+    @Override
+    public void psubscribed(String pattern, long count) {
+
+    }
+
+    @Override
+    public void unsubscribed(String channel, long count) {
+
+    }
+
+    @Override
+    public void punsubscribed(String pattern, long count) {
+
+    }
 }
