@@ -5,7 +5,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import net.chamosmp.chamoparty.velocity.commands.BaseBrigadier;
+import net.chamosmp.chamoparty.velocity.commands.BaseCommandBrigadier;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
 import net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
@@ -44,8 +44,12 @@ public class ChamoPartyVelo {
         registerChannels();
 
         // Registering the commands
-        BaseBrigadier.register(this.server, this, yamlLoader, this);
-        logger.info("Registered commands");
+        try {
+            BaseCommandBrigadier.register(this.server, this, yamlLoader, this);
+            logger.info("Registered commands");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         if (configPath != null) {

@@ -19,8 +19,8 @@ dependencies {
     compileOnly("com.github.NuVotifier.NuVotifier:nuvotifier-velocity:2.7.2")
 
     // StrokkCommands
-    compileOnly("net.strokkur.commands:annotations-velocity:2.1.1")
-    annotationProcessor("net.strokkur.commands:processor-velocity:2.1.1")
+    compileOnly("net.strokkur.commands:annotations-velocity:2.3.0")
+    annotationProcessor("net.strokkur.commands:processor-velocity:2.3.0")
 
     implementation(project(":core"))
 }

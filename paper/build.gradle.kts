@@ -20,8 +20,8 @@ dependencies {
     compileOnly("fr.maxlego08.menu:zmenu-api:1.1.1.4")
     compileOnly("me.clip:placeholderapi:2.11.6")
 
-    compileOnly("net.strokkur.commands:annotations-paper:2.1.1")
-    annotationProcessor("net.strokkur.commands:processor-paper:2.1.1")
+    compileOnly("net.strokkur.commands:annotations-paper:2.3.0")
+    annotationProcessor("net.strokkur.commands:processor-paper:2.3.0")
 
     implementation(project(":core"))
 }
