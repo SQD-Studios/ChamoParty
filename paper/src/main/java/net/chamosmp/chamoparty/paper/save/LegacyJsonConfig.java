@@ -38,12 +38,25 @@ public class LegacyJsonConfig {
 
     public static ProgressBar progressBar = new ProgressBar(20, '|', "§a", "§8");
 
-    /**
-     * static Singleton instance.
-     */
-    private static volatile LegacyJsonConfig instance = null;
+    private LegacyJsonConfig() {
+    }
 
-    public LegacyJsonConfig(Plugin plugin) {
+    public static void reloadConfigSafely(Plugin plugin) {
+        FileConfiguration config = plugin.getConfig();
+
+        enableDebug = config.getBoolean("debug.enabled", false);
+        enableDebugTime = config.getBoolean("debug.enabled", false);
+        enableLogMessage = true;
+        enableVoteInventory = config.getBoolean("vote-inventory.enabled", true);
+        enableVoteMessage = true;
+
+        enableActionBarVoteAnnonce = config.getBoolean("action-vote-announcement", true);
+        enableTchatVoteAnnonce = config.getBoolean("tchat-vote-annonce", true);
+
+        only_voters_rewards = config.getBoolean("party.only-voters-rewards", true);
+    }
+
+    public static void loadConfigOptions(Plugin plugin) {
         FileConfiguration config = plugin.getConfig();
 
         switch (config.getString("database.type", "sqlite").toLowerCase()) {
@@ -80,18 +93,5 @@ public class LegacyJsonConfig {
                 config.getInt("database.redis.redis-credentials.port", 6379),
                 config.getString("database.redis.redis-credentials.password", null)
         );
-    }
-
-    /**
-     * Return a singleton instance of Config.
-     */
-    public static void getInstance(Plugin plugin) {
-        if (instance == null) {
-            synchronized (LegacyJsonConfig.class) {
-                if (instance == null) {
-                    instance = new LegacyJsonConfig(plugin);
-                }
-            }
-        }
     }
 }

@@ -69,7 +69,7 @@ public class ChamoPartyPlugin extends Plugin {
         this.getSavers().forEach(saver -> saver.load());
 
         // Load storage
-        LegacyJsonConfig.getInstance(this);
+        LegacyJsonConfig.loadConfigOptions(this);
         this.storageManager = new StorageManager(LegacyJsonConfig.storage, this);
         this.storageManager.load();
 

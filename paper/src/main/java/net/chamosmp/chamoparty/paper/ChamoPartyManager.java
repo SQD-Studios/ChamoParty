@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
             this.loadConfiguration();
             this.plugin.getSavers().forEach(Saveable::load);
             this.plugin.reloadInventories();
+            LegacyJsonConfig.reloadConfigSafely(plugin);
             message(sender, Message.RELOAD_SUCCESS);
         } catch (Exception e) {
             message(sender, Message.RELOAD_ERROR.getMessage() + e.getMessage());
@@ -177,7 +179,6 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     @Override
     public void secretStart() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-
             boolean eligible = true;
             // Check if only voters should receive rewards
             if (LegacyJsonConfig.only_voters_rewards) {
@@ -213,11 +214,8 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
                 Reward reward = getRandomReward(RewardType.VOTE_PARTY);
                 if (reward != null) reward.give(this.plugin, player);
-
-            } else {
-                // Non-voter feedback
+            } else { // When a player is not eligible, send a message and play a sound
                 message(player, Message.NOT_ELIGIBLE_PARTY);
-                // Optional sound for non-eligible players
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 0.5f);
             }
         }
@@ -234,7 +232,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     }
 
     @Override
-    public Reward getRandomReward(RewardType type) {
+    public @Nullable Reward getRandomReward(RewardType type) {
         List<Reward> rewardList = type == RewardType.VOTE ? this.rewards : this.partyRewards;
         if (rewardList.isEmpty()) return null;
 
