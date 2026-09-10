@@ -7,6 +7,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.chamosmp.chamoparty.velocity.commands.BaseCommandBrigadier;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
+import net.chamosmp.chamoparty.velocity.listener.VotifierListener;
 import net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 import org.bstats.velocity.Metrics;
@@ -14,6 +15,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+
+import static net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity.VOTE;
 
 
 public class ChamoPartyVelo {
@@ -24,6 +27,9 @@ public class ChamoPartyVelo {
     public final Path configPath;
 
     private YamlLoader yamlLoader;
+    private VelocityToBackend velocityToBackend;
+    private BackendToVelocity backendToVelocity;
+    private VotifierListener votifierListener;
 
     @Inject
     public ChamoPartyVelo(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
@@ -38,7 +44,9 @@ public class ChamoPartyVelo {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         initInstances();
 
-        Metrics metrics = metricsFactory.make(this, 33142);
+        server.getEventManager().register(this, votifierListener);
+
+        metricsFactory.make(this, 33142);
         logger.info("Enabled metrics");
 
         registerChannels();
@@ -72,12 +80,15 @@ public class ChamoPartyVelo {
     }
 
     public void registerChannels() {
-        server.getChannelRegistrar().register(new BackendToVelocity(new VelocityToBackend(), server).VOTE);
+        server.getChannelRegistrar().register(VOTE);
         logger.info("Registered plugin messaging channels");
     }
 
     public void initInstances() {
         this.yamlLoader = new YamlLoader(this);
+        velocityToBackend = new VelocityToBackend(server);
+        backendToVelocity = new BackendToVelocity(velocityToBackend, server);
+        votifierListener = new VotifierListener(yamlLoader, velocityToBackend);
     }
 
     public Logger getLogger() {

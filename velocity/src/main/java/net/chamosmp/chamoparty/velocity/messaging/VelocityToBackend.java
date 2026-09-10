@@ -1,19 +1,24 @@
 package net.chamosmp.chamoparty.velocity.messaging;
 
-import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.ServerConnection;
+import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
-import java.util.Optional;
-
 public class VelocityToBackend {
-    public boolean sendPluginMessageToBackend(RegisteredServer server, ChannelIdentifier identifier, byte[] data) {
-        return server.sendPluginMessage(identifier, data);
+
+    private final ProxyServer server;
+
+    public VelocityToBackend(ProxyServer server) {
+        this.server = server;
     }
 
-    public boolean sendPluginMessageToBackendUsingPlayer(Player player, ChannelIdentifier identifier, byte[] data) {
-        Optional<ServerConnection> connection = player.getCurrentServer();
-        return connection.map(serverConnection -> serverConnection.sendPluginMessage(identifier, data)).orElse(false);
+    public void sendPluginMessageToBackend(RegisteredServer server, ChannelIdentifier identifier, byte[] data) {
+        server.sendPluginMessage(identifier, data);
+    }
+
+    public void sendPluginMessageToAllBackends(ChannelIdentifier identifier, byte[] data) {
+        server.getAllServers().forEach(server -> {
+            sendPluginMessageToBackend(server, identifier, data);
+        });
     }
 }

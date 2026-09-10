@@ -5,10 +5,9 @@ import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 public class BackendToVelocity {
-    public static final MinecraftChannelIdentifier VOTE = MinecraftChannelIdentifier.from("chamoparty:votifiersendvote");
+    public static final MinecraftChannelIdentifier VOTE = MinecraftChannelIdentifier.from("chamoparty:chamoparty");
 
     private final VelocityToBackend velocityToBackend;
     private final ProxyServer proxyServer;
@@ -24,16 +23,12 @@ public class BackendToVelocity {
             return;
         }
 
-        // mark PluginMessage as handled, indicating that the contents
-        // should not be forwarding to their original destination.
         event.setResult(PluginMessageEvent.ForwardResult.handled());
 
-        if (!(event.getSource() instanceof ServerConnection backend)) {
+        if (!(event.getSource() instanceof ServerConnection)) {
             return;
         }
 
-        for (RegisteredServer server : proxyServer.getAllServers()) {
-            velocityToBackend.sendPluginMessageToBackend(server, VOTE, event.getData());
-        }
+        velocityToBackend.sendPluginMessageToAllBackends(VOTE, event.getData());
     }
 }

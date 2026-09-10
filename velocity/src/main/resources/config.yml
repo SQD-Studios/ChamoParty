@@ -29,9 +29,6 @@
 #########################################################################################################################################
 
 database:
-  # VELOCITY (Multi server, not implemented)
-  type: VELOCITY
-
   # Velocity Mode Only (Not Implemented)
   velocity:
     sql-db: SQLITE # MySQL, MariaDB, SQLite
