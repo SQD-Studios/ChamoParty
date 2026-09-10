@@ -10,6 +10,7 @@ public enum Storage {
     SQLITE(Type.VOTE_STORING, "jdbc:sqlite:"),
     JSON(Type.VOTE_STORING),
     REDIS(Type.VOTE_STORING),
+    VELOCITY(Type.VOTE_STORING),
 
     ;
 

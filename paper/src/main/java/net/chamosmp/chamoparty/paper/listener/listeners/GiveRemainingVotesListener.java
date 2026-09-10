@@ -6,14 +6,14 @@ import net.chamosmp.chamoparty.paper.listener.ListenerAdapter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class VoteListener extends ListenerAdapter {
+public class GiveRemainingVotesListener extends ListenerAdapter {
 
     private final ChamoPartyPlugin plugin;
 
     /**
      * @param plugin
      */
-    public VoteListener(ChamoPartyPlugin plugin) {
+    public GiveRemainingVotesListener(ChamoPartyPlugin plugin) {
         super();
         this.plugin = plugin;
     }

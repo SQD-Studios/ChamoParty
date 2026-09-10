@@ -66,8 +66,11 @@ public class LegacyJsonConfig {
             case "redis":
                 storage = Storage.REDIS;
                 break;
+            case "velocity":
+                storage = Storage.VELOCITY;
+                break;
         }
-        switch (Objects.requireNonNull(config.getString("database.redis.sql.sql-database")).toLowerCase()) {
+        switch (Objects.requireNonNull(config.getString("database.sql.sql-database")).toLowerCase()) {
             case "mysql":
                 redisSqlStorage = Storage.MYSQL;
                 break;

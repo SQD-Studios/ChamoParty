@@ -88,21 +88,11 @@ party:
   only-voters-rewards: true
 
 database:
-  # REDIS (Multi-Server, requires a SQL Database too), SQLITE (One-server)
+  # REDIS (Multi-Server, requires a remote SQL Database too), SQLITE (One-server), VELOCITY (Multi server, not implemented. You may use a remote sql database, or just sqlite)
   type: SQLITE
 
   # Redis Only
   redis:
-    sql:
-      # Types are MYSQL or MARIADB
-      sql-database: MYSQL
-      sql-credentials:
-        user: "homestead"
-        password: "secret"
-        port: 3306
-        host: "192.168.10.10"
-        database: "chamoparty"
-        max-retry-amount: 5
     # Currently does nothing. Go to config.json
     redis-credentials:
       server-amount: 2
@@ -110,6 +100,22 @@ database:
       host: "localhost"
       port: 6379
       password: null
+
+  # Velocity Mode Only (Not Implemented)
+  velocity:
+    sql-db: SQLITE # MySQL, MariaDB, SQLite
+    where-is-the-votifier: BACKEND # BACKEND or PROXY
+
+  # When using a remote SQL database.
+  sql:
+    sql-database: MYSQL
+    sql-credentials:
+      user: "homestead"
+      password: "secret"
+      port: 3306
+      host: "192.168.10.10"
+      database: "chamoparty"
+      max-retry-amount: 5
 
 debug:
   enabled: false
@@ -119,9 +125,3 @@ tchat-vote-annonce: false
 
 vote-inventory:
   enabled: true
-
-# Currently does nothing
-proxy:
-  proxy-mode: false # If servers running on a proxy
-  plugin-messaging: false # Not implemented
-  where-is-the-votifier: BACKEND # BACKEND or PROXY

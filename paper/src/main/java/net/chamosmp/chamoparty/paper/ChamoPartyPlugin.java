@@ -12,7 +12,7 @@ import net.chamosmp.chamoparty.paper.core.Plugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.listener.AdapterListener;
-import net.chamosmp.chamoparty.paper.listener.listeners.VoteListener;
+import net.chamosmp.chamoparty.paper.listener.listeners.GiveRemainingVotesListener;
 import net.chamosmp.chamoparty.paper.listener.listeners.VotifierListener;
 import net.chamosmp.chamoparty.paper.loader.ZMenuLoader;
 import net.chamosmp.chamoparty.paper.placeholder.PlaceholderAPI;
@@ -59,7 +59,7 @@ public class ChamoPartyPlugin extends Plugin {
         */
 
         this.addListener(new AdapterListener(this));
-        this.addListener(new VoteListener(this));
+        this.addListener(new GiveRemainingVotesListener(this));
 
         /*
         Add Saver

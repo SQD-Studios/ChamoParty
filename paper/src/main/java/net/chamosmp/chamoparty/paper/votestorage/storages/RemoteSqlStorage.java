@@ -46,11 +46,11 @@ public class RemoteSqlStorage extends Utils implements IStorage {
 
     @Override
     public void load() {
-        String user = plugin.getConfig().getString("database.redis.sql.sql-credentials.user");
-        String password = plugin.getConfig().getString("database.redis.sql.sql-credentials.password");
-        String host = plugin.getConfig().getString("database.redis.sql.sql-credentials.host");
-        String database = plugin.getConfig().getString("database.redis.sql.sql-credentials.database");
-        int port = plugin.getConfig().getInt("database.redis.sql.sql-credentials.port");
+        String user = plugin.getConfig().getString("database.sql.sql-credentials.user");
+        String password = plugin.getConfig().getString("database.sql.sql-credentials.password");
+        String host = plugin.getConfig().getString("database.sql.sql-credentials.host");
+        String database = plugin.getConfig().getString("database.sql.sql-credentials.database");
+        int port = plugin.getConfig().getInt("database.sql.sql-credentials.port");
 
         this.iConnection = new Connection(storage, user, password, host, database, port);
 
