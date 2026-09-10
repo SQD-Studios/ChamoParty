@@ -6,12 +6,11 @@ import net.chamosmp.chamoparty.paper.api.PlayerManager;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.command.BaseBrigadier;
-import net.chamosmp.chamoparty.paper.command.VoteBrigadier;
+import net.chamosmp.chamoparty.paper.commands.BaseCommandBrigadier;
+import net.chamosmp.chamoparty.paper.commands.VoteCommandBrigadier;
 import net.chamosmp.chamoparty.paper.core.Plugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
-import net.chamosmp.chamoparty.paper.core.utils.plugins.VersionChecker;
+import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.listener.AdapterListener;
 import net.chamosmp.chamoparty.paper.listener.listeners.VoteListener;
 import net.chamosmp.chamoparty.paper.listener.listeners.VotifierListener;
@@ -21,6 +20,9 @@ import net.chamosmp.chamoparty.paper.placeholder.VotePartyExpansion;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.save.MessageLoader;
 import net.chamosmp.chamoparty.paper.votestorage.StorageManager;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.paper.util.UpdateUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
@@ -36,12 +38,8 @@ public class ChamoPartyPlugin extends Plugin {
 
     @Override
     public void onEnable() {
+        new LoggerUtil("<aqua>chamoParty</aqua>| ");
         PlaceholderAPI.getInstance().setPlugin(this);
-
-        /*
-        Register inventories
-         */
-        this.registerFile();
 
         this.preEnable();
 
@@ -67,29 +65,28 @@ public class ChamoPartyPlugin extends Plugin {
         Add Saver
         */
         this.addSave(new MessageLoader(this));
-        this.addSave(this.manager);
 
-        this.getSavers().forEach(saver -> saver.load(this.getPersist()));
+        this.getSavers().forEach(saver -> saver.load());
 
         // Load storage
         LegacyJsonConfig.getInstance(this);
         this.storageManager = new StorageManager(LegacyJsonConfig.storage, this);
-        this.storageManager.load(this.getPersist());
+        this.storageManager.load();
 
         this.manager.loadConfiguration();
 
-        if (this.isEnable(Plugins.PLACEHOLDER)) {
+        if (this.isEnabled(Plugins.PLACEHOLDER)) {
             VotePartyExpansion expansion = new VotePartyExpansion(this);
             expansion.register();
         }
 
-        if (this.isEnable(Plugins.VOTIFIER)) {
+        if (this.isEnabled(Plugins.VOTIFIER)) {
             Logger.log("Hooked into (Nu)Votifier");
             this.addListener(new VotifierListener(this));
         }
 
 
-        if (this.isEnable(Plugins.ZMENU)) {
+        if (this.isEnabled(Plugins.ZMENU)) {
             SchedulerUtil.runDelayed(this, () -> {
                 this.loader = new ZMenuLoader(this);
                 this.loader.load();
@@ -101,9 +98,9 @@ public class ChamoPartyPlugin extends Plugin {
             }, 1L);
         }
 
-        VersionChecker checker = new VersionChecker(this);
         try {
-            checker.modrinthVersionCheck();
+            UpdateUtil checker = new UpdateUtil(this, "chamoparty", "https://modrinth.com/plugin/chamoparty");
+            checker.versionCheck();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -113,7 +110,7 @@ public class ChamoPartyPlugin extends Plugin {
         Metrics
          */
         try {
-            Metrics metrics = new Metrics(this, 31621);
+            new Metrics(this, 31621);
             Logger.log("Successfully started metrics!");
         } catch (Exception ignored) {
             Logger.log("Failed to hook into Metrics.", Logger.LogType.ERROR);
@@ -124,16 +121,16 @@ public class ChamoPartyPlugin extends Plugin {
 
     @Override
     public void onDisable() {
-        this.getSavers().forEach(saver -> saver.save(this.getPersist()));
-        this.storageManager.save(this.getPersist());
+        this.getSavers().forEach(Saveable::save);
+        this.storageManager.save();
 
         this.postDisable();
     }
 
     public void registerCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            BaseBrigadier.register(event.registrar(), this);
-            VoteBrigadier.register(event.registrar(), this);
+            BaseCommandBrigadier.register(event.registrar(), this);
+            VoteCommandBrigadier.register(event.registrar(), this);
         }));
     }
 

@@ -1,15 +1,16 @@
 package net.chamosmp.chamoparty.paper.loader;
 
+import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.core.utils.loader.Loader;
 import net.chamosmp.chamoparty.paper.implementations.ChamoReward;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
-public class RewardLoader implements Loader<net.chamosmp.chamoparty.paper.api.Reward> {
+public class RewardLoader implements Loader<Reward> {
 
     @Override
-    public net.chamosmp.chamoparty.paper.api.Reward load(YamlConfiguration configuration, String path, Object... args) {
+    public Reward load(YamlConfiguration configuration, String path, Object... args) {
 
         double percent = configuration.getDouble(path + "percent", 10);
         List<String> commands = configuration.getStringList(path + "commands");
@@ -20,9 +21,7 @@ public class RewardLoader implements Loader<net.chamosmp.chamoparty.paper.api.Re
     }
 
     @Override
-    public void save(net.chamosmp.chamoparty.paper.api.Reward object, YamlConfiguration configuration, String path) {
-        // TODO Auto-generated method stub
-
+    public void save(Reward object, YamlConfiguration configuration, String path) {
     }
 
 }

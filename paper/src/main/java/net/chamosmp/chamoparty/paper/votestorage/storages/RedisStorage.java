@@ -3,14 +3,11 @@ package net.chamosmp.chamoparty.paper.votestorage.storages;
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.votestorage.redis.ChamoRedisClient;
 import net.chamosmp.chamoparty.paper.votestorage.redis.RedisPubSub;
 
-import java.util.UUID;
 
-
-public class RedisStorage extends SqlStorage implements IStorage {
+public class RedisStorage extends RemoteSqlStorage implements IStorage {
 
     private final ChamoRedisClient redisClient;
     private final RedisPubSub messaging;
@@ -26,22 +23,17 @@ public class RedisStorage extends SqlStorage implements IStorage {
     }
 
     @Override
-    public void load(Persist persist) {
-        super.load(persist);
+    public void load() {
+        super.load();
     }
 
     @Override
-    public void save(Persist persist) {
-        super.save(persist);
+    public void save() {
+        super.save();
         try {
             this.messaging.stop();
         } catch (Exception _) {
         }
-    }
-
-    @Override
-    public void performCustomVoteAction(String username, String serviceName, UUID uuid) {
-        this.messaging.sendVoteAction(username, serviceName, uuid);
     }
 
     /**

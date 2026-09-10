@@ -1,10 +1,11 @@
 package net.chamosmp.chamoparty.paper.core.utils;
 
-import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.chamosmp.chamoparty.paper.placeholder.PlaceholderAPI;
+import net.chamosmp.sqdlib.paper.util.ColorUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class PapiUtils {
 
@@ -21,7 +22,6 @@ public class PapiUtils {
      * @return string
      */
     public String papi(String placeHolder, Player player) {
-
         if (placeHolder == null)
             return null;
 
@@ -34,13 +34,15 @@ public class PapiUtils {
             return PlaceholderAPI.getInstance().setPlaceholders(player, placeHolder);
     }
 
+
     /**
+     * Parse a message with Placeholders
      *
-     * @param placeHolder
-     * @param player
-     * @return string
+     * @param message The message
+     * @param player  The player
+     * @return The colored message
      */
-    public Component papi(Component message, Player player) {
+    public Component papi(Component message, @Nullable Player player) {
         if (message == null)
             return null;
 
@@ -48,9 +50,9 @@ public class PapiUtils {
             usePlaceHolder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         if (usePlaceHolder) {
-            return ColorUtils.parse(me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, ColorUtils.deParse(message)));
+            return ColorUtil.parse(player, ColorUtil.deParse(message));
         } else
-            return ColorUtils.parse(PlaceholderAPI.getInstance().setPlaceholders(player, ColorUtils.deParse(message)));
+            return ColorUtil.parse(PlaceholderAPI.getInstance().setPlaceholders(player, ColorUtil.deParse(message)));
     }
 
 }

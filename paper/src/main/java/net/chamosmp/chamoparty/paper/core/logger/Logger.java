@@ -1,38 +1,34 @@
 package net.chamosmp.chamoparty.paper.core.logger;
 
-import net.chamosmp.chamoparty.core.utils.ColorUtils;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Obsolete
 public final class Logger {
-
-    private static final Component prefix = ColorUtils.parse("<aqua>chamoParty</aqua>| ");
 
     private Logger() {
     }
 
     public enum LogType {
-        ERROR("<dark_red>"),
-        INFO("<yellow>"),
-        WARNING("<red>"),
-        SUCCESS("<green>");
+        ERROR,
+        INFO,
+        WARNING,
+        SUCCESS;
 
-        private final String color;
-
-        LogType(String color) {
-            this.color = color;
-        }
-
-        public String getColor() {
-            return color;
+        public net.chamosmp.sqdlib.util.LogType logType() {
+            return switch (this) {
+                case ERROR -> net.chamosmp.sqdlib.util.LogType.SEVERE;
+                case INFO, SUCCESS -> net.chamosmp.sqdlib.util.LogType.INFO;
+                case WARNING -> net.chamosmp.sqdlib.util.LogType.WARNING;
+            };
         }
     }
 
     public static void log(String message, LogType type) {
-        Bukkit.getConsoleSender().sendMessage(prefix.append(ColorUtils.parse(type.getColor() + message)));
+        LoggerUtil.log(type.logType(), message);
     }
 
     public static void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(prefix.append(ColorUtils.parse(message)));
+        LoggerUtil.log(net.chamosmp.sqdlib.util.LogType.INFO, message);
     }
 }

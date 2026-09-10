@@ -1,15 +1,18 @@
 package net.chamosmp.chamoparty.paper.implementations;
 
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
+import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
 
-public class ChamoReward extends Utils implements net.chamosmp.chamoparty.paper.api.Reward {
+public class ChamoReward extends Utils implements Reward {
 
     private final double percent;
     private final List<String> commands;
@@ -46,9 +49,8 @@ public class ChamoReward extends Utils implements net.chamosmp.chamoparty.paper.
 
     @Override
     public void give(Plugin plugin, OfflinePlayer player) {
-
         if (player == null) {
-            Logger.log("Player is null. Cannot give reward.", Logger.LogType.WARNING);
+            LoggerUtil.log(LogType.WARNING, "Player is null. Cannot give reward.");
             return;
         }
 
@@ -77,7 +79,7 @@ public class ChamoReward extends Utils implements net.chamosmp.chamoparty.paper.
         if (!validMessages.isEmpty()) {
             Bukkit.getOnlinePlayers().forEach(oPlayer ->
                     validMessages.forEach(message ->
-                            this.messageWO(oPlayer, papi(message, oPlayer), "%player%", player.getName())
+                            this.messageWO(oPlayer, papi(message, oPlayer), Map.of("player", player.getName()))
                     )
             );
         }

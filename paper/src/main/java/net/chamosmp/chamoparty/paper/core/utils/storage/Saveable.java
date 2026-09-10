@@ -4,13 +4,11 @@ public interface Saveable {
 
     /**
      *
-     * @param persist
      */
-    void save(Persist persist);
+    void save();
 
     /**
      *
-     * @param persist
      */
-    void load(Persist persist);
+    void load();
 }

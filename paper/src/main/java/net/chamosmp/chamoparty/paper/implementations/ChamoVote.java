@@ -1,10 +1,11 @@
 package net.chamosmp.chamoparty.paper.implementations;
 
 import net.chamosmp.chamoparty.paper.api.Reward;
+import net.chamosmp.chamoparty.paper.api.Vote;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class ChamoVote implements net.chamosmp.chamoparty.paper.api.Vote {
+public class ChamoVote implements Vote {
 
     private final String serviceName;
     private final long createdAt;

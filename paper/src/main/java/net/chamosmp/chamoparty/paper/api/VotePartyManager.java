@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public interface VotePartyManager extends Saveable {
+public interface VotePartyManager {
 
     /**
      * Allows to reload configuration files
@@ -134,14 +134,6 @@ public interface VotePartyManager extends Saveable {
      * Secret start
      */
     void secretStart();
-
-    /**
-     * Secret vote
-     *
-     * @param username Nickname of the user who voted
-     * @param serviceName Name of the service where the player voted
-     */
-    //boolean secretVote(String username, String serviceName);
 
     /**
      * Allows you to add a vote in the database

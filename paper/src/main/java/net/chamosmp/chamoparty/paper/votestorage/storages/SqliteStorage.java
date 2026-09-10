@@ -1,7 +1,6 @@
 package net.chamosmp.chamoparty.paper.votestorage.storages;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
-import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
@@ -9,17 +8,14 @@ import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.votestorage.utils.Connection;
+import net.chamosmp.chamoparty.paper.votestorage.utils.SqliteConnection;
+import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class SqlStorage extends Utils implements IStorage {
+public class SqliteStorage extends Utils implements IStorage {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger("ChamoParty");
     protected final ChamoPartyPlugin plugin;
@@ -39,32 +35,25 @@ public class SqlStorage extends Utils implements IStorage {
     protected long voteCount = 1;
 
     /**
-     * @param plugin
-     * @param storage
+     * @param plugin the plugin
      */
-    public SqlStorage(ChamoPartyPlugin plugin, Storage storage) {
+    public SqliteStorage(ChamoPartyPlugin plugin) {
         super();
         this.plugin = plugin;
-        this.storage = storage;
+        this.storage = Storage.SQLITE;
     }
 
     @Override
-    public void load(Persist persist) {
-        String user = plugin.getConfig().getString("database.redis.sql.sql-credentials.user");
-        String password = plugin.getConfig().getString("database.redis.sql.sql-credentials.password");
-        String host = plugin.getConfig().getString("database.redis.sql.sql-credentials.host");
-        String database = plugin.getConfig().getString("database.redis.sql.sql-credentials.database");
-        int port = plugin.getConfig().getInt("database.redis.sql.sql-credentials.port");
+    public void load() {
+        this.iConnection = new SqliteConnection(storage, plugin);
 
-        this.iConnection = new Connection(storage, user, password, host, database, port);
-
-        Logger.log("Connecting to database... (MySQL/MariaDB)");
+        Logger.log("Connecting to the SQL database... (SQLite)");
         SchedulerUtil.runAsync(plugin, () -> {
             try {
                 this.iConnection.connect();
-                log.info("Connected to database");
+                log.info("Connected to the SQL database");
             } catch (SQLException e) {
-                log.error("Could not connect to database: ", e);
+                log.error("Could not connect to the SQL database: ", e);
                 return;
             }
 
@@ -98,24 +87,12 @@ public class SqlStorage extends Utils implements IStorage {
     }
 
     @Override
-    public void save(Persist persist) {
-        // TODO Auto-generated method stub
-
+    public void save() {
     }
 
     @Override
     public PlayerVote createPlayer(OfflinePlayer offlinePlayer) {
         return this.createPlayer(offlinePlayer.getUniqueId());
-    }
-
-    @Override
-    public File getFolder() {
-        return new File(this.plugin.getDataFolder(), Folder.PLAYERS.toFolder());
-    }
-
-    @Override
-    public Map<UUID, PlayerVote> getPlayers() {
-        return this.players;
     }
 
     @Override
@@ -152,11 +129,6 @@ public class SqlStorage extends Utils implements IStorage {
     @Override
     public void insertVote(PlayerVote playerVote, Vote vote, Reward reward) {
         this.iConnection.asyncInsert(playerVote, vote, reward);
-    }
-
-    @Override
-    public void performCustomVoteAction(String username, String serviceName, UUID uuid) {
-        Logger.log("Impossible to find the player " + username, LogType.WARNING);
     }
 
     @Override

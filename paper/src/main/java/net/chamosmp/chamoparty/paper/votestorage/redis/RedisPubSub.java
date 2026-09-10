@@ -8,10 +8,10 @@ import net.chamosmp.chamoparty.api.storage.RedisSubChannel;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
 import net.chamosmp.chamoparty.storage.redis.RedisVoteResponse;
+import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -88,7 +88,7 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
         RedisFuture<Void> unsubscribe =
                 asyncCommands.unsubscribe(LegacyJsonConfig.redisChannel);
         unsubscribe.thenAccept(_ -> {
-           chamoRedisClient.close();
+            chamoRedisClient.close();
         });
     }
 
@@ -128,7 +128,7 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
         UUID messageId = this.sendMessage(RedisSubChannel.ADD_VOTE, message);
 
         // Allows to give the reward if the player is not connected
-        RedisVoteResponse redisVoteResponse = new RedisVoteResponse(messageId, username, serviceName, 1, uuid);
+        RedisVoteResponse redisVoteResponse = new RedisVoteResponse(username, serviceName, 1, uuid);
         this.voteResponses.put(messageId, redisVoteResponse);
 
     }

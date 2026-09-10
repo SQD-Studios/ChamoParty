@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.command;
+package net.chamosmp.chamoparty.paper.commands;
 
 import net.chamosmp.chamoparty.paper.ChamoPartyManager;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 
 @Command("vote")
 @Description("Open the vote gui")
-public class Vote extends ChamoPartyManager {
+public class VoteCommand extends ChamoPartyManager {
 
-    public Vote(ChamoPartyPlugin plugin) {
+    public VoteCommand(ChamoPartyPlugin plugin) {
         super(plugin);
     }
 

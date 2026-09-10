@@ -6,8 +6,8 @@ public enum Storage {
 
     MARIADB(Type.REDIS_SQL, "jdbc:mariadb://"),
     PGSQL(Type.REDIS_SQL, "jdbc:postgresql://"),
-    SQLITE(Type.REDIS_SQL, ""),
 
+    SQLITE(Type.VOTE_STORING, "jdbc:sqlite:"),
     JSON(Type.VOTE_STORING),
     REDIS(Type.VOTE_STORING),
 
@@ -36,6 +36,6 @@ public enum Storage {
 
     public enum Type {
         REDIS_SQL,
-        VOTE_STORING
+        VOTE_STORING,
     }
 }

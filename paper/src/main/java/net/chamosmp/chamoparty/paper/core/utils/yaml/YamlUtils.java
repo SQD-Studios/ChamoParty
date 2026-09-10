@@ -10,21 +10,12 @@ public abstract class YamlUtils extends Utils {
 
     protected final JavaPlugin plugin;
 
-    /**
-     * @param plugin
-     */
     public YamlUtils(JavaPlugin plugin) {
         super();
         this.plugin = plugin;
     }
 
 
-    /**
-     * Get config
-     *
-     * @param path
-     * @return {@link YamlConfiguration}
-     */
     protected YamlConfiguration getConfig(File file) {
         if (file == null)
             return null;

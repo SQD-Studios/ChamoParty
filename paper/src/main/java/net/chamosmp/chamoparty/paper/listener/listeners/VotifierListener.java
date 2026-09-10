@@ -26,5 +26,4 @@ public class VotifierListener implements Listener {
         Vote vote = event.getVote();
         manager.vote(vote.getUsername(), vote.getServiceName(), true);
     }
-
 }

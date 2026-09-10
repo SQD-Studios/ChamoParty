@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.command;
+package net.chamosmp.chamoparty.paper.commands;
 
 
 import net.chamosmp.chamoparty.paper.ChamoPartyManager;
@@ -16,11 +16,11 @@ import static java.lang.String.valueOf;
 
 @Command("chamoparty")
 @Aliases("voteparty")
-public class Base extends ChamoPartyManager {
+public class BaseCommand extends ChamoPartyManager {
 
     private final ChamoPartyPlugin plugin;
 
-    public Base(ChamoPartyPlugin plugin) {
+    public BaseCommand(ChamoPartyPlugin plugin) {
         super(plugin);
         this.plugin = plugin;
     }

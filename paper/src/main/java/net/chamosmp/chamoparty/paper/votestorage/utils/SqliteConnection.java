@@ -1,6 +1,7 @@
 package net.chamosmp.chamoparty.paper.votestorage.utils;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
+import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
@@ -16,25 +17,22 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class Connection implements IConnection {
+public class SqliteConnection implements IConnection {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Connection.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SqliteConnection.class);
     private final Storage storage;
-    private final String user;
-    private final String password;
-    private final String host;
-    private final String dataBase;
-    private final int port;
     private java.sql.Connection connection;
 
-    public Connection(Storage storage, String user, String password, String host, String dataBase, int port) {
+    private final ChamoPartyPlugin plugin;
+
+    /**
+     * @param storage The storage
+     */
+    public SqliteConnection(Storage storage, ChamoPartyPlugin plugin) {
         super();
         this.storage = storage;
-        this.user = user;
-        this.password = password;
-        this.host = host;
-        this.dataBase = dataBase;
-        this.port = port;
+
+        this.plugin = plugin;
     }
 
     @Override
@@ -44,8 +42,8 @@ public class Connection implements IConnection {
 
     @Override
     public void connect() throws SQLException {
-        String url = this.storage.getUrlBase() + this.host + ":" + this.port + "/" + this.dataBase;
-        this.connection = DriverManager.getConnection(url, this.user, this.password);
+        String url = this.storage.getUrlBase() + plugin.getDataPath() + "/sqlite.db";
+        this.connection = DriverManager.getConnection(url);
     }
 
     @Override

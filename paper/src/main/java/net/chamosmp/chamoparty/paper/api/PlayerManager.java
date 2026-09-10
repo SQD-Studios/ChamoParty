@@ -44,13 +44,6 @@ public interface PlayerManager {
     PlayerVote createPlayer(UUID uuid);
 
     /**
-     * Get folder as object
-     *
-     * @return file
-     */
-    File getFolder();
-
-    /**
      *
      * @param player
      * @return

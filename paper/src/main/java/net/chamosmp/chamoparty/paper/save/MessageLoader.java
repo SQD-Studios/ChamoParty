@@ -2,17 +2,15 @@ package net.chamosmp.chamoparty.paper.save;
 
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.api.enums.MessageType;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MessageLoader extends YamlUtils implements Saveable {
@@ -22,11 +20,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
     }
 
     @Override
-    public void save(Persist persist) {
-
-        if (persist != null)
-            return;
-
+    public void save() {
         File file = new File(plugin.getDataFolder(), "messages.yml");
         if (!file.exists())
             try {
@@ -45,14 +39,9 @@ public class MessageLoader extends YamlUtils implements Saveable {
 
             configuration.set(path + ".type", message.getType().name());
 
-            if (message.getType().equals(MessageType.TCHAT) || message.getType().equals(MessageType.ACTION)
-                    || message.getType().equals(MessageType.CENTER)) {
+            if (message.getType().equals(MessageType.TCHAT) || message.getType().equals(MessageType.ACTION)) {
 
-                if (message.isMessage()) {
-                    configuration.set(path + ".messages", message.getStrings());
-                } else {
-                    configuration.set(path + ".message", message.getString());
-                }
+                configuration.set(path + ".message", message.getString());
 
             } else if (message.getType().equals(MessageType.TITLE)) {
 
@@ -75,29 +64,26 @@ public class MessageLoader extends YamlUtils implements Saveable {
     }
 
     @Override
-    public void load(Persist persist) {
-
+    public void load() {
         File file = new File(plugin.getDataFolder(), "messages.yml");
         if (!file.exists()) {
-            this.save(null);
+            this.save();
             return;
         }
 
         YamlConfiguration configuration = getConfig(file);
 
         if (!configuration.contains("messages")) {
-            this.save(null);
+            this.save();
             return;
         }
 
         for (String key : configuration.getConfigurationSection("messages.").getKeys(false)) {
-
             loadMessage(configuration, "messages." + key);
-
         }
 
         // Pour avoir directs les news param§tres
-        this.save(null);
+        this.save();
     }
 
     /**
@@ -105,31 +91,16 @@ public class MessageLoader extends YamlUtils implements Saveable {
      * @param configuration
      * @param key
      */
-    private void loadMessage(YamlConfiguration configuration, String key) {
-
+    private void loadMessage(@NonNull YamlConfiguration configuration, String key) {
         if (configuration.contains(key + ".type")) {
-
             MessageType messageType = MessageType.valueOf(configuration.getString(key + ".type").toUpperCase());
             String keys = key.substring("messages.".length());
             Message enumMessage = Message.valueOf(keys.toUpperCase().replace(".", "_"));
             enumMessage.setType(messageType);
             switch (messageType) {
-                case ACTION: {
+                case ACTION, TCHAT: {
                     String message = configuration.getString(key + ".message");
                     enumMessage.setMessage(color(message));
-                    break;
-                }
-                case CENTER:
-                case TCHAT: {
-                    if (configuration.contains(key + ".messages")) {
-                        List<String> messages = configuration.getStringList(key + ".messages");
-                        enumMessage.setMessages(color(messages));
-                        enumMessage.setMessage(null);
-                    } else {
-                        String message = configuration.getString(key + ".message");
-                        enumMessage.setMessage(color(message));
-                        enumMessage.setMessages(new ArrayList<>());
-                    }
                     break;
                 }
                 case TITLE: {

@@ -4,33 +4,17 @@ import java.util.UUID;
 
 public class RedisVoteResponse {
 
-    private final UUID messageId;
     private final String username;
     private final String serviceName;
     private int responseCount;
     private UUID userId;
 
-    /**
-     * @param messageId
-     * @param username
-     * @param serviceName
-     * @param responseCount
-     * @param userId
-     */
-    public RedisVoteResponse(UUID messageId, String username, String serviceName, int responseCount, UUID userId) {
+    public RedisVoteResponse(String username, String serviceName, int responseCount, UUID userId) {
         super();
-        this.messageId = messageId;
         this.username = username;
         this.serviceName = serviceName;
         this.responseCount = responseCount;
         this.userId = userId;
-    }
-
-    /**
-     * @return the messageId
-     */
-    public UUID getMessageId() {
-        return messageId;
     }
 
     /**
@@ -55,24 +39,10 @@ public class RedisVoteResponse {
     }
 
     /**
-     * @param responseCount the responseCount to set
-     */
-    public void setResponseCount(int responseCount) {
-        this.responseCount = responseCount;
-    }
-
-    /**
      * @return the userId
      */
     public UUID getUserId() {
         return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 
     public void addResponse(String userId) {

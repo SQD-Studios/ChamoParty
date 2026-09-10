@@ -23,5 +23,4 @@ public class VoteListener extends ListenerAdapter {
         VotePartyManager manager = this.plugin.getManager();
         manager.giveVotes(player);
     }
-
 }

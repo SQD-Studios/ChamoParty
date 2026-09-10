@@ -55,13 +55,6 @@ public interface PlayerVote {
     Vote vote(Plugin plugin, String serviceName, Reward reward, boolean forceStorage);
 
     /**
-     * Return file name
-     *
-     * @return name
-     */
-    String getFileName();
-
-    /**
      *
      */
     void removeVote();

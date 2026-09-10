@@ -5,12 +5,14 @@ import net.chamosmp.chamoparty.core.utils.ProgressBar;
 import net.chamosmp.chamoparty.save.RedisConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
+@ApiStatus.Obsolete
 public class LegacyJsonConfig {
 
-    public static Storage storage = Storage.JSON;
+    public static Storage storage = Storage.SQLITE;
     public static Storage redisSqlStorage = Storage.MYSQL;
 
     public static boolean enableDebug = false;
@@ -44,9 +46,9 @@ public class LegacyJsonConfig {
     public LegacyJsonConfig(Plugin plugin) {
         FileConfiguration config = plugin.getConfig();
 
-        switch (Objects.requireNonNull(config.getString("database.type")).toLowerCase()) {
-            case "json":
-                storage = Storage.JSON;
+        switch (config.getString("database.type", "sqlite").toLowerCase()) {
+            case "json", "sqlite":
+                storage = Storage.SQLITE;
                 break;
             case "redis":
                 storage = Storage.REDIS;

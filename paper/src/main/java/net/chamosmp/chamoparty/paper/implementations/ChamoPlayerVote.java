@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,14 +63,14 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
                 if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
                     if (player != null) {
-                        message(player, Message.VOTE_MESSAGE, "%player%", player.getName());
+                        message(player, Message.VOTE_MESSAGE, Map.of("player", player.getName()));
                     }
                 }
 
                 if (LegacyJsonConfig.enableActionBarVoteAnnonce)
-                    broadcast(Message.VOTE_BROADCAST_ACTION, "%player%", offlinePlayer.getName());
+                    broadcast(Message.VOTE_BROADCAST_ACTION, Map.of("player", offlinePlayer.getName()));
                 if (LegacyJsonConfig.enableTchatVoteAnnonce)
-                    broadcast(Message.VOTE_BROADCAST_TCHAT, "%player%", offlinePlayer.getName());
+                    broadcast(Message.VOTE_BROADCAST_TCHAT, Map.of("player", offlinePlayer.getName()));
 
                 if (reward.needToBeOnline()) {
                     if (offlinePlayer.isOnline()) {
@@ -89,11 +90,6 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
         Vote vote = new ChamoVote(serviceName, reward, give);
         this.votes.add(vote);
         return vote;
-    }
-
-    @Override
-    public String getFileName() {
-        return this.uniqueId.toString();
     }
 
     @Override

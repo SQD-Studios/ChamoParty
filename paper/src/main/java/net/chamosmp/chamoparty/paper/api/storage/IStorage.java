@@ -12,13 +12,6 @@ import java.util.UUID;
 public interface IStorage extends PlayerManager, Saveable {
 
     /**
-     * Get players
-     *
-     * @return players
-     */
-    Map<UUID, PlayerVote> getPlayers();
-
-    /**
      *
      * @return
      */
@@ -44,15 +37,6 @@ public interface IStorage extends PlayerManager, Saveable {
      * @param reward
      */
     void insertVote(PlayerVote playerVote, Vote vote, Reward reward);
-
-    /**
-     * Usefull for redis
-     *
-     * @param username
-     * @param serviceName
-     * @param uuid
-     */
-    void performCustomVoteAction(String username, String serviceName, UUID uuid);
 
     /**
      * Start vote party

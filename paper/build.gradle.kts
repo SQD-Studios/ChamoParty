@@ -10,8 +10,9 @@ dependencies {
         exclude("org.apache.commons", "commons-lang3")
     }
 
+    implementation("net.chamosmp.sqdlib:sqdlib-paper:2.1.0")
+
     compileOnly("io.lettuce:lettuce-core:7.0.0.RELEASE")
-    compileOnly("com.zaxxer:HikariCP:4.0.3")
 
     implementation("org.bstats:bstats-bukkit:3.2.1")
 
@@ -48,6 +49,7 @@ tasks {
     shadowJar {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
+        relocate("net.chamosmp.sqdlib", "net.chamosmp.chamoparty.libs.sqdlib")
 
         dependsOn(processResources)
     }

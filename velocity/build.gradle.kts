@@ -9,6 +9,8 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:4.1.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:4.1.0-SNAPSHOT")
 
+    implementation("net.chamosmp.sqdlib:sqdlib-paper:2.1.0")
+
     // Database stuff
     compileOnly("redis.clients:jedis:5.1.3")
     compileOnly("com.zaxxer:HikariCP:4.0.3")
@@ -40,6 +42,7 @@ tasks {
     shadowJar {
         configurations = project.configurations.runtimeClasspath.map { setOf(it) }
         relocate("org.bstats", project.group.toString())
+        relocate("net.chamosmp.sqdlib", "net.chamosmp.chamoparty.libs.sqdlib")
 
         dependsOn(processResources)
     }

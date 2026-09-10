@@ -9,12 +9,11 @@ import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.sched.SchedulerUtil;
 import net.chamosmp.chamoparty.paper.core.utils.loader.Loader;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.paper.loader.RewardLoader;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,10 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
@@ -52,7 +48,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         try {
             this.plugin.reloadConfig();
             this.loadConfiguration();
-            this.plugin.getSavers().forEach(e -> e.load(this.plugin.getPersist()));
+            this.plugin.getSavers().forEach(e -> e.load());
             this.plugin.reloadInventories();
             message(sender, Message.RELOAD_SUCCESS);
         } catch (Exception e) {
@@ -133,7 +129,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void openVote(Player player) {
-        if (LegacyJsonConfig.enableVoteMessage) message(player, Message.VOTE_INFORMATIONS);
+        if (LegacyJsonConfig.enableVoteMessage) message(player, Message.VOTE_INFORMATION);
         if (LegacyJsonConfig.enableVoteInventory && this.plugin.getLoader() != null) {
             this.plugin.getLoader().open(player);
             return;
@@ -162,7 +158,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     @Override
     public void vote(CommandSender sender, String username, boolean updateVoteParty) {
         this.vote(username, "ChamoParty", updateVoteParty);
-        message(sender, Message.VOTE_SEND, "%player%", username);
+        message(sender, Message.VOTE_SEND, Map.of("player", username));
     }
 
     @Override
@@ -234,7 +230,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
                 }), 1L
         );
 
-        broadcast(Message.VOTE_PARTY_START);
+        broadcast(Message.VOTE_PARTY_START, Map.of());
     }
 
     @Override
@@ -262,20 +258,12 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
             List<Vote> votes = playerVote.getNeedRewardVotes();
             if (!votes.isEmpty()) {
                 schedule((int) LegacyJsonConfig.joinGiveVoteMilliSecond, () -> {
-                    message(player, Message.VOTE_LATER, "%amount%", votes.size());
+                    message(player, Message.VOTE_LATER, Map.of("amount", votes.size()));
                     votes.forEach(e -> e.giveReward(this.plugin, player));
                 });
                 this.plugin.getIStorage().updateRewards(player.getUniqueId());
             }
         }, true);
-    }
-
-    @Override
-    public void save(Persist persist) {
-    }
-
-    @Override
-    public void load(Persist persist) {
     }
 
     @Override
@@ -320,12 +308,12 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     public void removeVote(CommandSender sender, OfflinePlayer player) {
         this.plugin.getPlayerManager().getPlayer(player, optional -> {
             if (optional.isEmpty() || optional.get().getVoteCount() == 0) {
-                message(sender, Message.VOTE_REMOVE_ERROR, "%player%", player.getName());
+                message(sender, Message.VOTE_REMOVE_ERROR, Map.of("player", player.getName()));
                 return;
             }
             PlayerVote playerVote = optional.get();
             playerVote.removeVote();
-            message(sender, Message.VOTE_REMOVE_SUCCESS, "%player%", player.getName());
+            message(sender, Message.VOTE_REMOVE_SUCCESS, Map.of("player", player.getName()));
         }, true);
     }
 
