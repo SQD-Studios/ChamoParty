@@ -3,7 +3,6 @@ package net.chamosmp.chamoparty.paper.loader;
 import fr.maxlego08.menu.api.Inventory;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.exceptions.InventoryException;
-import net.chamosmp.chamoparty.api.enums.InventoryName;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import org.bukkit.entity.Player;
@@ -35,7 +34,7 @@ public class ZMenuLoader extends Utils {
             return;
         }
 
-        File file = new File(this.plugin.getDataFolder(), "inventories/" + InventoryName.VOTE.getName() + ".yml");
+        File file = new File(this.plugin.getDataFolder(), "inventories/vote.yml");
         try {
             this.inventoryManager.deleteInventories(this.plugin);
             this.inventoryManager.loadInventory(this.plugin, file);
@@ -45,7 +44,7 @@ public class ZMenuLoader extends Utils {
     }
 
     public void open(Player player) {
-        Optional<Inventory> optional = this.inventoryManager.getInventory(InventoryName.VOTE.getName());
+        Optional<Inventory> optional = this.inventoryManager.getInventory("vote");
         if (optional.isPresent()) {
             Inventory inventory = optional.get();
             this.inventoryManager.openInventory(player, inventory);

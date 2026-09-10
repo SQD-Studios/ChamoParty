@@ -215,7 +215,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
                     }
                 }
 
-                Reward reward = getRandomReward(RewardType.PARTY);
+                Reward reward = getRandomReward(RewardType.VOTE_PARTY);
                 if (reward != null) reward.give(this.plugin, player);
 
             } else {

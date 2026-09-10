@@ -26,7 +26,7 @@ public abstract class Utils extends MessageUtils {
     }
 
     public String getProgressBar(long l, long m, ProgressBar progressBar) {
-        return this.getProgressBar(l, m, progressBar.getLength(), progressBar.getSymbol(), progressBar.getCompletedColor(), progressBar.getNotCompletedColor());
+        return this.getProgressBar(l, m, progressBar.length(), progressBar.symbol(), progressBar.completedColor(), progressBar.notCompletedColor());
     }
 
 

@@ -1,7 +1,6 @@
 package net.chamosmp.chamoparty.paper;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.chamosmp.chamoparty.api.enums.InventoryName;
 import net.chamosmp.chamoparty.core.utils.plugins.Plugins;
 import net.chamosmp.chamoparty.paper.api.PlayerManager;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -42,8 +41,7 @@ public class ChamoPartyPlugin extends Plugin {
         /*
         Register inventories
          */
-        for (InventoryName inventoryName : InventoryName.values())
-            this.registerFile(inventoryName);
+        this.registerFile();
 
         this.preEnable();
 

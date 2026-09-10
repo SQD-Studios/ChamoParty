@@ -2,7 +2,6 @@ package net.chamosmp.chamoparty.paper.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.chamosmp.chamoparty.api.enums.InventoryName;
 import net.chamosmp.chamoparty.api.storage.Script;
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.core.utils.plugins.Plugins;
@@ -177,7 +176,7 @@ public abstract class Plugin extends JavaPlugin {
         return Bukkit.getPluginManager().getPlugin(plugin.getName());
     }
 
-    protected void registerFile(InventoryName file) {
-        this.files.add(file.getName());
+    protected void registerFile() {
+        this.files.add("vote");
     }
 }

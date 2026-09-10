@@ -1,6 +1,5 @@
 package net.chamosmp.chamoparty.paper.votestorage.storages;
 
-import net.chamosmp.chamoparty.api.storage.Script;
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.core.enums.Folder;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
@@ -16,12 +15,11 @@ import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Persist;
 import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
 import net.chamosmp.chamoparty.paper.votestorage.utils.Connection;
-import net.chamosmp.chamoparty.storage.utils.ScriptRunner;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,22 +68,30 @@ public class SqlStorage extends Utils implements IStorage {
                 return;
             }
 
-            try {
-
-                for (Script script : Script.values()) {
-                    File file = new File(plugin.getDataFolder(), "scripts/" + script.name().toLowerCase() + ".sql");
-                    ScriptRunner runner = new ScriptRunner(iConnection.getConnection());
-                    Reader reader = new BufferedReader(new FileReader(file));
-                    runner.runScript(reader);
-                    reader.close();
-                }
-                log.info("Successfully run all the scripts");
-
-                this.iConnection.fetchVotes(this);
-
-            } catch (IOException e) {
+            try (java.sql.Connection conn = iConnection.getConnection()) {
+                conn.createStatement().execute("""
+                        CREATE TABLE IF NOT EXISTS chamoparty_count (
+                            vote BIGINT NOT NULL
+                        )
+                        """);
+                conn.createStatement().execute("""
+                        CREATE TABLE IF NOT EXISTS chamoparty_votes (
+                            player_uuid             varchar(36)          not null,
+                            service_name   varchar(255)         not null,
+                            is_reward_give boolean default true not null,
+                            reward_percent float   default 100  not null,
+                            commands       longtext             not null,
+                            need_online    boolean default true not null,
+                            created_at     long    				not null
+                        )
+                        """);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            log.info("Successfully run pre-database sql");
+
+            this.iConnection.fetchVotes(this);
 
         });
 

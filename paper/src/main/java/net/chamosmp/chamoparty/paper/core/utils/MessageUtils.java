@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class MessageUtils extends PapiUtils {
 
@@ -157,7 +158,7 @@ public abstract class MessageUtils extends PapiUtils {
      * @param message The message you want to send
      * @return message
      */
-    protected Component getCenteredMessage(Component message) {
+    protected Component getCenteredMessage(@Nullable Component message) {
         if (message == null)
             return Component.text("");
 
