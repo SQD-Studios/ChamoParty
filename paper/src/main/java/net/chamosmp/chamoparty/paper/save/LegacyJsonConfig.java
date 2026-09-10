@@ -20,7 +20,7 @@ public class LegacyJsonConfig {
     public static boolean enableLogMessage = false;
 
     public static boolean enableVoteInventory = true;
-    public static boolean enableVoteMessage = true;
+    public static boolean enableVoteMessage = false;
 
     // New flag to restrict rewards only to voters
     public static boolean only_voters_rewards = true;

@@ -12,8 +12,6 @@ public enum Message {
     RELOAD_SUCCESS("<green>You have just reloaded the configuration."),
     RELOAD_ERROR("<red>An error has occurred, go to the console."),
 
-    VOTE_INFORMATION(""),
-
     VOTE_BROADCAST_ACTION(MessageType.ACTION, "<white>%player% <gray>has just voted <dark_gray>(<aqua>%chamoparty_votes_recorded%<gray>/<green>%chamoparty_votes_required_total%<dark_gray>)"),
     VOTE_BROADCAST_TCHAT("<white>%player% <gray>has just voted <dark_gray>(<aqua>%chamoparty_votes_recorded%<gray>/<green>%chamoparty_votes_required_total%<dark_gray>)"),
     VOTE_MESSAGE("<gray>You have just voted for the server <dark_purple>Server name<gray>."),

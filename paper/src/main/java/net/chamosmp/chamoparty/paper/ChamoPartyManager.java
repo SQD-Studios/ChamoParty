@@ -10,6 +10,7 @@ import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.core.utils.loader.Loader;
+import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.paper.loader.RewardLoader;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
@@ -48,7 +49,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         try {
             this.plugin.reloadConfig();
             this.loadConfiguration();
-            this.plugin.getSavers().forEach(e -> e.load());
+            this.plugin.getSavers().forEach(Saveable::load);
             this.plugin.reloadInventories();
             message(sender, Message.RELOAD_SUCCESS);
         } catch (Exception e) {
@@ -129,13 +130,12 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void openVote(Player player) {
-        if (LegacyJsonConfig.enableVoteMessage) message(player, Message.VOTE_INFORMATION);
         if (LegacyJsonConfig.enableVoteInventory && this.plugin.getLoader() != null) {
             this.plugin.getLoader().open(player);
             return;
         }
         if (!LegacyJsonConfig.enableVoteMessage)
-            message(player, "§cError in configuration, please contact an administrator.");
+            message(player, "§cFound error in the vote party plugin configuration, please contact an administrator.");
     }
 
     @Override
