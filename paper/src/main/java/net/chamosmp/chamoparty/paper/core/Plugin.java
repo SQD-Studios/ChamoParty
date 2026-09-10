@@ -23,9 +23,9 @@ public abstract class Plugin extends JavaPlugin {
     protected void preEnable() {
         this.getDataFolder().mkdirs();
 
-        File inventoryFile = new File(getFile(), "/inventories/vote.yml");
+        File inventoryFile = new File(getDataFolder(), "/inventories/vote.yml");
         if (!inventoryFile.exists()) {
-            saveResource(inventoryFile.toString(), false);
+            saveResource("inventories/vote.yml", false);
         }
 
         if (!Bukkit.getServerConfig().isProxyOnlineMode()) {
