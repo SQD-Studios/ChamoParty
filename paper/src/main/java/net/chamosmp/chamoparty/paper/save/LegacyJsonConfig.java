@@ -36,7 +36,7 @@ public class LegacyJsonConfig {
     );
     public static int maxSqlRetryAmoun = 5;
 
-    public static ProgressBar progressBar = new ProgressBar(20, '|', "§a", "§8");
+    public static ProgressBar progressBar = new ProgressBar(20, '|', "<green>", "<dark_gray>");
 
     private LegacyJsonConfig() {
     }
