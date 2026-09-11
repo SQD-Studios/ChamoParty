@@ -14,6 +14,7 @@ import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.paper.loader.RewardLoader;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.sqdlib.paper.util.ConfigUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -22,11 +23,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -61,36 +57,8 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
 
     @Override
     public void loadConfiguration() {
-        File file = new File(this.plugin.getDataFolder(), "config.yml");
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        YamlConfiguration configuration = ConfigUtil.loadOrAdapt(plugin, "config.yml", List.of("rewards.", "party."));
         ConfigurationSection configurationSection;
-
-        InputStream resourceStream = plugin.getResource(file.getName());
-        if (resourceStream != null) {
-            try (InputStreamReader reader = new InputStreamReader(resourceStream, StandardCharsets.UTF_8)) {
-                YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(reader);
-                boolean changed = false;
-                for (String key : defaultConfig.getKeys(true)) {
-                    if (!configuration.contains(key)) {
-                        if (!key.startsWith("categories.") && !key.startsWith("rarities.")) {
-                            configuration.set(key, defaultConfig.get(key));
-                            changed = true;
-                        }
-                    }
-                }
-
-                if (changed) {
-                    try {
-                        configuration.save(file);
-                    } catch (IOException e) {
-                        Logger.log("Could not save adapted config " + e.getMessage(), LogType.ERROR);
-                    }
-                }
-            } catch (IOException e) {
-                Logger.log("Could not read default config: " + e.getMessage(), LogType.ERROR);
-            }
-
-        }
 
         this.rewards.clear();
         Loader<Reward> loader = new RewardLoader();
@@ -323,6 +291,6 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         this.plugin.get(uniqueId, playerVote -> {
             Vote vote = playerVote.vote(this.plugin, serviceName, reward, true);
             this.plugin.getIStorage().insertVote(playerVote, vote, reward);
-        }, false);
+        });
     }
 }

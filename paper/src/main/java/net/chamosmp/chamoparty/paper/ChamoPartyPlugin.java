@@ -159,7 +159,7 @@ public class ChamoPartyPlugin extends Plugin {
      * @return {@link PlayerVote}
      */
     public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
-        this.get(offlinePlayer.getUniqueId(), consumer, forceDatabaseUpdate);
+        this.get(offlinePlayer.getUniqueId(), consumer);
     }
 
     /**
@@ -168,7 +168,7 @@ public class ChamoPartyPlugin extends Plugin {
      * @param uuid
      * @return {@link PlayerVote}
      */
-    public void get(UUID uuid, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
+    public void get(UUID uuid, Consumer<PlayerVote> consumer) {
         PlayerManager manager = this.getPlayerManager();
         manager.getPlayer(uuid, optional -> {
             consumer.accept(optional.orElseGet(() -> manager.createPlayer(uuid)));
