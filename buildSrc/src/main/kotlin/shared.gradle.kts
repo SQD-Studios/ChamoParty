@@ -1,3 +1,5 @@
+import sun.tools.jar.resources.jar
+
 plugins {
     id("java")
     id("maven-publish")
@@ -6,8 +8,13 @@ plugins {
 group = "net.chamosmp.chamoparty"
 version = "1.1.1"
 description = "ChamoParty, fork of zVoteParty, but just better"
-java.sourceCompatibility = JavaVersion.VERSION_25
-java.targetCompatibility = JavaVersion.VERSION_25
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+
+    withSourcesJar()
+}
 
 repositories {
     maven {
