@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.chamosmp.chamoparty"
-version = "1.1.1"
+version = "1.1.2"
 description = "ChamoParty, fork of zVoteParty, but just better"
 
 java {
