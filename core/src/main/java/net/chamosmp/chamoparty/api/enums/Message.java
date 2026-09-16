@@ -2,6 +2,7 @@ package net.chamosmp.chamoparty.api.enums;
 
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public enum Message {
     VOTE_STARTPARTY("<green>You just launched the voting party.");
 
     private Component message;
+    private String stringMessage;
     private Map<String, Object> titles = new HashMap<>();
     private final boolean use;
     private MessageType type = MessageType.TCHAT;
@@ -35,6 +37,7 @@ public enum Message {
      * @param message
      */
     Message(String message) {
+        this.stringMessage = message;
         this.message = ColorUtils.parse("<white>" + message);
         this.use = true;
     }
@@ -44,6 +47,7 @@ public enum Message {
      * @param message
      */
     Message(MessageType type, String message) {
+        this.stringMessage = message;
         this.message = ColorUtils.parse("<white>" + message);
         this.use = true;
         this.type = type;
@@ -57,8 +61,9 @@ public enum Message {
         return use;
     }
 
-    public void setMessage(Component message) {
-        this.message = message;
+    public void setMessage(String message) {
+        this.stringMessage = message;
+        this.message = ColorUtils.parse(stringMessage);
     }
 
     public String getTitle() {
@@ -94,8 +99,7 @@ public enum Message {
     }
 
     public String getString() {
-        return ColorUtils.deParse(message);
+        return stringMessage;
     }
 
 }
-

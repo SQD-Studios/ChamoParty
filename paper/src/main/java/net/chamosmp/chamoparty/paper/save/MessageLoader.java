@@ -4,6 +4,7 @@ import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.api.enums.MessageType;
 import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
+import net.kyori.adventure.title.Title;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
@@ -31,36 +32,25 @@ public class MessageLoader extends YamlUtils implements Saveable {
 
         YamlConfiguration configuration = getConfig(file);
         for (Message message : Message.values()) {
-
-            if (!message.isUse())
-                continue;
-
             String path = "messages." + message.name().toLowerCase().replace("_", ".");
 
             configuration.set(path + ".type", message.getType().name());
 
             if (message.getType().equals(MessageType.TCHAT) || message.getType().equals(MessageType.ACTION)) {
-
                 configuration.set(path + ".message", message.getString());
-
             } else if (message.getType().equals(MessageType.TITLE)) {
-
                 configuration.set(path + ".title", colorReverse(message.getTitle()));
                 configuration.set(path + ".subtitle", colorReverse(message.getSubTitle()));
                 configuration.set(path + ".fadeInTime", message.getStart());
                 configuration.set(path + ".showTime", message.getTime());
                 configuration.set(path + ".fadeOutTime", message.getEnd());
-
             }
-
         }
-
         try {
             configuration.save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -82,7 +72,6 @@ public class MessageLoader extends YamlUtils implements Saveable {
             loadMessage(configuration, "messages." + key);
         }
 
-        // Pour avoir directs les news param§tres
         this.save();
     }
 
@@ -100,7 +89,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
             switch (messageType) {
                 case ACTION, TCHAT: {
                     String message = configuration.getString(key + ".message");
-                    enumMessage.setMessage(color(message));
+                    enumMessage.setMessage(message);
                     break;
                 }
                 case TITLE: {
@@ -109,7 +98,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
                     int fadeInTime = configuration.getInt(key + ".fadeInTime");
                     int showTime = configuration.getInt(key + ".showTime");
                     int fadeOutTime = configuration.getInt(key + ".fadeOutTime");
-                    Map<String, Object> titles = new HashMap<String, Object>();
+                    Map<String, Object> titles = new HashMap<>();
                     titles.put("title", color(title));
                     titles.put("subtitle", color(subtitle));
                     titles.put("start", fadeInTime);

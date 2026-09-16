@@ -100,5 +100,4 @@ public class PlaceholderAPI extends Utils {
         };
 
     }
-
 }
