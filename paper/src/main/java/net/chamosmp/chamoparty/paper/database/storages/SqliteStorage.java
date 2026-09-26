@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.votestorage.storages;
+package net.chamosmp.chamoparty.paper.database.storages;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
@@ -7,11 +7,11 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.votestorage.utils.Connection;
+import net.chamosmp.chamoparty.paper.database.utils.SqlConnection;
+import net.chamosmp.chamoparty.paper.impl.ChamoPlayerVote;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.slf4j.LoggerFactory;
@@ -23,38 +23,29 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class RemoteSqlStorage extends Utils implements IStorage {
+public class SqliteStorage implements IStorage {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger("ChamoParty");
     protected final ChamoPartyPlugin plugin;
     protected final Storage storage;
-
-    protected IConnection iConnection;
-
     protected transient final Map<UUID, PlayerVote> players = new HashMap<>();
+    protected IConnection iConnection;
     protected long voteCount = 1;
 
     /**
-     * @param plugin
-     * @param storage
+     * @param plugin the plugin
      */
-    public RemoteSqlStorage(ChamoPartyPlugin plugin, Storage storage) {
-        super();
+    public SqliteStorage(ChamoPartyPlugin plugin) {
+
         this.plugin = plugin;
-        this.storage = storage;
+        this.storage = Storage.SQLITE;
     }
 
     @Override
     public void load() {
-        String user = plugin.getConfig().getString("database.sql.sql-credentials.user");
-        String password = plugin.getConfig().getString("database.sql.sql-credentials.password");
-        String host = plugin.getConfig().getString("database.sql.sql-credentials.host");
-        String database = plugin.getConfig().getString("database.sql.sql-credentials.database");
-        int port = plugin.getConfig().getInt("database.sql.sql-credentials.port");
+        this.iConnection = new SqlConnection(storage, plugin);
 
-        this.iConnection = new Connection(storage, user, password, host, database, port);
-
-        Logger.log("Connecting to the SQL database... (MySQL/MariaDB)");
+        LoggerUtil.log(LogType.INFO, "Connecting to the SQL database... (SQLite)");
         SchedulerUtil.runAsync(plugin, () -> {
             try {
                 this.iConnection.connect();
@@ -95,8 +86,6 @@ public class RemoteSqlStorage extends Utils implements IStorage {
 
     @Override
     public void save() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -110,14 +99,14 @@ public class RemoteSqlStorage extends Utils implements IStorage {
     }
 
     @Override
-    public void addVoteCount(long amount) {
-        this.voteCount += amount;
+    public void setVoteCount(long amount) {
+        this.voteCount = amount;
         this.iConnection.updateVoteCount(this.voteCount);
     }
 
     @Override
-    public void setVoteCount(long amount) {
-        this.voteCount = amount;
+    public void addVoteCount(long amount) {
+        this.voteCount += amount;
         this.iConnection.updateVoteCount(this.voteCount);
     }
 

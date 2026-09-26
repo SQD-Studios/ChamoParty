@@ -1,10 +1,10 @@
-package net.chamosmp.chamoparty.paper.votestorage.storages;
+package net.chamosmp.chamoparty.paper.database.storages;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.votestorage.redis.ChamoRedisClient;
-import net.chamosmp.chamoparty.paper.votestorage.redis.RedisPubSub;
+import net.chamosmp.chamoparty.paper.database.redis.ChamoRedisClient;
+import net.chamosmp.chamoparty.paper.database.redis.RedisPubSub;
 
 
 public class RedisStorage extends RemoteSqlStorage implements IStorage {

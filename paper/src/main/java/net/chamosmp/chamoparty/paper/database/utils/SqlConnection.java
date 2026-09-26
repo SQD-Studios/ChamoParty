@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.votestorage.utils;
+package net.chamosmp.chamoparty.paper.database.utils;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -6,46 +6,54 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.votestorage.requets.*;
+import net.chamosmp.chamoparty.paper.database.requets.*;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.util.LogType;
+import org.bukkit.plugin.Plugin;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class Connection implements IConnection {
+public class SqlConnection implements IConnection {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Connection.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SqlConnection.class);
     private final Storage storage;
-    private final String user;
-    private final String password;
-    private final String host;
-    private final String dataBase;
-    private final int port;
-    private java.sql.Connection connection;
+    private final Plugin plugin;
+    private Connection connection;
 
-    public Connection(Storage storage, String user, String password, String host, String dataBase, int port) {
-        super();
+    public SqlConnection(Storage storage, Plugin plugin) {
         this.storage = storage;
-        this.user = user;
-        this.password = password;
-        this.host = host;
-        this.dataBase = dataBase;
-        this.port = port;
+        this.plugin = plugin;
     }
 
     @Override
-    public java.sql.Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 
     @Override
     public void connect() throws SQLException {
-        String url = this.storage.getUrlBase() + this.host + ":" + this.port + "/" + this.dataBase;
-        this.connection = DriverManager.getConnection(url, this.user, this.password);
+        switch (this.storage) {
+            case MYSQL, MARIADB -> {
+                String user = plugin.getConfig().getString("database.sql.sql-credentials.user");
+                String password = plugin.getConfig().getString("database.sql.sql-credentials.password");
+                String host = plugin.getConfig().getString("database.sql.sql-credentials.host");
+                String database = plugin.getConfig().getString("database.sql.sql-credentials.database");
+                int port = plugin.getConfig().getInt("database.sql.sql-credentials.port");
+
+                String url = this.storage.getUrlBase() + host + ":" + port + "/" + database;
+                this.connection = DriverManager.getConnection(url, user, password);
+            }
+            default -> {
+                String url = this.storage.getUrlBase() + plugin.getDataPath() + "/sqlite.db";
+                this.connection = DriverManager.getConnection(url);
+            }
+        }
     }
 
     @Override
@@ -54,7 +62,7 @@ public class Connection implements IConnection {
             try {
                 this.connection.close();
             } catch (SQLException e) {
-                Logger.log("Connection close failed" + e);
+                LoggerUtil.log(LogType.SEVERE, "Connection close failed" + e);
             }
         }
     }
@@ -76,7 +84,7 @@ public class Connection implements IConnection {
                 runnable.run();
             }
         } catch (SQLException e) {
-            Logger.log(e.getMessage(), Logger.LogType.ERROR);
+            LoggerUtil.log(LogType.SEVERE, e.getMessage());
         }
     }
 
@@ -119,5 +127,4 @@ public class Connection implements IConnection {
             thread.start();
         });
     }
-
 }

@@ -1,23 +1,24 @@
-package net.chamosmp.chamoparty.paper.votestorage;
+package net.chamosmp.chamoparty.paper.database;
 
+import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
+import net.chamosmp.chamoparty.paper.api.storage.StorageManager;
+import net.chamosmp.chamoparty.paper.database.storages.RedisStorage;
+import net.chamosmp.chamoparty.paper.database.storages.RemoteSqlStorage;
+import net.chamosmp.chamoparty.paper.database.storages.SqliteStorage;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
-import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
-import net.chamosmp.chamoparty.paper.votestorage.storages.RemoteSqlStorage;
-import net.chamosmp.chamoparty.paper.votestorage.storages.SqliteStorage;
 
-public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage.StorageManager {
+public class DatabaseManager implements StorageManager {
 
-    private final net.chamosmp.chamoparty.api.storage.Storage storage;
+    private final Storage storage;
     private IStorage iStorage;
 
     /**
      * @param storage
      * @param plugin
      */
-    public StorageManager(net.chamosmp.chamoparty.api.storage.Storage storage, ChamoPartyPlugin plugin) {
-        super();
+    public DatabaseManager(Storage storage, ChamoPartyPlugin plugin) {
         this.storage = storage;
 
         if (storage == null) {
@@ -57,7 +58,7 @@ public class StorageManager implements net.chamosmp.chamoparty.paper.api.storage
     }
 
     @Override
-    public net.chamosmp.chamoparty.api.storage.Storage getStorage() {
+    public Storage getStorage() {
         return this.storage;
     }
 

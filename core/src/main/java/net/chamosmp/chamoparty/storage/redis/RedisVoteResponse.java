@@ -10,7 +10,7 @@ public class RedisVoteResponse {
     private UUID userId;
 
     public RedisVoteResponse(String username, String serviceName, int responseCount, UUID userId) {
-        super();
+        
         this.username = username;
         this.serviceName = serviceName;
         this.responseCount = responseCount;

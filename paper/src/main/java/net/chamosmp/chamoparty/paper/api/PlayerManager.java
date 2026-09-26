@@ -3,7 +3,6 @@ package net.chamosmp.chamoparty.paper.api;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;

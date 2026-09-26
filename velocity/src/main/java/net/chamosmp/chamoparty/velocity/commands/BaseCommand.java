@@ -2,7 +2,6 @@ package net.chamosmp.chamoparty.velocity.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
-import com.velocitypowered.api.proxy.Player;
 import net.chamosmp.chamoparty.velocity.ChamoPartyVelo;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
 import net.strokkur.commands.Aliases;
@@ -32,14 +31,14 @@ public class BaseCommand {
                 sender.sendRichMessage("Config reloaded!");
             } else {
                 sender.sendRichMessage("Reloading config...");
-                plugin.getLogger().info("Reloading config...");
+                plugin.getLoggerUtil().info("Reloading config...");
                 loader.reloadConfig();
                 sender.sendRichMessage("Config reloaded!");
-                plugin.getLogger().info("Config reloaded!");
+                plugin.getLoggerUtil().info("Config reloaded!");
             }
         } catch (ConfigurateException e) {
             sender.sendRichMessage("<dark_red>Failed to load config! Please check your proxy's console for details.");
-            plugin.getLogger().error("Failed to reload config!", e);
+            plugin.getLoggerUtil().error("Failed to reload config!", e);
         }
     }
 }

@@ -1,7 +1,9 @@
-package net.chamosmp.chamoparty.paper.implementations;
+package net.chamosmp.chamoparty.paper.impl;
 
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -51,7 +53,7 @@ public class ChamoVote implements Vote {
             this.rewardIsGiven = true;
             reward.give(plugin, player);
         } catch (Exception e) {
-            plugin.getLogger().warning("Failed to give reward to " + player.getName() + ": " + e.getMessage());
+            LoggerUtil.log(LogType.WARNING, "Failed to give reward to " + player.getName() + ": " + e.getMessage());
             e.printStackTrace();
         }
     }

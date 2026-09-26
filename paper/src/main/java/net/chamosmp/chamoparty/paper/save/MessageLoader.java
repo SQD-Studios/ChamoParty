@@ -2,9 +2,8 @@ package net.chamosmp.chamoparty.paper.save;
 
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.api.enums.MessageType;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
-import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
-import net.kyori.adventure.title.Title;
+import net.chamosmp.chamoparty.paper.api.storage.Saveable;
+import net.chamosmp.sqdlib.paper.util.ColorUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
@@ -14,10 +13,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessageLoader extends YamlUtils implements Saveable {
+public class MessageLoader implements Saveable {
+
+    private final JavaPlugin plugin;
 
     public MessageLoader(JavaPlugin plugin) {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
                 e.printStackTrace();
             }
 
-        YamlConfiguration configuration = getConfig(file);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         for (Message message : Message.values()) {
             String path = "messages." + message.name().toLowerCase().replace("_", ".");
 
@@ -39,8 +40,8 @@ public class MessageLoader extends YamlUtils implements Saveable {
             if (message.getType().equals(MessageType.TCHAT) || message.getType().equals(MessageType.ACTION)) {
                 configuration.set(path + ".message", message.getString());
             } else if (message.getType().equals(MessageType.TITLE)) {
-                configuration.set(path + ".title", colorReverse(message.getTitle()));
-                configuration.set(path + ".subtitle", colorReverse(message.getSubTitle()));
+                configuration.set(path + ".title", message.getTitle());
+                configuration.set(path + ".subtitle", message.getSubTitle());
                 configuration.set(path + ".fadeInTime", message.getStart());
                 configuration.set(path + ".showTime", message.getTime());
                 configuration.set(path + ".fadeOutTime", message.getEnd());
@@ -61,7 +62,7 @@ public class MessageLoader extends YamlUtils implements Saveable {
             return;
         }
 
-        YamlConfiguration configuration = getConfig(file);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
         if (!configuration.contains("messages")) {
             this.save();
@@ -99,8 +100,10 @@ public class MessageLoader extends YamlUtils implements Saveable {
                     int showTime = configuration.getInt(key + ".showTime");
                     int fadeOutTime = configuration.getInt(key + ".fadeOutTime");
                     Map<String, Object> titles = new HashMap<>();
-                    titles.put("title", color(title));
-                    titles.put("subtitle", color(subtitle));
+                    if (title != null)
+                        titles.put("title", ColorUtil.parse(title));
+                    if (subtitle != null)
+                        titles.put("subtitle", ColorUtil.parse(subtitle));
                     titles.put("start", fadeInTime);
                     titles.put("time", showTime);
                     titles.put("end", fadeOutTime);
@@ -111,12 +114,9 @@ public class MessageLoader extends YamlUtils implements Saveable {
                 default:
                     break;
             }
-
             return;
         }
-
         for (String newKey : configuration.getConfigurationSection(key + ".").getKeys(false))
             loadMessage(configuration, key + "." + newKey);
     }
-
 }

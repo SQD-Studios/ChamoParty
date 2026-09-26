@@ -13,7 +13,7 @@ public class VotePartyExpansion extends PlaceholderExpansion {
      * @param plugin
      */
     public VotePartyExpansion(Plugin plugin) {
-        super();
+        
         this.plugin = plugin;
     }
 

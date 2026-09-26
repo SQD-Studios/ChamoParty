@@ -8,40 +8,51 @@ import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.commands.BaseCommandBrigadier;
 import net.chamosmp.chamoparty.paper.commands.VoteCommandBrigadier;
-import net.chamosmp.chamoparty.paper.core.Plugin;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
-import net.chamosmp.chamoparty.paper.listener.AdapterListener;
-import net.chamosmp.chamoparty.paper.listener.listeners.GiveRemainingVotesListener;
-import net.chamosmp.chamoparty.paper.listener.listeners.VotifierListener;
+import net.chamosmp.chamoparty.paper.listener.VotifierListener;
 import net.chamosmp.chamoparty.paper.loader.ZMenuLoader;
 import net.chamosmp.chamoparty.paper.placeholder.PlaceholderAPI;
 import net.chamosmp.chamoparty.paper.placeholder.VotePartyExpansion;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.save.MessageLoader;
-import net.chamosmp.chamoparty.paper.votestorage.StorageManager;
+import net.chamosmp.chamoparty.paper.database.DatabaseManager;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import net.chamosmp.sqdlib.paper.util.UpdateUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class ChamoPartyPlugin extends Plugin {
+public class ChamoPartyPlugin extends JavaPlugin {
 
-    private ZMenuLoader loader;
     private final VotePartyManager manager = new ChamoPartyManager(this);
+    private ZMenuLoader loader;
     private net.chamosmp.chamoparty.paper.api.storage.StorageManager storageManager;
+    private MessageLoader messageLoader;
 
     @Override
     public void onEnable() {
         new LoggerUtil("<aqua>chamoParty</aqua>| ");
         PlaceholderAPI.getInstance().setPlugin(this);
 
-        this.preEnable();
+        this.getDataFolder().mkdirs();
+
+        File inventoryFile = new File(getDataFolder(), "/inventories/vote.yml");
+        if (!inventoryFile.exists()) {
+            saveResource("inventories/vote.yml", false);
+        }
+
+        if (!Bukkit.getServerConfig().isProxyOnlineMode()) {
+            LoggerUtil.log(LogType.WARNING, """
+                    It appears that you are running an offline mode server. We, do not provide support for setups that bypass Mojang's authentication.
+                    You are on your own to solve any issues that arise.""");
+        }
 
         this.saveDefaultConfig();
         this.reloadConfig();
@@ -54,23 +65,12 @@ public class ChamoPartyPlugin extends Plugin {
         */
         registerCommands();
 
-        /*
-        Add Listener
-        */
-
-        this.addListener(new AdapterListener(this));
-        this.addListener(new GiveRemainingVotesListener(this));
-
-        /*
-        Add Saver
-        */
-        this.addSave(new MessageLoader(this));
-
-        this.getSavers().forEach(saver -> saver.load());
+        this.messageLoader = new MessageLoader(this);
+        this.messageLoader.load();
 
         // Load storage
         LegacyJsonConfig.loadConfigOptions(this);
-        this.storageManager = new StorageManager(LegacyJsonConfig.storage, this);
+        this.storageManager = new DatabaseManager(LegacyJsonConfig.storage, this);
         this.storageManager.load();
 
         this.manager.loadConfiguration();
@@ -81,8 +81,8 @@ public class ChamoPartyPlugin extends Plugin {
         }
 
         if (this.isEnabled(Plugins.VOTIFIER)) {
-            Logger.log("Hooked into (Nu)Votifier");
-            this.addListener(new VotifierListener(this));
+            LoggerUtil.log(LogType.INFO, "Hooked into (Nu)Votifier");
+            Bukkit.getPluginManager().registerEvents(new VotifierListener(this), this);
         }
 
 
@@ -93,7 +93,7 @@ public class ChamoPartyPlugin extends Plugin {
                 if (this.loader.isLoaded()) {
                     reloadInventories();
                 } else {
-                    this.getLogger().warning("Failed to hook into zMenu.");
+                    LoggerUtil.log(LogType.WARNING, "Failed to hook into zMenu.");
                 }
             }, 1L);
         }
@@ -111,20 +111,20 @@ public class ChamoPartyPlugin extends Plugin {
          */
         try {
             new Metrics(this, 31621);
-            Logger.log("Successfully started metrics!");
+            LoggerUtil.log(LogType.INFO, "Successfully started metrics!");
         } catch (Exception ignored) {
-            Logger.log("Failed to hook into Metrics.", Logger.LogType.ERROR);
+            LoggerUtil.log(LogType.SEVERE, "Failed to hook into Metrics.");
         }
 
-        this.postEnable();
+        LoggerUtil.log(LogType.INFO, "Done enabling");
     }
 
     @Override
     public void onDisable() {
-        this.getSavers().forEach(Saveable::save);
+        this.messageLoader.save();
         this.storageManager.save();
 
-        this.postDisable();
+        LoggerUtil.log(LogType.INFO, "Done disabling");
     }
 
     public void registerCommands() {
@@ -158,7 +158,7 @@ public class ChamoPartyPlugin extends Plugin {
      * @param offlinePlayer
      * @return {@link PlayerVote}
      */
-    public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer, boolean forceDatabaseUpdate) {
+    public void get(OfflinePlayer offlinePlayer, Consumer<PlayerVote> consumer) {
         this.get(offlinePlayer.getUniqueId(), consumer);
     }
 
@@ -187,4 +187,11 @@ public class ChamoPartyPlugin extends Plugin {
         return loader;
     }
 
+    private boolean isEnabled(Plugins pl) {
+        return Bukkit.getPluginManager().isPluginEnabled(pl.getName());
+    }
+
+    public MessageLoader getMessageLoader() {
+        return messageLoader;
+    }
 }

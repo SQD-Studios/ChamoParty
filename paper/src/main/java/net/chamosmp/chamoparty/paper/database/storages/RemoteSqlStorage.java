@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.votestorage.storages;
+package net.chamosmp.chamoparty.paper.database.storages;
 
 import net.chamosmp.chamoparty.api.storage.Storage;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
@@ -7,11 +7,11 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.votestorage.utils.SqliteConnection;
+import net.chamosmp.chamoparty.paper.database.utils.SqlConnection;
+import net.chamosmp.chamoparty.paper.impl.ChamoPlayerVote;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.slf4j.LoggerFactory;
@@ -23,31 +23,29 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class SqliteStorage extends Utils implements IStorage {
+public class RemoteSqlStorage implements IStorage {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger("ChamoParty");
     protected final ChamoPartyPlugin plugin;
     protected final Storage storage;
-
-    protected IConnection iConnection;
-
     protected transient final Map<UUID, PlayerVote> players = new HashMap<>();
+    protected IConnection iConnection;
     protected long voteCount = 1;
 
     /**
-     * @param plugin the plugin
+     * @param plugin
+     * @param storage
      */
-    public SqliteStorage(ChamoPartyPlugin plugin) {
-        super();
+    public RemoteSqlStorage(ChamoPartyPlugin plugin, Storage storage) {
         this.plugin = plugin;
-        this.storage = Storage.SQLITE;
+        this.storage = storage;
     }
 
     @Override
     public void load() {
-        this.iConnection = new SqliteConnection(storage, plugin);
+        this.iConnection = new SqlConnection(storage, plugin);
 
-        Logger.log("Connecting to the SQL database... (SQLite)");
+        LoggerUtil.log(LogType.INFO, "Connecting to the SQL database... (MySQL/MariaDB)");
         SchedulerUtil.runAsync(plugin, () -> {
             try {
                 this.iConnection.connect();
@@ -101,14 +99,14 @@ public class SqliteStorage extends Utils implements IStorage {
     }
 
     @Override
-    public void addVoteCount(long amount) {
-        this.voteCount += amount;
+    public void setVoteCount(long amount) {
+        this.voteCount = amount;
         this.iConnection.updateVoteCount(this.voteCount);
     }
 
     @Override
-    public void setVoteCount(long amount) {
-        this.voteCount = amount;
+    public void addVoteCount(long amount) {
+        this.voteCount += amount;
         this.iConnection.updateVoteCount(this.voteCount);
     }
 

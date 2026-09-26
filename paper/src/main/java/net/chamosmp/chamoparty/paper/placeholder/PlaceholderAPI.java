@@ -1,33 +1,24 @@
 package net.chamosmp.chamoparty.paper.placeholder;
 
+import com.google.common.base.Strings;
+import net.chamosmp.chamoparty.core.utils.ProgressBar;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
 import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlaceholderAPI extends Utils {
-
-    private ChamoPartyPlugin plugin;
-    private final Pattern pattern = Pattern.compile("%([^%]+)%");
-
-    /**
-     * Set plugin instance
-     *
-     * @param plugin
-     */
-    public void setPlugin(ChamoPartyPlugin plugin) {
-        this.plugin = plugin;
-    }
+public class PlaceholderAPI {
 
     /**
      * static Singleton instance.
      */
     private static volatile PlaceholderAPI instance;
+    private final Pattern pattern = Pattern.compile("%([^%]+)%");
+    private ChamoPartyPlugin plugin;
 
     /**
      * Private constructor for singleton.
@@ -51,11 +42,14 @@ public class PlaceholderAPI extends Utils {
     }
 
     /**
+     * Set plugin instance
      *
-     * @param player
-     * @param displayName
-     * @return
+     * @param plugin
      */
+    public void setPlugin(ChamoPartyPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     public String setPlaceholders(Player player, String placeholder) {
 
         if (placeholder == null || !placeholder.contains("%")) {
@@ -78,13 +72,6 @@ public class PlaceholderAPI extends Utils {
         return placeholder;
     }
 
-    /**
-     * Custom placeholder
-     *
-     * @param player
-     * @param string
-     * @return
-     */
     public String onRequest(Player player, String string) {
         VotePartyManager manager = plugin.getManager();
         IStorage iStorage = plugin.getIStorage();
@@ -94,10 +81,22 @@ public class PlaceholderAPI extends Utils {
             case "votes_required_party" -> String.valueOf(manager.getNeedVotes() - iStorage.getVoteCount());
             case "votes_required_total" -> String.valueOf(manager.getNeedVotes());
             case "votes_progressbar" ->
-                    this.getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), LegacyJsonConfig.progressBar);
+                    getProgressBar(iStorage.getVoteCount(), manager.getNeedVotes(), LegacyJsonConfig.progressBar);
             case "player_votes" -> player == null ? null : String.valueOf(manager.getPlayerVoteCount(player));
             default -> null;
         };
 
+    }
+
+    public String getProgressBar(long l, long m, ProgressBar progressBar) {
+        int totalBars = progressBar.length();
+        char symbol = progressBar.symbol();
+        String completedColor = progressBar.completedColor();
+        String notCompletedColor = progressBar.notCompletedColor();
+
+        float percent = (float) l / m;
+        int progressBars = (int) (totalBars * percent);
+
+        return Strings.repeat(completedColor + symbol, progressBars) + Strings.repeat(notCompletedColor + symbol, totalBars - progressBars);
     }
 }

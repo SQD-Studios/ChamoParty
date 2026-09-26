@@ -1,11 +1,13 @@
-package net.chamosmp.chamoparty.paper.implementations;
+package net.chamosmp.chamoparty.paper.impl;
 
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.chamoparty.paper.utils.MessageUtils;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ChamoPlayerVote extends Utils implements PlayerVote {
+public class ChamoPlayerVote extends MessageUtils implements PlayerVote {
 
     private final UUID uniqueId;
     private final List<Vote> votes;
@@ -39,11 +41,6 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
     @Override
     public OfflinePlayer getPlayer() {
         return Bukkit.getOfflinePlayer(this.uniqueId);
-    }
-
-    @Override
-    public List<Vote> getVotes() {
-        return this.votes;
     }
 
     @Override
@@ -82,12 +79,12 @@ public class ChamoPlayerVote extends Utils implements PlayerVote {
                     reward.give(plugin, offlinePlayer);
                 }
             } catch (Exception e) {
-                plugin.getLogger().warning("Failed to process vote for " + offlinePlayer.getName() + ": " + e.getMessage());
+                LoggerUtil.log(LogType.WARNING, "Failed to process vote for " + offlinePlayer.getName() + ": " + e.getMessage());
                 e.printStackTrace();
             }
         }
 
-        Vote vote = new ChamoVote(serviceName, reward, give);
+        ChamoVote vote = new ChamoVote(serviceName, reward, give);
         this.votes.add(vote);
         return vote;
     }

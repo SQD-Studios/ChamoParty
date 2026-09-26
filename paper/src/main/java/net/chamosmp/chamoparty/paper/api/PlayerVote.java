@@ -23,13 +23,6 @@ public interface PlayerVote {
     OfflinePlayer getPlayer();
 
     /**
-     * Returns the player's vote list
-     *
-     * @return votes
-     */
-    List<Vote> getVotes();
-
-    /**
      * Returns the list of votes or the player needs to collect the rewards
      *
      * @return votes

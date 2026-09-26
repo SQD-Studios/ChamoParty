@@ -1,7 +1,6 @@
 package net.chamosmp.chamoparty.paper.api;
 
 import net.chamosmp.chamoparty.api.enums.RewardType;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

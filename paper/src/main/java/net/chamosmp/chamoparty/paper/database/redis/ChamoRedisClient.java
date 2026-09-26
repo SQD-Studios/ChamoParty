@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.votestorage.redis;
+package net.chamosmp.chamoparty.paper.database.redis;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;

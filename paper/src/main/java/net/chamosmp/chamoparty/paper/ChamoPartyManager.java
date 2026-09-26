@@ -1,5 +1,6 @@
 package net.chamosmp.chamoparty.paper;
 
+import io.papermc.paper.util.Tick;
 import net.chamosmp.chamoparty.api.enums.Message;
 import net.chamosmp.chamoparty.api.enums.RewardType;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
@@ -7,15 +8,13 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.VotePartyManager;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.utils.loader.Loader;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
-import net.chamosmp.chamoparty.paper.core.utils.yaml.YamlUtils;
 import net.chamosmp.chamoparty.paper.loader.RewardLoader;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.chamoparty.paper.utils.MessageUtils;
 import net.chamosmp.sqdlib.paper.util.ConfigUtil;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,10 +22,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
+public class ChamoPartyManager extends MessageUtils implements VotePartyManager {
 
     private final ChamoPartyPlugin plugin;
     private final List<Reward> rewards = new ArrayList<>();
@@ -37,7 +37,6 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
     private String partySound;
 
     public ChamoPartyManager(ChamoPartyPlugin plugin) {
-        super(plugin);
         this.plugin = plugin;
     }
 
@@ -46,12 +45,12 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         try {
             this.plugin.reloadConfig();
             this.loadConfiguration();
-            this.plugin.getSavers().forEach(Saveable::load);
+            this.plugin.getMessageLoader().load();
             this.plugin.reloadInventories();
             LegacyJsonConfig.reloadConfigSafely(plugin);
-            message(sender, Message.RELOAD_SUCCESS);
+            super.message(sender, Message.RELOAD_SUCCESS);
         } catch (Exception e) {
-            message(sender, Message.RELOAD_ERROR.getMessage() + e.getMessage());
+            MessageUtils.message(sender, Message.RELOAD_ERROR.getMessage() + e.getMessage());
         }
     }
 
@@ -61,7 +60,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         ConfigurationSection configurationSection;
 
         this.rewards.clear();
-        Loader<Reward> loader = new RewardLoader();
+        RewardLoader loader = new RewardLoader();
         try {
             configurationSection = configuration.getConfigurationSection("rewards.");
             if (configurationSection != null) {
@@ -74,7 +73,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         } catch (Exception ignored) {
         }
 
-        Logger.log("Loaded " + this.rewards.size() + " rewards", LogType.SUCCESS);
+        LoggerUtil.log(LogType.INFO, "Loaded " + this.rewards.size() + " rewards");
 
         this.needVote = configuration.getLong("party.votes_needed", 50);
         this.globalCommands = configuration.getStringList("party.global_commands");
@@ -141,7 +140,7 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         this.plugin.get(offlinePlayer, playerVote -> {
             Vote vote = playerVote.vote(this.plugin, serviceName, reward, false);
             iStorage.insertVote(playerVote, vote, reward);
-        }, false);
+        });
     }
 
     @Override
@@ -223,13 +222,13 @@ public class ChamoPartyManager extends YamlUtils implements VotePartyManager {
         this.plugin.get(player, playerVote -> {
             List<Vote> votes = playerVote.getNeedRewardVotes();
             if (!votes.isEmpty()) {
-                schedule((int) LegacyJsonConfig.joinGiveVoteMilliSecond, () -> {
+                SchedulerUtil.runDelayed(plugin, () -> {
                     message(player, Message.VOTE_LATER, Map.of("amount", votes.size()));
                     votes.forEach(e -> e.giveReward(this.plugin, player));
-                });
+                }, Tick.tick().fromDuration(Duration.ofMillis(LegacyJsonConfig.joinGiveVoteMilliSecond)));
                 this.plugin.getIStorage().updateRewards(player.getUniqueId());
             }
-        }, true);
+        });
     }
 
     @Override

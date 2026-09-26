@@ -4,9 +4,7 @@ import net.chamosmp.chamoparty.paper.api.PlayerManager;
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
-import net.chamosmp.chamoparty.paper.core.utils.storage.Saveable;
 
-import java.util.Map;
 import java.util.UUID;
 
 public interface IStorage extends PlayerManager, Saveable {
@@ -21,13 +19,13 @@ public interface IStorage extends PlayerManager, Saveable {
      *
      * @param amount
      */
-    void addVoteCount(long amount);
+    void setVoteCount(long amount);
 
     /**
      *
      * @param amount
      */
-    void setVoteCount(long amount);
+    void addVoteCount(long amount);
 
     /**
      * Add vote to datebase

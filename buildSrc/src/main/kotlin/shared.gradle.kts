@@ -1,5 +1,3 @@
-import sun.tools.jar.resources.jar
-
 plugins {
     id("java")
     id("maven-publish")

@@ -1,4 +1,4 @@
-package net.chamosmp.chamoparty.paper.votestorage.redis;
+package net.chamosmp.chamoparty.paper.database.redis;
 
 import io.lettuce.core.RedisFuture;
 import io.lettuce.core.pubsub.RedisPubSubListener;
@@ -6,12 +6,12 @@ import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import net.chamosmp.chamoparty.api.storage.RedisSubChannel;
 import net.chamosmp.chamoparty.paper.ChamoPartyPlugin;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
-import net.chamosmp.chamoparty.paper.votestorage.storages.RedisStorage;
+import net.chamosmp.chamoparty.paper.database.storages.RedisStorage;
 import net.chamosmp.chamoparty.storage.redis.RedisVoteResponse;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -26,7 +26,6 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
 
     private final ChamoRedisClient chamoRedisClient;
     private final RedisPubSubAsyncCommands<String, String> asyncCommands;
-    private final StatefulRedisPubSubConnection<String, String> connection;
 
     private final List<UUID> sendingUUID = new ArrayList<>();
 
@@ -43,7 +42,7 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
 
         this.chamoRedisClient = chamoRedisClient;
 
-        connection = chamoRedisClient.getConnection();
+        StatefulRedisPubSubConnection<String, String> connection = chamoRedisClient.getConnection();
         asyncCommands = chamoRedisClient.getAsyncCommands();
 
         try {
@@ -52,7 +51,7 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
                     asyncCommands.subscribe(LegacyJsonConfig.redisChannel);
 
             future.thenAccept(_ -> {
-                Logger.log("Subscribed to the redis channel");
+                LoggerUtil.log(LogType.INFO, "Subscribed to the redis channel");
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,14 +122,12 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
      * @param uuid
      */
     public void sendVoteAction(String username, String serviceName, UUID uuid) {
-
         String message = username + ";;" + serviceName;
         UUID messageId = this.sendMessage(RedisSubChannel.ADD_VOTE, message);
 
         // Allows to give the reward if the player is not connected
         RedisVoteResponse redisVoteResponse = new RedisVoteResponse(username, serviceName, 1, uuid);
         this.voteResponses.put(messageId, redisVoteResponse);
-
     }
 
     /**
@@ -201,15 +198,10 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
                             redisVoteResponse.getServiceName());
 
                 } else {
-
-                    Logger.log("Impossible to find the player " + redisVoteResponse.getUsername(), LogType.WARNING);
-
+                    LoggerUtil.log(LogType.WARNING, "Impossible to find the player " + redisVoteResponse.getUsername());
                 }
-
             }
-
         }
-
     }
 
     @Override

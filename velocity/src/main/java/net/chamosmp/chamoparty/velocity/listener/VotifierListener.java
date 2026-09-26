@@ -5,10 +5,6 @@ import com.vexsoftware.votifier.velocity.event.VotifierEvent;
 import net.chamosmp.chamoparty.velocity.config.YamlLoader;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 
-import java.nio.charset.StandardCharsets;
-
-import static net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity.VOTE;
-
 public class VotifierListener {
 
     private final YamlLoader loader;

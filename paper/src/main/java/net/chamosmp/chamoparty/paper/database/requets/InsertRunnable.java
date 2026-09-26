@@ -1,11 +1,12 @@
-package net.chamosmp.chamoparty.paper.votestorage.requets;
+package net.chamosmp.chamoparty.paper.database.requets;
 
 import net.chamosmp.chamoparty.paper.api.PlayerVote;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class InsertRunnable implements Runnable {
      *
      */
     public InsertRunnable(PlayerVote playerVote, Vote vote, Reward reward, IConnection iConnection) {
-        super();
+        
         this.playerVote = playerVote;
         this.vote = vote;
         this.reward = reward;
@@ -71,10 +72,10 @@ public class InsertRunnable implements Runnable {
                     this.iConnection.connect();
                     this.run();
                 } catch (SQLException e1) {
-                    Logger.log("Impossible to use MySQL storage!" + e1.getMessage(), Logger.LogType.ERROR);
+                    LoggerUtil.log(LogType.SEVERE, "Impossible to use MySQL storage!" + e1.getMessage());
                 }
             } else {
-                Logger.log("Could not connect to database." + e.getMessage(), Logger.LogType.ERROR);
+                LoggerUtil.log(LogType.SEVERE, "Could not connect to database." + e.getMessage());
             }
         }
     }

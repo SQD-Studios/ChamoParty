@@ -14,10 +14,9 @@ import java.nio.file.Path;
 
 public class YamlLoader {
 
+    private final ChamoPartyVelo plugin;
     private CommentedConfigurationNode configNode;
     private Path configFilePath;
-
-    private final ChamoPartyVelo plugin;
 
     public YamlLoader(ChamoPartyVelo plugin) {
         this.plugin = plugin;

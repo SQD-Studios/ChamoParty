@@ -1,7 +1,7 @@
-package net.chamosmp.chamoparty.paper.implementations;
+package net.chamosmp.chamoparty.paper.impl;
 
 import net.chamosmp.chamoparty.paper.api.Reward;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
+import net.chamosmp.chamoparty.paper.utils.MessageUtils;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import net.chamosmp.sqdlib.util.LogType;
@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 import java.util.Map;
 
-public class ChamoReward extends Utils implements Reward {
+public class ChamoReward extends MessageUtils implements Reward {
 
     private final double percent;
     private final List<String> commands;
@@ -20,7 +20,7 @@ public class ChamoReward extends Utils implements Reward {
     private final List<String> messages;
 
     public ChamoReward(double percent, List<String> commands, boolean needToBeOnline, List<String> messages) {
-        super();
+
         this.percent = percent;
         this.commands = commands;
         this.needToBeOnline = needToBeOnline;
@@ -64,10 +64,7 @@ public class ChamoReward extends Utils implements Reward {
         // Handle commands and percent warnings
         boolean percentInvalid = this.percent <= 0;
 
-        if (validCommands.isEmpty() && percentInvalid) {
-        } else if (validCommands.isEmpty()) {
-        } else if (percentInvalid) {
-        } else {
+        if (!validCommands.isEmpty() && !percentInvalid) {
             SchedulerUtil.runDelayed(plugin, () ->
                     validCommands.forEach(command ->
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName()))
@@ -79,7 +76,7 @@ public class ChamoReward extends Utils implements Reward {
         if (!validMessages.isEmpty()) {
             Bukkit.getOnlinePlayers().forEach(oPlayer ->
                     validMessages.forEach(message ->
-                            this.messageWO(oPlayer, papi(message, oPlayer), Map.of("player", player.getName()))
+                            message(oPlayer, papi(message, oPlayer), Map.of("player", player.getName()))
                     )
             );
         }

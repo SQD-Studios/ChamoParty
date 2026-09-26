@@ -2,7 +2,6 @@ package net.chamosmp.chamoparty.api.enums;
 
 import net.chamosmp.chamoparty.core.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +25,10 @@ public enum Message {
     NOT_ELIGIBLE_PARTY("<red>You didn’t vote, so you didn't earn any rewards"),
     VOTE_STARTPARTY("<green>You just launched the voting party.");
 
+    private final boolean use;
     private Component message;
     private String stringMessage;
     private Map<String, Object> titles = new HashMap<>();
-    private final boolean use;
     private MessageType type = MessageType.TCHAT;
 
     /**
@@ -57,13 +56,13 @@ public enum Message {
         return message;
     }
 
-    public boolean isUse() {
-        return use;
-    }
-
     public void setMessage(String message) {
         this.stringMessage = message;
         this.message = ColorUtils.parse(stringMessage);
+    }
+
+    public boolean isUse() {
+        return use;
     }
 
     public String getTitle() {

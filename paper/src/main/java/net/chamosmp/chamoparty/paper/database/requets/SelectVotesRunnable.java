@@ -1,14 +1,14 @@
-package net.chamosmp.chamoparty.paper.votestorage.requets;
+package net.chamosmp.chamoparty.paper.database.requets;
 
+import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
-import net.chamosmp.chamoparty.paper.core.logger.Logger;
-import net.chamosmp.chamoparty.paper.core.logger.Logger.LogType;
-import net.chamosmp.chamoparty.paper.core.utils.Utils;
-import net.chamosmp.chamoparty.paper.implementations.ChamoPlayerVote;
-import net.chamosmp.chamoparty.paper.implementations.ChamoReward;
-import net.chamosmp.chamoparty.paper.implementations.ChamoVote;
+import net.chamosmp.chamoparty.paper.impl.ChamoPlayerVote;
+import net.chamosmp.chamoparty.paper.impl.ChamoReward;
+import net.chamosmp.chamoparty.paper.impl.ChamoVote;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
+import net.chamosmp.sqdlib.paper.util.LoggerUtil;
+import net.chamosmp.sqdlib.util.LogType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class SelectVotesRunnable extends Utils implements Runnable {
+public class SelectVotesRunnable implements Runnable {
 
     private final IConnection iConnection;
     private final UUID uniqueId;
@@ -34,7 +34,6 @@ public class SelectVotesRunnable extends Utils implements Runnable {
      */
     public SelectVotesRunnable(IConnection iConnection, UUID uniqueId, Consumer<Optional<net.chamosmp.chamoparty.paper.api.PlayerVote>> consumer,
                                IStorage iStorage) {
-        super();
         this.iConnection = iConnection;
         this.uniqueId = uniqueId;
         this.consumer = consumer;
@@ -46,7 +45,7 @@ public class SelectVotesRunnable extends Utils implements Runnable {
         try {
             Connection connection = this.iConnection.getConnection();
 
-            List<net.chamosmp.chamoparty.paper.api.Vote> votes = new ArrayList<>();
+            List<Vote> votes = new ArrayList<>();
 
             String request = "SELECT * FROM chamoparty_votes WHERE player_uuid = ?";
             PreparedStatement statement = connection.prepareStatement(request);
@@ -58,7 +57,6 @@ public class SelectVotesRunnable extends Utils implements Runnable {
             }
 
             while (resultSet.next()) {
-
                 String serviceName = resultSet.getString("service_name");
                 boolean isRewardGive = resultSet.getBoolean("is_reward_give");
                 double rewardPercent = resultSet.getDouble("reward_percent");
@@ -68,9 +66,8 @@ public class SelectVotesRunnable extends Utils implements Runnable {
 
                 List<String> commands = Arrays.asList(commandsAsString.split(";"));
                 ChamoReward chamoReward = new ChamoReward(rewardPercent, commands, needOnline, new ArrayList<>());
-                net.chamosmp.chamoparty.paper.api.Vote vote = new ChamoVote(serviceName, createdAt, chamoReward, isRewardGive);
+                ChamoVote vote = new ChamoVote(serviceName, createdAt, chamoReward, isRewardGive);
                 votes.add(vote);
-
             }
 
             statement.close();
@@ -87,7 +84,7 @@ public class SelectVotesRunnable extends Utils implements Runnable {
                     this.run();
                 } catch (SQLException e1) {
                     this.consumer.accept(Optional.empty());
-                    Logger.log("Impossible to use MySQL storage!", LogType.ERROR);
+                    LoggerUtil.log(LogType.SEVERE, "Impossible to use MySQL storage!");
                     e1.printStackTrace();
                 }
             } else {

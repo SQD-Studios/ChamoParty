@@ -1,7 +1,7 @@
 package net.chamosmp.chamoparty.core.utils.plugins;
 
 public enum Plugins {
-    
+
     PLACEHOLDER("PlaceholderAPI"),
     VOTIFIER("Votifier"),
     ZMENU("zMenu"),

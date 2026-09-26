@@ -8,68 +8,44 @@ import net.strokkur.commands.Command;
 import net.strokkur.commands.Executes;
 import net.strokkur.commands.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static java.lang.String.valueOf;
 
 @Command("chamoparty")
 @Aliases("voteparty")
 public class BaseCommand extends ChamoPartyManager {
 
-    private final ChamoPartyPlugin plugin;
-
     public BaseCommand(ChamoPartyPlugin plugin) {
         super(plugin);
-        this.plugin = plugin;
     }
 
-    // Main Command
     @Permission("chamoparty.use")
     @Executes
-    void onExecuteBase(CommandSender sender) {
+    public void onExecuteBase(CommandSender sender) {
         sendNeedVote(sender);
     }
 
-    // Reload Subcommand
     @Permission("chamoparty.reload")
     @Executes("reload")
-    void onExecuteReload(CommandSender sender) {
+    public void onExecuteReload(CommandSender sender) {
         reload(sender);
     }
 
-    // Version Subcommand
-    @Permission("chamoparty.version")
-    @Executes("version")
-    void onExecuteVersion(CommandSender sender) {
-        message(sender, String.format("""
-                <green>Version<gray>: <dark_green>" %s
-                <green>Organization<gray>: <dark_green>SQD Studios
-                <green>Download<gray>: <dark_green>https://modrinth.com/project/chamoparty"
-                """, plugin.getPluginMeta().getVersion()
-        ));
-    }
-
-    // StartParty Sub
     @Permission("chamoparty.startparty")
     @Executes("startparty")
-    void onExecuteStartParty(CommandSender sender) {
+    public void onExecuteStartParty(CommandSender sender) {
         forceStart(sender);
     }
 
     @Permission("chamoparty.add")
     @Executes("add")
-    void onExecuteAdd(CommandSender sender, Player target) {
-        String player = valueOf(target);
-        vote(sender, player, true);
+    public void onExecuteAdd(CommandSender sender, Player target) {
+        vote(sender, target.getName(), true);
     }
 
     @Permission("chamoparty.remove")
     @Executes("remove")
-    void onExecuteRemove(CommandSender sender, Player playerName) {
-        OfflinePlayer target = Bukkit.getOfflinePlayer(String.valueOf(playerName));
-        removeVote(sender, target);
+    public void onExecuteRemove(CommandSender sender, Player playerName) {
+        removeVote(sender, Bukkit.getOfflinePlayer(String.valueOf(playerName)));
     }
-
 }
