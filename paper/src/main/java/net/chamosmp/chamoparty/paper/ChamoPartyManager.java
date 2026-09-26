@@ -60,14 +60,13 @@ public class ChamoPartyManager extends MessageUtils implements VotePartyManager 
         ConfigurationSection configurationSection;
 
         this.rewards.clear();
-        RewardLoader loader = new RewardLoader();
         try {
             configurationSection = configuration.getConfigurationSection("rewards.");
             if (configurationSection != null) {
                 for (String key : configurationSection.getKeys(false)) {
                     String path = "rewards." + key + ".";
-                    Reward reward = loader.load(configuration, path);
-                    if (reward != null) this.rewards.add(reward);
+                    Reward reward = RewardLoader.load(configuration, path);
+                    this.rewards.add(reward);
                 }
             }
         } catch (Exception ignored) {
@@ -89,8 +88,8 @@ public class ChamoPartyManager extends MessageUtils implements VotePartyManager 
                 }
                 for (String key : configurationSection.getKeys(false)) {
                     String path = "party.rewards." + key + ".";
-                    Reward reward = loader.load(configuration, path);
-                    if (reward != null) this.partyRewards.add(reward);
+                    Reward reward = RewardLoader.load(configuration, path);
+                    this.partyRewards.add(reward);
                 }
             } catch (Exception _) {
             }

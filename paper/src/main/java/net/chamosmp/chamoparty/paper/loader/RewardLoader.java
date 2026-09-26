@@ -6,8 +6,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
-public class RewardLoader {
-    public Reward load(YamlConfiguration configuration, String path) {
+public final class RewardLoader {
+    public static Reward load(YamlConfiguration configuration, String path) {
 
         double percent = configuration.getDouble(path + "percent", 10);
         List<String> commands = configuration.getStringList(path + "commands");

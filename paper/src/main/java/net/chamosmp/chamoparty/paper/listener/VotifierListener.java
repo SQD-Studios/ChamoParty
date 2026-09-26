@@ -28,7 +28,7 @@ public class VotifierListener implements Listener {
     }
 
     @EventHandler
-    protected void onConnect(PlayerJoinEvent event) {
+    public void onConnect(PlayerJoinEvent event) {
         this.plugin.getManager().giveVotes(event.getPlayer());
     }
 }
