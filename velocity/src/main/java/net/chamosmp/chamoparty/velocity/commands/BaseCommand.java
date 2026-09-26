@@ -31,14 +31,14 @@ public class BaseCommand {
                 sender.sendRichMessage("Config reloaded!");
             } else {
                 sender.sendRichMessage("Reloading config...");
-                plugin.getLoggerUtil().info("Reloading config...");
+                plugin.getLogger().info("Reloading config...");
                 loader.reloadConfig();
                 sender.sendRichMessage("Config reloaded!");
-                plugin.getLoggerUtil().info("Config reloaded!");
+                plugin.getLogger().info("Config reloaded!");
             }
         } catch (ConfigurateException e) {
             sender.sendRichMessage("<dark_red>Failed to load config! Please check your proxy's console for details.");
-            plugin.getLoggerUtil().error("Failed to reload config!", e);
+            plugin.getLogger().error("Failed to reload config!", e);
         }
     }
 }

@@ -11,7 +11,7 @@ import net.chamosmp.chamoparty.velocity.listener.VotifierListener;
 import net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 import org.bstats.velocity.Metrics;
-import org.slf4j.LoggerUtil;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,17 +23,15 @@ public class ChamoPartyVelo {
     public final Path pluginFolderPath;
     public final Path configPath;
     private final ProxyServer server;
-    private final LoggerUtil LoggerUtil;
+    private final Logger logger;
     private final Metrics.Factory metricsFactory;
     private YamlLoader yamlLoader;
-    private VelocityToBackend velocityToBackend;
-    private BackendToVelocity backendToVelocity;
     private VotifierListener votifierListener;
 
     @Inject
-    public ChamoPartyVelo(ProxyServer server, LoggerUtil LoggerUtil, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
+    public ChamoPartyVelo(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
         this.server = server;
-        this.LoggerUtil = LoggerUtil;
+        this.logger = logger;
         this.pluginFolderPath = dataDirectory;
         this.metricsFactory = metricsFactory;
         this.configPath = dataDirectory.resolve("config.yml");
@@ -46,14 +44,14 @@ public class ChamoPartyVelo {
         server.getEventManager().register(this, votifierListener);
 
         metricsFactory.make(this, 33142);
-        LoggerUtil.info("Enabled metrics");
+        logger.info("Enabled metrics");
 
         registerChannels();
 
         // Registering the commands
         try {
             BaseCommandBrigadier.register(this.server, this, yamlLoader, this);
-            LoggerUtil.info("Registered commands");
+            logger.info("Registered commands");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,17 +60,17 @@ public class ChamoPartyVelo {
         if (configPath != null) {
             try {
                 yamlLoader.loadConfig(configPath);
-                LoggerUtil.info("Loaded config files");
+                logger.info("Loaded config files");
             } catch (IOException e) {
-                LoggerUtil.error("Failed to load config!", e);
+                logger.error("Failed to load config!", e);
             }
         } else {
-            LoggerUtil.error("Failed to load config! Path to plugin is null!");
+            logger.error("Failed to load config! Path to plugin is null!");
         }
 
         // Offline mode message
         if (!server.getConfiguration().isOnlineMode()) {
-            LoggerUtil.warn("""
+            logger.warn("""
                     It appears that you are running an offline mode server. We, do not provide support for setups that bypass Mojang's authentication.
                     You are on your own to solve any issues that arise.""");
         }
@@ -80,17 +78,17 @@ public class ChamoPartyVelo {
 
     public void registerChannels() {
         server.getChannelRegistrar().register(VOTE);
-        LoggerUtil.info("Registered plugin messaging channels");
+        logger.info("Registered plugin messaging channels");
     }
 
     public void initInstances() {
         this.yamlLoader = new YamlLoader(this);
-        velocityToBackend = new VelocityToBackend(server);
-        backendToVelocity = new BackendToVelocity(velocityToBackend, server);
+        VelocityToBackend velocityToBackend = new VelocityToBackend(server);
+        BackendToVelocity backendToVelocity = new BackendToVelocity(velocityToBackend, server);
         votifierListener = new VotifierListener(yamlLoader, velocityToBackend);
     }
 
-    public LoggerUtil getLoggerUtil() {
-        return LoggerUtil;
+    public Logger getLogger() {
+        return logger;
     }
 }
