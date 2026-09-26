@@ -129,8 +129,8 @@ public class ChamoPartyPlugin extends JavaPlugin {
 
     public void registerCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            BaseCommandBrigadier.register(event.registrar(), this);
-            VoteCommandBrigadier.register(event.registrar(), this);
+            BaseCommandBrigadier.register(event.registrar(), getManager());
+            VoteCommandBrigadier.register(event.registrar(), getManager());
         }));
     }
 
