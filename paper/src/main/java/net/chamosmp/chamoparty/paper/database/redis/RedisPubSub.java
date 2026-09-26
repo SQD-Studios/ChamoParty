@@ -181,9 +181,9 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
             // the number of servers indicated in the configuration file
             // We also add the UUID of the player if it is present
 
-            redisVoteResponse.addResponse(userId);
+            redisVoteResponse = redisVoteResponse.addResponse(userId);
 
-            if (redisVoteResponse.getResponseCount() >= LegacyJsonConfig.redisServerAmount) {
+            if (redisVoteResponse.responseCount() >= LegacyJsonConfig.redisServerAmount) {
 
                 // We will check if the UUID of the player exists, if yes then
                 // we will give a reward so that the player can recover it when
@@ -192,13 +192,13 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
                 // If the player cannot be found, then nothing can be done and
                 // the vote will be lost
 
-                if (redisVoteResponse.getUserId() != null) {
+                if (redisVoteResponse.userId() != null) {
 
-                    this.plugin.getManager().voteOffline(redisVoteResponse.getUserId(),
-                            redisVoteResponse.getServiceName());
+                    this.plugin.getManager().voteOffline(redisVoteResponse.userId(),
+                            redisVoteResponse.serviceName());
 
                 } else {
-                    LoggerUtil.log(LogType.WARNING, "Impossible to find the player " + redisVoteResponse.getUsername());
+                    LoggerUtil.log(LogType.WARNING, "Impossible to find the player " + redisVoteResponse.username());
                 }
             }
         }

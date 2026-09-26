@@ -8,7 +8,6 @@ public enum Storage {
     PGSQL(Type.REDIS_SQL, "jdbc:postgresql://"),
 
     SQLITE(Type.VOTE_STORING, "jdbc:sqlite:"),
-    JSON(Type.VOTE_STORING),
     REDIS(Type.VOTE_STORING),
     VELOCITY(Type.VOTE_STORING),
 
@@ -29,10 +28,6 @@ public enum Storage {
 
     public String getUrlBase() {
         return urlBase;
-    }
-
-    public Type getType() {
-        return type;
     }
 
     public enum Type {
