@@ -7,7 +7,7 @@ import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.chamoparty.paper.utils.MessageUtils;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

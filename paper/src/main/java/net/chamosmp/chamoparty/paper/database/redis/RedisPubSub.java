@@ -11,7 +11,7 @@ import net.chamosmp.chamoparty.paper.database.storages.RedisStorage;
 import net.chamosmp.chamoparty.storage.redis.RedisVoteResponse;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 

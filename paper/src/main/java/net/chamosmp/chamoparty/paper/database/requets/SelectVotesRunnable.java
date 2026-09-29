@@ -8,7 +8,7 @@ import net.chamosmp.chamoparty.paper.impl.ChamoReward;
 import net.chamosmp.chamoparty.paper.impl.ChamoVote;
 import net.chamosmp.chamoparty.paper.save.LegacyJsonConfig;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

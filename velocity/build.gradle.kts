@@ -9,7 +9,7 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:4.1.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:4.1.0-SNAPSHOT")
 
-    implementation("net.chamosmp.sqdlib:sqdlib-paper:2.1.0")
+    implementation("net.chamosmp.sqdlib:sqdlib-velocity:3.1.0")
 
     // Database stuff
     compileOnly("redis.clients:jedis:5.1.3")

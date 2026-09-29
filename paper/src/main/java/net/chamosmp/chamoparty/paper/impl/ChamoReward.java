@@ -4,7 +4,7 @@ import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.utils.MessageUtils;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;

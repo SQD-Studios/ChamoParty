@@ -2,17 +2,17 @@ package net.chamosmp.chamoparty.velocity.listener;
 
 import com.velocitypowered.api.event.Subscribe;
 import com.vexsoftware.votifier.velocity.event.VotifierEvent;
-import net.chamosmp.chamoparty.velocity.config.YamlLoader;
+import net.chamosmp.chamoparty.velocity.ChamoPartyVelo;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 
 public class VotifierListener {
 
-    private final YamlLoader loader;
     private final VelocityToBackend backend;
+    private final ChamoPartyVelo plugin;
 
-    public VotifierListener(YamlLoader loader, VelocityToBackend backend) {
-        this.loader = loader;
+    public VotifierListener(VelocityToBackend backend, ChamoPartyVelo plugin) {
         this.backend = backend;
+        this.plugin = plugin;
     }
 
     @Subscribe

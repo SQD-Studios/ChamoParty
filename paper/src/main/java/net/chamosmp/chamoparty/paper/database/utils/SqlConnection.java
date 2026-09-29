@@ -8,7 +8,7 @@ import net.chamosmp.chamoparty.paper.api.storage.IConnection;
 import net.chamosmp.chamoparty.paper.api.storage.IStorage;
 import net.chamosmp.chamoparty.paper.database.requets.*;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.plugin.Plugin;
 import org.slf4j.LoggerFactory;
 

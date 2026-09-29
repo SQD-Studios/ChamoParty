@@ -14,7 +14,7 @@ import net.chamosmp.chamoparty.paper.utils.MessageUtils;
 import net.chamosmp.sqdlib.paper.util.ConfigUtil;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

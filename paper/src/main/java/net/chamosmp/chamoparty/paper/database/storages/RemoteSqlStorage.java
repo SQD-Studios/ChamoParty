@@ -11,7 +11,7 @@ import net.chamosmp.chamoparty.paper.database.utils.SqlConnection;
 import net.chamosmp.chamoparty.paper.impl.ChamoPlayerVote;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.slf4j.LoggerFactory;

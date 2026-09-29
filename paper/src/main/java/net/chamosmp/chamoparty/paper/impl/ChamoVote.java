@@ -3,7 +3,7 @@ package net.chamosmp.chamoparty.paper.impl;
 import net.chamosmp.chamoparty.paper.api.Reward;
 import net.chamosmp.chamoparty.paper.api.Vote;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

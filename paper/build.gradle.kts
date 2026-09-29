@@ -10,7 +10,7 @@ dependencies {
         exclude("org.apache.commons", "commons-lang3")
     }
 
-    implementation("net.chamosmp.sqdlib:sqdlib-paper:2.1.0")
+    implementation("net.chamosmp.sqdlib:sqdlib-paper:3.1.0")
 
     compileOnly("io.lettuce:lettuce-core:7.0.0.RELEASE")
 

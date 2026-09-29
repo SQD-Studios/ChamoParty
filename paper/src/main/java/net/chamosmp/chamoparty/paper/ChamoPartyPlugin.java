@@ -18,7 +18,7 @@ import net.chamosmp.chamoparty.paper.database.DatabaseManager;
 import net.chamosmp.sqdlib.paper.util.LoggerUtil;
 import net.chamosmp.sqdlib.paper.util.SchedulerUtil;
 import net.chamosmp.sqdlib.paper.util.UpdateUtil;
-import net.chamosmp.sqdlib.util.LogType;
+import net.chamosmp.sqdlib.util.log.LogType;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

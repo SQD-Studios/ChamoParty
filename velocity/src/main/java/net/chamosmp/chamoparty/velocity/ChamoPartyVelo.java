@@ -5,31 +5,33 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.chamomsp.sqdlib.velocity.VelocityPlugin;
+import net.chamomsp.sqdlib.velocity.util.ConfigUtil;
+import net.chamomsp.sqdlib.velocity.util.LoggerUtil;
 import net.chamosmp.chamoparty.velocity.commands.BaseCommandBrigadier;
-import net.chamosmp.chamoparty.velocity.config.YamlLoader;
 import net.chamosmp.chamoparty.velocity.listener.VotifierListener;
 import net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity;
 import net.chamosmp.chamoparty.velocity.messaging.VelocityToBackend;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 import static net.chamosmp.chamoparty.velocity.messaging.BackendToVelocity.VOTE;
 
 
-public class ChamoPartyVelo {
+public class ChamoPartyVelo extends VelocityPlugin {
     public final Path pluginFolderPath;
     public final Path configPath;
     private final ProxyServer server;
     private final Logger logger;
     private final Metrics.Factory metricsFactory;
-    private YamlLoader yamlLoader;
     private VotifierListener votifierListener;
 
     @Inject
     public ChamoPartyVelo(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
+        super(server, dataDirectory);
+
         this.server = server;
         this.logger = logger;
         this.pluginFolderPath = dataDirectory;
@@ -39,6 +41,10 @@ public class ChamoPartyVelo {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
+        new LoggerUtil("<aqua>chamoParty</aqua>| ", server);
+
+        ConfigUtil.loadOrAdapt(this, "config.yml");
+
         initInstances();
 
         server.getEventManager().register(this, votifierListener);
@@ -50,22 +56,10 @@ public class ChamoPartyVelo {
 
         // Registering the commands
         try {
-            BaseCommandBrigadier.register(this.server, this, yamlLoader, this);
+            BaseCommandBrigadier.register(this.server, this, this);
             logger.info("Registered commands");
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-
-        if (configPath != null) {
-            try {
-                yamlLoader.loadConfig(configPath);
-                logger.info("Loaded config files");
-            } catch (IOException e) {
-                logger.error("Failed to load config!", e);
-            }
-        } else {
-            logger.error("Failed to load config! Path to plugin is null!");
         }
 
         // Offline mode message
@@ -82,13 +76,8 @@ public class ChamoPartyVelo {
     }
 
     public void initInstances() {
-        this.yamlLoader = new YamlLoader(this);
         VelocityToBackend velocityToBackend = new VelocityToBackend(server);
         BackendToVelocity backendToVelocity = new BackendToVelocity(velocityToBackend, server);
-        votifierListener = new VotifierListener(yamlLoader, velocityToBackend);
-    }
-
-    public Logger getLogger() {
-        return logger;
+        votifierListener = new VotifierListener(velocityToBackend, this);
     }
 }
